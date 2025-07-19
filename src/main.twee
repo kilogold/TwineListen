@@ -1,0 +1,79 @@
+:: StoryTitle
+The Attic Encounter
+
+:: StoryData
+{
+    "ifid": "8F139B5E-A4D9-4F1A-9B5C-D2E7C1A9F3B0",
+    "format": "SugarCube",
+    "format-version": "2.37.3",
+    "start": "StoryInit",
+    "tag-colors": {
+        "spooky": "red",
+        "dialogue": "blue",
+        "choice": "green"
+    },
+    "zoom": 1.0
+}
+
+:: stylesheet [stylesheet]
+body {
+    font-family: 'Georgia', serif;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.passage {
+    max-width: 600px;
+    margin: 2em auto;
+    padding: 2em;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+a.link-internal {
+    color: #8ab4f8;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a.link-internal:hover {
+    color: #adc7f8;
+    text-decoration: underline;
+}
+
+.dialogue {
+    font-style: italic;
+    color: #b8b8b8;
+    margin: 1em 0;
+    padding-left: 1em;
+    border-left: 3px solid #4a4a4a;
+}
+
+:: script [script]
+$(document).on('click', '.dialogue', function() {
+    $(this).css('color', '#ffffff').fadeOut(1000).fadeIn(1000);
+});
+
+:: StoryJavaScript[script]
+UIBar.destroy();
+/* Health Bar code - Start */
+window.Health = function (CurHP, MaxHP, BarID, Horizontal, Container) {
+	if (Container == undefined) {
+		Container = document;
+	}
+	var HP = parseInt((CurHP / MaxHP) * 100).clamp(0, 100);
+	var BarElement = $(Container).find("#" + BarID);
+	if (Horizontal) {
+		BarElement.css({ width: HP + "%" });
+	} else {
+		BarElement.css({ height: HP + "%" });
+	}
+	BarElement.attr("title", CurHP + "/" + MaxHP + " HP");
+	$(Container).find("#" + BarID + "bkg").attr("title", CurHP + "/" + MaxHP + " HP");
+};
+/* Health Bar code - End */
+
+:: StoryInit
+<<set $timer to 5>>
+<<goto "Attic Awakening">>
