@@ -50,6 +50,10 @@ a.link-internal:hover {
     border-left: 3px solid #4a4a4a;
 }
 
+img{
+    max-width: 100%
+}
+
 :: script [script]
 $(document).on('click', '.dialogue', function() {
     $(this).css('color', '#ffffff').fadeOut(1000).fadeIn(1000);
@@ -57,23 +61,13 @@ $(document).on('click', '.dialogue', function() {
 
 :: StoryJavaScript[script]
 UIBar.destroy();
-/* Health Bar code - Start */
-window.Health = function (CurHP, MaxHP, BarID, Horizontal, Container) {
-	if (Container == undefined) {
-		Container = document;
-	}
-	var HP = parseInt((CurHP / MaxHP) * 100).clamp(0, 100);
-	var BarElement = $(Container).find("#" + BarID);
-	if (Horizontal) {
-		BarElement.css({ width: HP + "%" });
-	} else {
-		BarElement.css({ height: HP + "%" });
-	}
-	BarElement.attr("title", CurHP + "/" + MaxHP + " HP");
-	$(Container).find("#" + BarID + "bkg").attr("title", CurHP + "/" + MaxHP + " HP");
-};
-/* Health Bar code - End */
-
+if (document.location.href.toLowerCase().includes("/twine/scratch/") || document.location.href.toLowerCase().includes("/temp/") || document.location.href.toLowerCase().includes("/private/") || hasOwnProperty.call(window, "storyFormat")) {
+	// Change this to the path where the HTML file is
+	// located if you want to run this from inside Twine.
+	setup.Path = "/Users/kbonilla/Projects/TwineListen/build";  // Running inside Twine application
+} else { 
+	setup.Path = "";  // Running in a browser
+}
 :: StoryInit
 <<set $timer to 5>>
 <<goto "Attic Awakening">>
