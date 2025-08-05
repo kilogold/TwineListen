@@ -144,7 +144,7 @@ The air is thick with dust. A frail old man sits on the attic floor, facing away
 
 ''Leon (muttering):'' ''"D'you think the wind knows where it's blowin'? Or is it just... runnin' from somethin', too?"''
 
-<img @src="'images/A1.png'" width="auto" height="auto">
+<img @src="setup.ImagePath+'A1.png'" width="auto" height="auto">
 
 [[Look at the window->Window Gaze]]
 
@@ -153,7 +153,7 @@ You look toward the grimy attic window. Moonlight cuts through like dying veins 
 
 ''Leon (murmuring):'' ''"Don't bother. Ain't nothin' out there worth seein'. Ain't nothin' that's comin' to save you, neither."''
 
-<img @src="'images/A2.png'" width="auto" height="auto">
+<img @src="setup.ImagePath+'A2.png'" width="auto" height="auto">
 
 <<timed 3s>>
 He shifts, fingers twitching on the floorboards.
@@ -176,7 +176,7 @@ $(document).trigger(':passagedisplay');
 He shifts again, the floorboards creaking beneath him.
 
 ''Leon:'' ''"Either way, you're right to be quiet. Words got teeth. And mine been sharpened too long."''
-<img @src="'images/A3.png'" width="auto" height="auto">
+<img @src="setup.ImagePath+'A3.png'" width="auto" height="auto">
 
 [[Continue listening->Nod Yes]]
 
@@ -188,7 +188,7 @@ He doesn't turn, but his voice dips lower.
 ''Leon:'' ''"You agree, huh? That it's gone? That there ain't nothin' left to look at?"''
 
 ''Leon:'' ''"...Or maybe you're just noddin' to keep me calm..."''
-<img @src="'images/A4.png'" width="auto" height="auto">
+<img @src="setup.ImagePath+'A4.png'" width="auto" height="auto">
 
 [[Stay quiet->Stay Quiet]]
 
@@ -209,7 +209,7 @@ He lurches violently.
 ''Leon:'' ''"Words got teeth. And mine been sharpened too long. You wouldn't want 'em near you... not if you knew the things they done."''
 
 He laughs again, but this one is hollow. Rotten at the core.
-<img @src="'images/A5.png'" width="auto" height="auto">
+<img @src="setup.ImagePath+'A5.png'" width="auto" height="auto">
 
 ''Leon:'' ''"You still there?"''
 
@@ -221,7 +221,7 @@ He laughs again, but this one is hollow. Rotten at the core.
 
 :: Game Over
 ''Before you can react, Leon spins. Eyes wild. The room fades into blackness.''
-<img @src="'images/A6.png'" width="auto" height="auto">
+<img @src="setup.ImagePath+'A6.png'" width="auto" height="auto">
 
 '''GAME OVER'''
 
