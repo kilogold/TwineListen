@@ -1,234 +1,1050 @@
+:: Attic Awakening [spooky]
+<img src= "include/images/A1.png">
 
-:: UserScript[script]
-/*
-    Macro: timedprogressbar
+The attic stretches before you like a wooden ribcage, all shadows and dust motes dancing in the amber light of a single bulb. The air tastes of insulation and forgotten dreams.
 
-    Description: Show a dynamically-created "progress bar"
-    that changes colors as its timer runs down.
+An elderly man sits hunched in the far corner, his back against the slanted wall. Leon. He hasn't noticed you yet—or perhaps he has, and simply doesn't care.
 
-    Original design: Akjosch (https://github.com/Akjosch)
+The floorboards wheeze beneath your weight as you remain perfectly still, watching.
 
-    Arguments:
-      [0]: The time to run in seconds
-      [1]: The length of the progress bar in CSS units (px, em, or %)
-*/
-Macro.add("timedprogressbar", {
-  isAsync : true,
-  tags: null,
-  handler: function() {
-    // Filter the payload for newlines and save it for later execution
-    var payload = this.payload[0].contents.replace(/\n$/, '').trim();
-
-    // Save or generate a default duration
-    var duration = (Number(this.args[0]) || 60) * 1000;
-
-    // Save or generate a width
-    var width = this.args[1] || "100%";
-
-    // Generate a unique hash
-    var hash = Math.floor(Math.random() * 0x100000000).toString(16);
-
-    //  Create an outer ID
-    var outerId = "outer_" + hash;
-
-    // Create an inner ID
-    var innerId = "inner_" + hash;
-
-    // Create an outer div,
-    // add an ID,
-    // add a class,
-    // change the CSS width, and
-    // append to the output
-    var progressbar = $("<div>")
-    .attr("id", outerId)
-    .addClass("progress-bar")
-    .css('width', width)
-    .appendTo(this.output);
-
-    // Create an inner div,
-    // add an ID,
-    // add a class,
-    // change the CSS width, and
-    // append to the progressbar
-    var progressvalue = $("<div>")
-    .attr("id", innerId)
-    .addClass("progress-value")
-    .css('width', "100%")
-    .appendTo(progressbar);
-
-    // Create a function to convert into hexadecimal
-    var toHex = function(num) {
-      var res = Math.round(Number(num)).toString(16);
-      return (res.length === 1 ? "0" + res : res);
-    };
-
-    // Save a reference to possible payload content
-    var functionToRun = this.createShadowWrapper(
-      payload
-        ? function() { Wikifier.wikifyEval(payload); }
-        : null
-    );
-
-    // Watch for the :passagedisplay event once
-    jQuery(document).one(":passagedisplay", function() {
-
-      // Get the current time
-      var timeStarted = (new Date()).getTime();
-
-      // Save a reference to the setInterval function
-      var workFunction = setInterval(function() {
-
-        // Check if the element is still 'connected'
-        if(! progressbar.prop("isConnected") ) {
-
-          // Navigated away from the passage
-          clearInterval(workFunction);
-          return;
-        }
-
-        // Figure out how much time has passed
-        var timePassed = (new Date()).getTime() - timeStarted;
-
-        // Check if the timer has run out
-        if(timePassed >= duration) {
-
-          // Reduce the inner width to 0
-          progressvalue.css('width', "0");
-
-          // Clear interval
-          clearInterval(workFunction);
-
-          // Run the inner function (if set)
-          setTimeout(functionToRun, 40);
-          return;
-        }
-
-        // Update the progress percentage
-        var percentage = 100 - 100 * timePassed / duration;
-
-        // Save the new color
-        var color = "#"
-          + toHex(Math.min(255, 510 -  5.1 * percentage))
-          + toHex(Math.min(255, 5.1 * percentage)) + "00";
-
-        // Update the background color of the inner div
-        progressvalue.css("backgroundColor", color);
-
-        // Update the inner div width
-        progressvalue.css("width", (100 - 100 * timePassed / duration) + "%");
-
-      }, 40);
-
-    });
-  },
-});
-
-:: UserStylesheet[stylesheet]
-.progress-bar {
-  position: relative;
-  border: 1px solid #777;
-  background: black;
-  height: 1em;
-}
-
-.progress-value {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background: #00ff00;
-}
-
-:: Attic Awakening
-The air is thick with dust. A frail old man sits on the attic floor, facing away. His back is hunched. His breath is uneven.
-
-''Leon (muttering):'' ''"D'you think the wind knows where it's blowin'? Or is it just... runnin' from somethin', too?"''
-
-<img @src="setup.ImagePath+'A1.png'" width="auto" height="auto">
-
-[[Look at the window->Window Gaze]]
-
-:: Window Gaze
-You look toward the grimy attic window. Moonlight cuts through like dying veins of silver. There is no wind. Just black sky.
-
-''Leon (murmuring):'' ''"Don't bother. Ain't nothin' out there worth seein'. Ain't nothin' that's comin' to save you, neither."''
-
-<img @src="setup.ImagePath+'A2.png'" width="auto" height="auto">
-
-<<timed 3s>>
-He shifts, fingers twitching on the floorboards.
-
-''Leon:'' ''"They used to say you could tell a man's soul by the way he stared out a window... Guess mine's long gone."''
-<<next>>
-<<timedprogressbar 8 20em>>
-  <<goto "Time's Up">>
+<<timedprogressbar 1 "80%">>
+<<goto "First Contact">>
 <</timedprogressbar>>
-[[Nod yes->Nod Yes]]  
-[[Nod no->Nod No]]
-<<script>>
-$(document).trigger(':passagedisplay');
-<</script>>
-<</timed>>
 
-:: Time's Up
-''Leon (coldly):'' ''"Silence speaks volumes, don't it? Maybe you're smarter than I thought... or maybe you're just too scared to answer."''
+:: First Contact [dialogue]
+<img src= "include/images/Leon_front.png">
 
-He shifts again, the floorboards creaking beneath him.
+Leon's voice scrapes against the drywall like sandpaper on bone.
 
-''Leon:'' ''"Either way, you're right to be quiet. Words got teeth. And mine been sharpened too long."''
-<img @src="setup.ImagePath+'A3.png'" width="auto" height="auto">
+<div class="dialogue">"The floorboards up here wheeze under my ribs each time I breathe, like the house itself is tired of holding me."</div>
 
-[[Continue listening->Nod Yes]]
+He hasn't looked at you directly, but his words seem to acknowledge your presence. His fingers trace idle patterns in the dust.
 
-:: Nod Yes
-''Leon (softly):'' ''"...So you hear me, then. Hnh... wasn't sure if you were real. Or just another one of the echoes."''
+<div class="dialogue">"I didn't mean to end my days in an empty attic, but here I am—no chair, no keepsakes, only splinters, dust, and an open-eyed light bulb that hums like a distant fly."</div>
 
-He doesn't turn, but his voice dips lower.
+You have two choices, but time is running short.
 
-''Leon:'' ''"You agree, huh? That it's gone? That there ain't nothin' left to look at?"''
+<<timedprogressbar $timer "80%">>
+<<goto "Impatience Rising">>
+<</timedprogressbar>>
 
-''Leon:'' ''"...Or maybe you're just noddin' to keep me calm..."''
-<img @src="setup.ImagePath+'A4.png'" width="auto" height="auto">
+[[Gaze at Leon intently|Gaze Path 1]]
+[[Listen without moving|Listen Path 1]]
 
-[[Stay quiet->Stay Quiet]]
+:: Gaze Path 1 [choice]
+<img src= "include/images/Leon_side.png">
 
-:: Nod No
-''Leon (whispers):'' ''"...Wrong answer."''
+You fix your gaze on Leon, studying the deep lines carved into his weathered face. He turns slowly, meeting your eyes for the first time.
 
-He lurches violently.
+<div class="dialogue">"You're looking at me like I'm a specimen. Like something to be dissected and understood."</div>
 
-*You catch a glint of something sharp.*
+His voice carries a sharp edge now, and his hands clench into fists.
 
-''Leon (hissing):'' ''"You shouldn't lie to a dying man."''
+<div class="dialogue">"She used to look at me that way too. Glori. Searching for the monster she was sure lived beneath my skin."</div>
 
-<<goto "Game Over">>
+<<set $gazed to true>>
 
-:: Stay Quiet
-''Leon:'' ''"...Smart. Real smart. Quiet mouths live longer in rooms like this."''
+The air grows thick with tension. Leon's breathing becomes shallow, agitated.
 
-''Leon:'' ''"Words got teeth. And mine been sharpened too long. You wouldn't want 'em near you... not if you knew the things they done."''
+<<timedprogressbar $timer "80%">>
+<<goto "Misunderstanding">>
+<</timedprogressbar>>
 
-He laughs again, but this one is hollow. Rotten at the core.
-<img @src="setup.ImagePath+'A5.png'" width="auto" height="auto">
+[[Continue gazing|Gaze Attack]]
+[[Look away respectfully|Gentle Redirect]]
 
-''Leon:'' ''"You still there?"''
+:: Listen Path 1 [choice]
+<img src= "include/images/Leon_back.png">
 
-<<timed 5s>>
-    <<goto "Nod No">>
-<</timed>>
+You remain still, letting his words wash over you without judgment. Leon seems to relax slightly, his shoulders dropping.
 
-[[Nod No->Nod No]]
+<div class="dialogue">"Because I had nowhere else to stand, I came up here; because I came up here, I started talking to the shadows; because the shadows answered with silence, I kept going until the words tasted like rust."</div>
 
-:: Game Over
-''Before you can react, Leon spins. Eyes wild. The room fades into blackness.''
-<img @src="setup.ImagePath+'A6.png'" width="auto" height="auto">
+He shifts position, turning slightly toward where you stand.
 
-'''GAME OVER'''
+<div class="dialogue">"You're not interrupting. Not judging. That's... unusual."</div>
 
-*You denied him something he needed.*
+<<set $listened to true>>
 
-*Memory Fragment Unlocked:*  
-> *Leon at 18, outside a church in the rain.*  
-> *"Please—please, I swear I'll never do it again."*
+His voice grows softer, more confessional.
 
-[[Try again->Attic Awakening]]
+<<timedprogressbar $timer "80%">>
+<<goto "Trust Building">>
+<</timedprogressbar>>
+
+[[Nod gently|Encouraging Nod]]
+[[Remain perfectly still|Deep Listening]]
+
+:: Gaze Attack [spooky]
+<img src= "include/images/A5.png">
+
+Leon's eyes flash with sudden fury. He lurches forward with surprising speed for his age.
+
+<div class="dialogue">"ENOUGH! I see what you're doing! Just like the HR girl with her blood-red lips, just like Glori with her wounded stare—you think you can see through me!"</div>
+
+His weathered hands reach for your throat. The last thing you see is the wild desperation in his eyes before everything goes black.
+
+<div class="dialogue">"I won't be a specimen. I won't be your broken thing to fix."</div>
+
+**GAME OVER**
+
+//You have unlocked new understanding. Leon's trauma runs deeper than you realized.//
+
+[[Begin again|Second Awakening]]
+
+:: Listen Path Deep [dialogue]
+<img src= "include/images/Leon_below.png">
+
+Leon's voice drops to almost a whisper, and you sense you're hearing something precious and fragile.
+
+<div class="dialogue">"I'm feeling stuck, you see—stitched in place by a hundred small humiliations. I pulled the final thread myself the day I lost the job that dangled early retirement like a cheap carrot."</div>
+
+He picks up a pair of tiny blue-striped socks from beside him, turning them over in his hands.
+
+<div class="dialogue">"Ten years of blood-sweat romance, of ramen dinners and rented rooms, then the clap—done. These little things... they weigh more than bricks now."</div>
+
+The vulnerability in his voice is almost unbearable. One wrong move could shatter this moment.
+
+<<timedprogressbar $timer "80%">>
+<<goto "Fragile Moment Breaks">>
+<</timedprogressbar>>
+
+[[Continue listening in silence|Deeper Truth]]
+[[Make a small, understanding sound|Acknowledgment]]
+
+:: Second Awakening [spooky]
+<img src= "include/images/A2.png">
+
+You return to the attic, but something has changed. The light bulb flickers more erratically now, and Leon sits in a different position—closer to the loose floorboard he mentioned.
+
+<div class="dialogue">"You're back. I remember you now... though perhaps that's just the shadows playing tricks."</div>
+
+His voice is calmer, but there's a new wariness in his posture.
+
+<div class="dialogue">"I may have been... hasty before. But you have to understand—trust is like glass. Once broken, even the pieces can cut you."</div>
+
+This time, you know better. You know what triggers his rage.
+
+<<timedprogressbar $timer "80%">>
+<<goto "Second Chance Lost">>
+<</timedprogressbar>>
+
+[[Gaze softly, not intensely|Gentle Gaze]]
+[[Listen with complete stillness|Patient Listening]]
+
+:: Deeper Truth [dialogue]
+<img src= "include/images/Leon_top.png">
+
+Leon's words flow like water through broken stones, each syllable carrying years of pain.
+
+<div class="dialogue">"I told Glori, I am changing, look, but transformation in silence is invisible. By the time she saw the man I was carving out, she'd labeled me a statue that could never move."</div>
+
+He sets the baby socks down carefully, reverently.
+
+<div class="dialogue">"And statues do not father children. Statues do not chase monsters out of nursery closets. Statues just stand, brittle, waiting for pigeons."</div>
+
+The raw honesty in his confession hangs in the air like incense. You sense this is the deepest truth he's shared with anyone.
+
+<<timedprogressbar $timer "80%">>
+<<goto "Truth Interrupted">>
+<</timedprogressbar>>
+
+[[Remain in perfect silence|Sacred Listening]]
+[[Offer the slightest nod|Gentle Recognition]]
+
+:: Sacred Listening [choice]
+<img src= "include/images/A3.png">
+
+Your perfect stillness becomes a sanctuary for Leon's words. He continues, his voice growing stronger with each confession shared into the understanding darkness.
+
+<div class="dialogue">"If I slide my fingers along this beam, I can carve little tally marks—days since hope last visited. Maybe I'll run out of wood before hope runs out of me. Or vice versa."</div>
+
+He looks up at you then, really seeing you for the first time.
+
+<div class="dialogue">"You... you just listen. No advice. No judgment. No trying to fix what's broken."</div>
+
+For a moment, something like peace crosses his weathered features.
+
+<div class="dialogue">"Maybe that's all anyone needs. Someone to witness the weight of their words without trying to lift it for them."</div>
+
+**TRUE ENDING**
+
+//In the silence between breaths, healing begins not with answers, but with presence.//
+
+[[Begin a new story|Attic Awakening]]
+
+:: Impatience Rising [spooky]
+<img src= "include/images/A4.png">
+
+Time runs out before you can choose. Leon interprets your hesitation as discomfort, his paranoia flaring.
+
+<div class="dialogue">"I see. You think I'm mad, don't you? Just another broken old man talking to himself in the dark."</div>
+
+His voice turns bitter, defensive.
+
+<div class="dialogue">"Get out. GET OUT! I don't need your pity or your fear!"</div>
+
+He throws a handful of dust and debris in your direction. The particles catch the light like falling stars as his rage consumes the moment.
+
+**GAME OVER**
+
+//Indecision is itself a choice, and it chose poorly.//
+
+[[Try again with purpose|Second Awakening]]
+
+:: Fragile Moment Breaks [spooky]
+<img src= "include/images/A6.png">
+
+Your silence stretches too long, and Leon misreads it as discomfort or judgment. The vulnerable moment shatters like glass.
+
+<div class="dialogue">"There it is. That look. That silence that says 'poor broken Leon, what a tragedy.' I don't need your pity!"</div>
+
+He clutches the baby socks to his chest protectively, his earlier openness replaced by defensive anger.
+
+<div class="dialogue">"Everyone thinks they know better. Everyone thinks they can fix what trauma broke. But some things stay broken!"</div>
+
+The trust you'd begun to build crumbles in an instant.
+
+**GAME OVER**
+
+//Even in listening, timing matters. Patience is an art form.//
+
+[[Learn from the silence|Second Awakening]]
+
+:: Gentle Recognition [choice]
+<img src= "include/images/Leon_front.png">
+
+Your slight nod—barely perceptible—carries more weight than words ever could. Leon sees it and understands that you're not pitying him, but recognizing the truth of his pain.
+
+<div class="dialogue">"Yes... yes, you do understand. Not the facts, perhaps, but the feeling beneath them."</div>
+
+He carefully places the baby socks back in their sacred spot beside the loose floorboard.
+
+<div class="dialogue">"I've been carrying this weight alone for so long, I forgot what it felt like to have someone simply... acknowledge it exists."</div>
+
+The attic feels different now—less like a prison, more like a chapel where difficult truths can be spoken and heard.
+
+<div class="dialogue">"Perhaps... perhaps there are other stories worth telling. Other wounds worth witnessing."</div>
+
+**HEALING PATHWAY UNLOCKED**
+
+//Small gestures can hold infinite compassion.//
+
+[[Continue this sacred dialogue|Extended Conversation]]
+[[Begin anew with deeper understanding|Attic Awakening]]
+
+:: Misunderstanding [spooky]
+<img src= "include/images/A4.png">
+
+Your indecision weighs heavy in the cramped attic air. Leon's paranoia flares as he misreads your hesitation.
+
+<div class="dialogue">"I see it in your face. That look of... calculation. You're deciding whether I'm worth your time, aren't you?"</div>
+
+His voice turns bitter, defensive.
+
+<div class="dialogue">"Just like the rest of them. Measuring my worth, cataloging my failures."</div>
+
+He turns away from you, shoulders hunched with rejection.
+
+**GAME OVER**
+
+//Indecision can be as cutting as judgment.//
+
+[[Start over with clarity|Second Awakening]]
+
+:: Gentle Redirect [choice]
+<img src= "include/images/Leon_side.png">
+
+You shift your gaze away from his face, looking instead at the weathered rafters above. The gesture is small but profound—showing interest without intrusion.
+
+<div class="dialogue">"Ah... you're not staring. Not dissecting. Just... present."</div>
+
+Leon's tension eases slightly. His breathing slows.
+
+<div class="dialogue">"Glori never learned that trick. She'd either avoid my eyes completely or bore into them like she was searching for lies."</div>
+
+He follows your gaze upward, finding momentary peace in the simple wooden beams.
+
+<div class="dialogue">"Sometimes the weight of being seen is too much. But being noticed... that's different."</div>
+
+[[Continue this gentle observation|Shared Contemplation]]
+[[Return your attention to Leon|Second Contact]]
+
+:: Trust Building [choice]
+<img src= "include/images/Leon_back.png">
+
+Your patient listening creates a safe space in the dusty attic. Leon's voice grows stronger, more confident with each word shared into the understanding silence.
+
+<div class="dialogue">"You know what's strange? I've been up here for... days? Weeks? Time moves differently when you're talking to shadows."</div>
+
+He shifts position, turning slightly more toward you.
+
+<div class="dialogue">"But you're not a shadow, are you? You're real, and you're listening, and you're not trying to fix anything."</div>
+
+The recognition in his voice carries a note of wonder.
+
+<div class="dialogue">"Maybe that's what I needed all along. Not solutions. Just... witness."</div>
+
+[[Continue building this trust|Deeper Connection]]
+[[Acknowledge his insight with a subtle nod|Understanding Moment]]
+
+:: Encouraging Nod [choice]
+<img src= "include/images/Leon_front.png">
+
+Your gentle nod—barely perceptible but deeply felt—acknowledges his pain without diminishing it. Leon sees the gesture and something in his posture softens.
+
+<div class="dialogue">"You understand. Not the details, perhaps, but the shape of it. The weight."</div>
+
+He leans forward slightly, as if sharing a precious secret.
+
+<div class="dialogue">"I used to think healing meant forgetting. But maybe it just means finding someone who can hold the story without trying to change its ending."</div>
+
+The attic feels warmer somehow, less like a prison and more like a sanctuary.
+
+<div class="dialogue">"There are other stories, you know. Darker ones. Would you... would you listen to those too?"</div>
+
+[[Nod again, indicating willingness|Deeper Stories]]
+[[Remain open and present|Continued Presence]]
+
+:: Deep Listening [choice]
+<img src= "include/images/A3.png">
+
+Your absolute stillness becomes a vessel for Leon's words. In the complete absence of judgment or interruption, he finds the courage to speak truths he's never voiced.
+
+<div class="dialogue">"The baby socks... I bought them the day we decided to try. Sky-blue stripes, so small they could disappear in a closed fist."</div>
+
+His voice carries the weight of years.
+
+<div class="dialogue">"Every month we failed, I'd hold them a little longer. Imagining tiny feet, tiny heartbeats. Glori stopped looking at them after the third try."</div>
+
+The silence stretches, sacred and unbroken.
+
+<div class="dialogue">"But I kept them. Even after she left. Even up here. Because throwing them away would be... would be admitting we never really tried at all."</div>
+
+This leads directly to: [[Listen Path Deep]]
+
+:: Acknowledgment [choice]
+<img src= "include/images/Leon_below.png">
+
+You make the softest sound—barely a breath, more felt than heard. It's not agreement or disagreement, just acknowledgment that his words exist and matter.
+
+<div class="dialogue">"Yes... exactly like that. Not trying to fill the silence with solutions or platitudes."</div>
+
+Leon carefully sets the baby socks back in their sacred place.
+
+<div class="dialogue">"Glori used to make sounds like that, in the beginning. Before the trauma convinced her that every breath was a judgment."</div>
+
+His eyes find yours for a brief moment.
+
+<div class="dialogue">"I'm starting to remember what it felt like... to simply be heard."</div>
+
+[[Continue this sacred listening|Extended Truth]]
+[[Offer another gentle acknowledgment|Healing Presence]]
+
+:: Second Chance Lost [spooky]
+<img src= "include/images/A6.png">
+
+Despite your newfound knowledge, you hesitate too long. Leon's fragile trust begins to crack like ice under pressure.
+
+<div class="dialogue">"No... no, I see it again. That pause. That moment where you decide if I'm worth the effort."</div>
+
+His voice grows sharp with old wounds.
+
+<div class="dialogue">"I thought maybe this time would be different. But even you... even you can't see past the broken pieces."</div>
+
+The second chance crumbles to dust in his weathered hands.
+
+**GAME OVER**
+
+//Some trust, once broken, breaks twice as easily.//
+
+[[Try once more|Third Awakening]]
+
+:: Gentle Gaze [choice]
+<img src= "include/images/Leon_side.png">
+
+This time your gaze is soft, unfocused—seeing without staring, acknowledging without analyzing. Leon notices the difference immediately.
+
+<div class="dialogue">"That's... that's better. You're looking at me like I'm a person, not a puzzle to solve."</div>
+
+His defensive posture relaxes incrementally.
+
+<div class="dialogue">"I've learned to tell the difference, you see. Between seeing and scrutinizing. Between care and curiosity."</div>
+
+The trust you lost before begins to tentatively rebuild.
+
+<div class="dialogue">"Perhaps we can try this again. Perhaps there's still something worth salvaging here."</div>
+
+[[Continue with this gentle approach|Redemption Path]]
+[[Shift to listening instead|Respectful Transition]]
+
+:: Patient Listening [choice]
+<img src= "include/images/Leon_back.png">
+
+Your complete stillness in this second encounter speaks volumes. Leon recognizes your restraint and appreciates the lesson learned.
+
+<div class="dialogue">"You remember. You learned from before. That's... that's more than most people manage."</div>
+
+His voice carries a note of surprised gratitude.
+
+<div class="dialogue">"Maybe there's hope for this conversation yet. Maybe broken things can still hold water, if you're careful with the cracks."</div>
+
+The attic feels less oppressive now, charged with possibility rather than dread.
+
+<div class="dialogue">"Let me tell you about the day I realized I'd lost everything. Really lost it, not just misplaced it."</div>
+
+[[Listen to this deeper story|Core Trauma]]
+[[Remain in perfect receptive silence|Sacred Space]]
+
+:: Truth Interrupted [spooky]
+<img src= "include/images/A5.png">
+
+Time runs out before you can respond to Leon's deepest confession. He misreads your silence as judgment or discomfort.
+
+<div class="dialogue">"Too much. I said too much, didn't I? The baby socks, the statues, the failure—it's all too heavy for someone else to carry."</div>
+
+His vulnerability curdles into shame.
+
+<div class="dialogue">"I should have kept it simple. Should have talked about the weather, the dust, anything but the truth."</div>
+
+The moment of connection shatters like glass on stone.
+
+**GAME OVER**
+
+//Even the deepest truths need the right timing.//
+
+[[Honor the truth he shared|Sacred Listening]]
+
+:: Extended Conversation [choice]
+<img src= "include/images/A1.png">
+
+The attic has transformed. What began as a place of exile has become a sanctuary of shared understanding. Leon speaks with growing confidence, no longer talking to shadows but to a presence that truly hears.
+
+<div class="dialogue">"There are other chapters to this story. About the therapist who said healing was just a matter of 'choosing different thoughts.' About the nights I prayed until my knuckles turned white."</div>
+
+He pauses, studying your face in the amber light.
+
+<div class="dialogue">"About the day I threw away the porn collection and felt like I was finally becoming the man she needed me to be. Too late, of course. But becoming him anyway."</div>
+
+The conversation continues, each revelation met with perfect presence.
+
+<div class="dialogue">"What happens next? I don't know. But for the first time in months, I'm not afraid of the answer."</div>
+
+**EXTENDED ENDING**
+
+//Some stories don't end, they just find better listeners.//
+
+[[Begin again with deeper wisdom|Attic Awakening]]
+[[Continue this timeless dialogue|Infinite Conversation]]
+
+:: Shared Contemplation [choice]
+<img src= "include/images/A2.png">
+
+Together, you both gaze at the weathered beams above. In this shared silence, Leon finds a moment of peace he hasn't experienced in months.
+
+<div class="dialogue">"These rafters have heard everything. Every word of anger, every sob, every desperate prayer. But they don't judge. They just... hold it all."</div>
+
+His voice is softer now, contemplative rather than bitter.
+
+<div class="dialogue">"Maybe that's what I needed. Not someone to fix the broken parts, just someone to help me look up instead of down."</div>
+
+The simple act of shared observation has created an unexpected bond.
+
+[[Continue looking upward together|Transcendent Moment]]
+[[Slowly lower your gaze to meet his|Gentle Connection]]
+
+:: Second Contact [choice]
+<img src= "include/images/Leon_front.png">
+
+You return your attention to Leon, but with new understanding. Your gaze is warm rather than analytical, present rather than probing.
+
+<div class="dialogue">"There it is. That's the difference. You're seeing me, not studying me."</div>
+
+Leon meets your eyes directly for the first time, and there's no fear in his expression.
+
+<div class="dialogue">"I'd forgotten what it felt like to be looked at with kindness rather than concern."</div>
+
+The connection between you strengthens, built on mutual respect rather than curiosity.
+
+[[Maintain this gentle eye contact|Understanding Gaze]]
+[[Offer a small, reassuring smile|Comfort Offered]]
+
+:: Deeper Connection [choice]
+<img src= "include/images/Leon_back.png">
+
+The trust between you deepens like roots finding water. Leon's posture continues to relax as he realizes you're not going anywhere.
+
+<div class="dialogue">"It's been so long since someone just... stayed. Glori left, the job ended, even my own hopes packed up and moved out. But you're still here."</div>
+
+He turns fully toward you now, no longer hiding.
+
+<div class="dialogue">"Maybe that's the real miracle. Not healing the wound, but finding someone willing to sit with it while it heals itself."</div>
+
+The attic feels transformed by this growing trust.
+
+[[Affirm your presence with a gentle gesture|Steadfast Presence]]
+[[Continue listening to his realization|Witness Becoming]]
+
+:: Understanding Moment [choice]
+<img src= "include/images/Leon_side.png">
+
+Your subtle nod carries infinite understanding. Leon sees not pity or analysis in your expression, but simple recognition of truth shared.
+
+<div class="dialogue">"You get it. Not the facts and figures, but the feeling underneath. The shape of it."</div>
+
+He leans back against the wall, suddenly looking less burdened.
+
+<div class="dialogue">"I've been carrying this alone for so long, I forgot what it felt like to have someone else hold part of the weight."</div>
+
+The acknowledgment has lightened something essential in him.
+
+[[Share in this moment of understanding|Mutual Recognition]]
+[[Encourage him to continue|Deeper Sharing]]
+
+:: Deeper Stories [choice]
+<img src= "include/images/A4.png">
+
+Your willingness to hear more opens a floodgate. Leon's eyes brighten with the possibility of being fully known.
+
+<div class="dialogue">"The darker stories... they're about the nights I almost didn't make it up here. About pills counted and recounted. About the bridge I walked to but couldn't cross."</div>
+
+His voice doesn't shake—your presence has given him strength.
+
+<div class="dialogue">"But also about the moments that saved me. A song on the radio. A memory of Glori laughing. The baby socks reminding me that hope existed once."</div>
+
+The darkness and light intertwine in his storytelling.
+
+[[Listen to these deeper truths|Sacred Witness]]
+[[Acknowledge the courage it takes to share|Honor Vulnerability]]
+
+:: Continued Presence [choice]
+<img src= "include/images/A3.png">
+
+Your unwavering presence becomes a lighthouse in Leon's storm. He speaks with growing confidence, no longer afraid of overwhelming you.
+
+<div class="dialogue">"There's something powerful about someone who doesn't flinch. Who doesn't try to lighten the mood or change the subject when things get heavy."</div>
+
+He gestures around the attic, which suddenly seems less oppressive.
+
+<div class="dialogue">"This place was my tomb. But with you here... it feels more like a cocoon. A place where something new might emerge."</div>
+
+The transformation is palpable.
+
+[[Remain in this sacred space|Transformative Presence]]
+[[Witness his emerging hope|Renewal Recognition]]
+
+:: Extended Truth [choice]
+<img src= "include/images/Leon_below.png">
+
+The sacred listening continues to unfold deeper layers of Leon's story. Each word shared into the understanding silence reveals more of his authentic self.
+
+<div class="dialogue">"The self-help books said forgiveness was a choice. But they never explained what to do when the person you need to forgive is yourself."</div>
+
+His voice carries years of self-recrimination.
+
+<div class="dialogue">"I thought changing meant becoming someone else entirely. But maybe it just means accepting who you've always been underneath the shame."</div>
+
+This insight seems to surprise even him.
+
+[[Continue this profound listening|Deep Wisdom]]
+[[Reflect his insight back to him|Mirror Truth]]
+
+:: Healing Presence [choice]
+<img src= "include/images/Leon_front.png">
+
+Your gentle acknowledgment creates a space where healing becomes possible. Leon's breathing deepens, his shoulders drop, his hands unclench.
+
+<div class="dialogue">"This is what therapy was supposed to feel like, wasn't it? Not fixing or analyzing, just... being with."</div>
+
+He looks at you with something approaching wonder.
+
+<div class="dialogue">"I understand now why Glori couldn't heal with me. I was trying to be her therapist instead of her witness."</div>
+
+The realization brings both sadness and relief.
+
+[[Honor this insight|Wisdom Honored]]
+[[Continue being present|Sustained Presence]]
+
+:: Third Awakening [spooky]
+<img src= "include/images/A1.png">
+
+The attic appears once more, but now there's a quality of finality to it. This feels like a last chance, a final opportunity for true connection.
+
+<div class="dialogue">"You keep coming back. Even after I've shown you my worst, my most broken parts. Why?"</div>
+
+Leon's voice carries exhaustion but also a thread of hope.
+
+<div class="dialogue">"Most people give up after the second try. But here you are again, willing to sit with my darkness."</div>
+
+The weight of repeated failure hangs heavy, but so does the possibility of redemption.
+
+[[Demonstrate your commitment through presence|Final Chance]]
+[[Show him you see his worth|Unconditional Acceptance]]
+
+:: Infinite Conversation [choice]
+<img src= "include/images/A5.png">
+
+Time becomes fluid in this space of perfect understanding. The conversation transcends the physical attic, becoming something eternal and healing.
+
+<div class="dialogue">"I think I understand now what the philosophers meant about eternal moments. This feeling... it could last forever and still not be enough."</div>
+
+Leon speaks with profound peace.
+
+<div class="dialogue">"Maybe that's what love really is—not passion or romance, but this: someone willing to listen to your truth without trying to change it."</div>
+
+The story has found its true ending in this endless conversation.
+
+**INFINITE ENDING**
+
+//Some conversations transcend time and space, becoming pure communion.//
+
+[[Let the conversation continue beyond words|Wordless Understanding]]
+[[Return to the beginning with complete wisdom|Attic Awakening]]
+
+:: Redemption Path [choice]
+<img src= "include/images/Leon_side.png">
+
+Your gentle approach begins to rebuild the trust that was lost. Leon's defensive walls slowly lower as he recognizes your sincere effort to understand rather than judge.
+
+<div class="dialogue">"You're trying. Really trying. That means more than you know."</div>
+
+His voice carries cautious hope.
+
+<div class="dialogue">"Maybe redemption isn't about erasing the mistakes, but about finding someone willing to see past them."</div>
+
+The possibility of connection flickers back to life.
+
+[[Continue this patient rebuilding|Slow Healing]]
+[[Show him he's worthy of patience|Worth Affirmed]]
+
+:: Respectful Transition [choice]
+<img src= "include/images/Leon_back.png">
+
+You gracefully shift from gazing to listening, showing Leon that you can adapt without judgment. This flexibility demonstrates respect for his comfort levels.
+
+<div class="dialogue">"You hear me. You really hear me. That's rarer than you might think."</div>
+
+Leon's appreciation is evident in his relaxed posture.
+
+<div class="dialogue">"Sometimes the kindest thing isn't what you do, but how willing you are to stop doing what doesn't work."</div>
+
+This wisdom emerges from your respectful transition.
+
+[[Continue this respectful listening|Honored Space]]
+[[Acknowledge his wisdom|Reciprocal Understanding]]
+
+:: Core Trauma [dialogue]
+<img src= "include/images/A6.png">
+
+Leon prepares to share his deepest wound. Your patient listening has earned this level of trust.
+
+<div class="dialogue">"The day I lost everything... it wasn't dramatic. No explosions, no shouting matches. Just silence."</div>
+
+His voice grows quiet, reverent.
+
+<div class="dialogue">"Glori packed while I was at work. Left the baby socks on the kitchen table with a note: 'These were always yours more than mine.'"</div>
+
+The pain is raw even now.
+
+<div class="dialogue">"That's when I knew. Hope isn't something you lose in a moment. It bleeds out slowly, drop by drop, until you're empty."</div>
+
+[[Witness this profound pain|Sacred Grief]]
+[[Hold space for his emptiness|Container for Pain]]
+
+:: Sacred Space [choice]
+<img src= "include/images/A3.png">
+
+Your perfect receptive silence creates a sanctuary where Leon's deepest truths can emerge without fear of judgment or interruption.
+
+<div class="dialogue">"This silence... it's not empty. It's full. Full of acceptance, of patience, of space for whatever comes."</div>
+
+Leon speaks with growing peace.
+
+<div class="dialogue">"I've been so afraid of silence, thinking it meant abandonment. But this silence says 'I'm here. I'm not going anywhere.'"</div>
+
+The sacred space transforms both of you.
+
+[[Maintain this holy silence|Divine Presence]]
+[[Let him fill the space with truth|Truth Container]]
+
+:: Transcendent Moment [choice]
+<img src= "include/images/A2.png">
+
+Looking upward together, you both transcend the immediate pain and find something larger. The rafters become a cathedral ceiling, the attic a sanctuary.
+
+<div class="dialogue">"Up there... beyond the wood and the dust... I can almost see it. The person I was meant to be before the world broke me."</div>
+
+Leon's voice carries wonder.
+
+<div class="dialogue">"Maybe healing isn't about going back. Maybe it's about going up."</div>
+
+This shared vision transforms the space entirely.
+
+[[Share in this transcendent vision|Elevated Understanding]]
+[[Witness his spiritual emergence|Soul Recognition]]
+
+:: Gentle Connection [choice]
+<img src= "include/images/Leon_front.png">
+
+As your gaze slowly meets his, the connection feels natural rather than forced. Leon's eyes hold no fear, only gratitude.
+
+<div class="dialogue">"There you are. And here I am. Two people in a dusty attic, and yet... this feels like the most real moment I've had in years."</div>
+
+The simplicity of the connection is profound.
+
+<div class="dialogue">"Maybe that's all anyone ever needs. To be seen and not judged. To be heard and not fixed."</div>
+
+This gentle connection becomes the foundation for deeper understanding.
+
+[[Deepen this gentle connection|Soul Meeting]]
+[[Honor the reality of this moment|Present Moment Awareness]]
+
+:: Wordless Understanding [choice]
+<img src= "include/images/A1.png">
+
+The conversation moves beyond language into pure communion. In this wordless space, understanding flows without the need for explanation.
+
+Leon's eyes speak volumes. Your presence responds in kind. The attic becomes a temple of silent communication.
+
+Time stops. Pain transforms. Hope emerges not as something to be achieved, but as something already present in this moment of perfect understanding.
+
+**TRANSCENDENT ENDING**
+
+//In perfect silence, all truths are spoken.//
+
+[[Rest in this eternal moment|Eternal Peace]]
+[[Return to language, forever changed|Transformed Return]]
+
+:: Understanding Gaze [choice]
+<img src= "include/images/Leon_front.png">
+
+Your sustained gentle eye contact creates a bridge of understanding. Leon's face relaxes completely, years of tension melting away.
+
+<div class="dialogue">"This is what I've been searching for. Not love, not passion, not even forgiveness. Just... recognition."</div>
+
+The connection deepens with each shared moment.
+
+<div class="dialogue">"You see me as I am, not as I was or could be. Present tense. Real time. That's the rarest gift."</div>
+
+[[Deepen this recognition|Mutual Seeing]]
+[[Rest in this perfect understanding|Peaceful Connection]]
+
+:: Comfort Offered [choice]
+<img src= "include/images/Leon_side.png">
+
+Your small, genuine smile breaks through years of Leon's isolation. He hasn't seen kindness directed at him in so long that it takes him a moment to recognize it.
+
+<div class="dialogue">"I'd forgotten... I'd actually forgotten what it felt like to have someone smile at me. Not out of politeness or pity, but because they genuinely see something worth smiling about."</div>
+
+His own face begins to soften in response.
+
+<div class="dialogue">"Maybe I'm not as irredeemable as I thought. Maybe there's still something human left in me."</div>
+
+[[Continue offering gentle comfort|Sustained Kindness]]
+[[Share in this moment of rediscovered humanity|Human Recognition]]
+
+:: Steadfast Presence [choice]
+<img src= "include/images/A3.png">
+
+Your unwavering presence becomes an anchor in Leon's storm. He realizes that for the first time in months, he's not afraid you'll leave.
+
+<div class="dialogue">"You're not going anywhere, are you? Not checking your watch, not looking for the exit, not making excuses."</div>
+
+Relief floods his voice.
+
+<div class="dialogue">"This is what Glori couldn't give me. Not because she didn't love me, but because her own pain made staying too dangerous."</div>
+
+The gift of presence transforms everything.
+
+[[Affirm your commitment to staying|Committed Presence]]
+[[Acknowledge the courage staying requires|Brave Witness]]
+
+:: Witness Becoming [choice]
+<img src= "include/images/Leon_back.png">
+
+You witness Leon's transformation in real time. Before your eyes, he's shifting from broken to healing, from isolated to connected.
+
+<div class="dialogue">"I can feel it happening. Not fixing, not changing back to who I was, but becoming... someone new. Someone who can carry scars without being defined by them."</div>
+
+The metamorphosis is profound.
+
+<div class="dialogue">"You're not watching me break down. You're watching me break through."</div>
+
+[[Honor this transformation|Sacred Becoming]]
+[[Celebrate his emergence|Joyful Recognition]]
+
+:: Mutual Recognition [choice]
+<img src= "include/images/Leon_front.png">
+
+The understanding flows both ways now. Leon sees that you too have been touched by this encounter, that witnessing has changed you as much as being witnessed has changed him.
+
+<div class="dialogue">"You're different too now, aren't you? Not the same person who walked into this attic. Bearing witness changes the witness."</div>
+
+The recognition is mutual and profound.
+
+<div class="dialogue">"Maybe that's how healing really works. Not one person fixing another, but two people becoming more human together."</div>
+
+**MUTUAL TRANSFORMATION**
+
+//In true witness, both observer and observed are forever changed.//
+
+[[Embrace this mutual change|Shared Evolution]]
+[[Honor what you've both become|New Beings]]
+
+:: Deeper Sharing [choice]
+<img src= "include/images/Leon_below.png">
+
+Your encouragement opens floodgates of truth. Leon shares not just his pain, but his hopes, his dreams deferred, his small daily victories over despair.
+
+<div class="dialogue">"There are good parts too. Moments when the sun hits the attic just right and I remember what beauty feels like. Days when I can hold the baby socks without crying."</div>
+
+Light enters the darkness of his story.
+
+<div class="dialogue">"And now this. This conversation. This proof that connection is still possible."</div>
+
+The sharing becomes a celebration of resilience.
+
+[[Celebrate these moments of light|Light Recognition]]
+[[Honor his surviving spirit|Resilience Honored]]
+
+:: Eternal Peace [choice]
+<img src= "include/images/A1.png">
+
+In this eternal moment, all suffering transforms into understanding, all pain into compassion, all isolation into connection. The attic becomes timeless, a space outside of ordinary existence.
+
+Leon's face radiates peace. Your presence embodies perfect acceptance. Together, you rest in a space where healing isn't a destination but a natural state of being.
+
+**ETERNAL ENDING**
+
+//Some moments contain all of eternity.//
+
+[[Dwell in this timeless space forever|Infinite Peace]]
+
+:: Transformed Return [choice]
+<img src= "include/images/Leon_front.png">
+
+You return to language, but both of you are forever changed by the wordless communion you've shared. Words themselves seem inadequate now, but necessary to bridge back to the world.
+
+<div class="dialogue">"I don't think I can explain what just happened. But I don't need to. You were there. You know."</div>
+
+Leon speaks with quiet certainty.
+
+<div class="dialogue">"When I leave this attic—and I will leave it now—I'll carry this moment with me. Not as a memory, but as a new way of being."</div>
+
+**TRANSFORMATION COMPLETE**
+
+//True encounters change us at the cellular level.//
+
+[[Witness his prepared departure|Readiness Recognized]]
+[[Prepare for your own transformation|Personal Change]]
+
+:: Infinite Peace [choice]
+<img src= "include/images/A5.png">
+
+You choose to remain in this eternal moment, where peace isn't an achievement but a recognition of what was always already present. The attic becomes a portal to the infinite.
+
+Time stops being linear. Story stops being sequential. You and Leon exist in a space of pure being, where all suffering has been transformed into wisdom, all pain into compassion.
+
+**INFINITE PEACE ENDING**
+
+//In choosing eternity, time becomes irrelevant.//
+
+This is the end that is no ending, the story that continues forever in the space between heartbeats, in the silence between words, in the love that exists when all doing stops and only being remains.
+
+:: To Be Continued [choice]
+<img src= "include/images/A1.png">
+
+This path of the story is still being written. Leon's journey continues to unfold in ways not yet imagined.
+
+<div class="dialogue">"Some stories need time to breathe before they can be told properly. This is one of those moments."</div>
+
+The attic shimmers with possibility, waiting for the right words to give form to the experiences that lie ahead.
+
+<div class="dialogue">"But every ending is also a beginning. Every pause, a preparation for what comes next."</div>
+
+**TO BE CONTINUED**
+
+//The deepest stories are written slowly, with patience and care.//
+
+[[Return to the beginning|Attic Awakening]]
+[[Start a new journey|First Contact]]
+
+:: Sacred Witness [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Honor Vulnerability [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Transformative Presence [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Renewal Recognition [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Deep Wisdom [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Mirror Truth [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Wisdom Honored [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Sustained Presence [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Final Chance [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Unconditional Acceptance [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Slow Healing [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Worth Affirmed [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Honored Space [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Reciprocal Understanding [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Sacred Grief [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Container for Pain [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Divine Presence [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Truth Container [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Elevated Understanding [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Soul Recognition [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Soul Meeting [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Present Moment Awareness [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Mutual Seeing [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Peaceful Connection [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Sustained Kindness [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Human Recognition [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Committed Presence [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Brave Witness [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Sacred Becoming [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Joyful Recognition [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Shared Evolution [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: New Beings [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Light Recognition [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Resilience Honored [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Readiness Recognized [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]
+
+:: Personal Change [choice]
+<img src= "include/images/A1.png">
+
+[[Continue the story|To Be Continued]]

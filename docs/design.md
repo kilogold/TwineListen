@@ -14,3 +14,14 @@ The narrative context of the game is as follows:
 - The old man is prone to commit suicide or impulsively murdering the player, triggering a game over.
 - Every game over reveals a little bit of additional context. The player is expected to lose several times as they uncover the story.
 - The game ends when the man tells his story in full, finally confiding in the player.
+
+Progression:
+We start unraveling Leon's psyche, from current state all the way to childhood.
+Leon reaching reflection of his childhood leads to end-game, where he finally becomes self-aware.
+His final challenge is to accept the arduous journey of radical change; he can still reject the calling at the end.
+
+Ending:
+There are multiple premature endings, and only one definitive ending.
+In the definitive ending, the player realizes that Leon was not an intruder in the attic, the player is.
+The player was a sort of kindered spirit, providing emotional support. The player ought to feel proud for helping Leon.
+Hopefully, players seek out that same rewarding feeling in real life by helping those in need, even if only listening.
