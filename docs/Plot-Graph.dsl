@@ -1,3 +1,8 @@
+// [Instructions/Guide]
+// Summary:
+// This C4 DSL model is adapted for interactive narrative building. 
+// It is unconventional, but works for rendering a story graph via Structurizr.
+//
 // Nomenclature:
 // - Chapters (softwareSystem): ch_<chapter_slug>
 // - Scenes (container): scn_<scene_slug>
@@ -10,11 +15,13 @@
 // - Display names: short code (e.g., "P01"); second label is human-readable
 // - Cross-references: ch_<chapter>.scn_<scene>.pNN_<kind>_<slug>
 // - Slugs: lowercase, snake_case, concise
+//
 // Relationships:
 // - Treat directionality as plot continuity, as if answering "because..." into the next node.
 // - Treat nodes with multiple afferent relationships as complimenting narrative, as if stating "and..." into the connected nodes.
 // - Treat nodes with multiple efferent relationships as re-visiting the narrative topic with new information.
 //      - Avoid infinite narrative recursion by ensuring that the narrative is always progressing.
+//
 
 workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
 

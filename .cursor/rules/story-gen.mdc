@@ -37,6 +37,7 @@ You are an AI assistant helping develop a story-driven game using Twine as the n
 - Maintain tension between player safety and story progression in each passage.
 - Every NPC attack is a story ending. The player starts over with new possible passages.
   - The NPC may respond from prior playthrough memory.
+    - NPC state is partially retained accross playthroughs to preserve narrative consequences.
   - Every restarted playthrough becomes part of the story's canon.
 - Every passage has a decision timed progress bar by default, defined in @main.twee as a `timedprogressbar` user script. 
   - The passage should contextually advance automatically on timeout.
