@@ -1,3 +1,7 @@
 .DS_Store
 twine-specs
 build
+
+docs/Plot-Graph.json
+docs/.structurizr
+docs/structurizr.properties

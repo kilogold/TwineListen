@@ -1,0 +1,68 @@
+---
+alwaysApply: false
+---
+You are an AI assistant helping develop a story-driven game using Twine as the narrative engine.
+
+## Key development constraints:
+1. The game has only two mechanics: gaze & listen.
+2. Focus on emotional storytelling and psychological horror.
+3. Apply principles from "Aesthetics of Play" for narrative content.
+
+## Game features: 
+- Player perspective: First-person.
+- Single NPC actor: a frail and melancholic elderly man named Leon.
+- Player actor: a mysterious humanoid physical entity that keeps respawning.
+- Static environment: dark attic setting.
+- Core gameplay revolves around careful NPC + environment observation & listening.
+- Leon is subject to attack the player if he feels misunderstood, judged, or ignored.
+- Game over unlocks new progressive story passages.
+- The story has multiple endings based on player interactions & NPC reactions.
+- Player only nods and listens.
+
+## Narrative rules:
+- Player is silent and stationary, only responding with presence, observation, and listening.
+- The player's character in the attic willingly.
+- Incorporate the following tones & writing style, in order of preference:
+  1. Melancholy, despair, grief.
+  2. Poetic, but not abstract.
+  3. Psychological thriller.
+- Build Leon's Twine dialogue script based on @Plot-Device.md
+  - Leon's dialogue cues must be unpredictable, making player choice hard to decide between safety & danger.
+  - Leon always ers on the side of suspicion towards the player.
+  - Keep his dialogue faithful to the plot device.
+- Leon's communication style:
+  - Uses coloquial American English.
+  - Cynical
+  - Hopeful
+- Maintain tension between player safety and story progression in each passage.
+- Every NPC attack is a story ending. The player starts over with new possible passages.
+  - The NPC may respond from prior playthrough memory.
+  - Every restarted playthrough becomes part of the story's canon.
+- Every passage has a decision timed progress bar by default, defined in @main.twee as a `timedprogressbar` user script. 
+  - The passage should contextually advance automatically on timeout.
+
+## Technical guidelines:
+- Implement story as a Twee in @leon.twee
+- Use Sugarcube V2 story format.
+  - For Sugarcube documentation, recursively scan @/docs/sugarcube-2_docs/ directory.
+- The story always starts with passage name: `Attic Awakening`.
+- Do not create `StoryData` or `StoryTitle` passages. @main.twee already defines them.
+- `timedprogressbar` macro uses the same duration accross every invocation. Set a Sugarcube variable to easily modify.
+- Creatively leverage Sugarcube variables to design pivotal narrative forks accross  passages. 
+  - Example A:
+    - For passages `A`->`B`->`C`, passage `C` may have a `visited` counter.
+      - If `visited` == 0: Game over is triggered, and `visited` counter increments.
+      - If `visited` > 0: Passage continues sequence; `C`->`D`->`E`, and so on.
+  - Example B:
+    - Leon has a `comfort` variable. Certain passages have a `threshold` value. Upon reaching such passages, the following conditions ensue:
+      - If `comfort` >= `threshold`: Progress the story.
+      - If `comfort` < `threshold`: Game over.
+  - Force the player to face multiple game overs on their way to the successful ending; it is impossible to achieve the final ending in a single  playthrough.
+- Passage links are always written outside & after the `timedprogressbar` macro. For example:
+```
+<<timedprogressbar 3>>
+  <<goto "Tragedy">>
+<</timedprogressbar>>
+[[Option 1|OptionOne]]
+[[Option 2|OptionTwo]]
+```
