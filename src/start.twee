@@ -1,0 +1,215 @@
+:: P01 [Passage]
+He hears a breath that isn’t his. The attic holds it like a secret you don’t deserve.
+
+<div class="dialogue">
+<<if visited("P01") <= 1>>
+"You picked a bad night to haunt me."
+<<else>>
+"You again. Thought the dust would bury the trail you keep making back here."
+<</if>>
+</div>
+
+<div class="dialogue">
+"Don’t fix me. Just witness. If you can bear that."
+</div>
+
+<<timedprogressbar $timer>>
+  <<goto "P03">>
+<</timedprogressbar>>
+
+[[Act: Stay|P02]]
+<<if $anger > 40 || $stress > 50>>[[Act: Look away|P05]]<</if>>
+
+
+
+:: P02 [Passage]
+<div class="dialogue">
+"Alright. Terms are simple—no rescue missions. I talk; you stand there and try not to look holy."
+</div>
+
+<<timedprogressbar $timer>>
+  <<goto "P03">>
+<</timedprogressbar>>
+
+[[Act: Nod once|P04]]
+<<if $stress > 50 || $anger > 40>>[[Act: Stare too long|P05]]<</if>>
+
+
+
+:: P03 [Passage]
+<<set $stress = Math.max(0, Math.min(100, $stress + 3))>>
+
+He searches your face for the verdict he swears is hiding there.
+
+<div class="dialogue">
+"Does this place disgust you? Or is it just me you can’t stand?"
+</div>
+
+<<if $stress > 70>>
+  <<timedprogressbar $timer>>
+    <<goto "P10">>
+  <</timedprogressbar>>
+<</if>>
+
+<<if $stress >= 20 && $stress <= 60>>[[Act: Admit you're here|P06]]<</if>>
+[[Act: Keep your distance|P05]]
+
+
+
+:: P04 [Passage]
+<<set $stress = Math.max(0, Math.min(100, $stress - 2))>>
+
+<div class="dialogue">
+"You hold your ground. I’ll trade you detail for presence."
+</div>
+
+<<timedprogressbar $timer>>
+  <<goto "P12">>
+<</timedprogressbar>>
+
+<<if $anger <= 30>>[[Act: Keep a soft gaze|P08]]<</if>>
+<<if $anger > 40>>[[Act: Break eye contact|P05]]<</if>>
+
+
+
+:: P05 [Passage]
+<<set $anger = Math.max(0, Math.min(100, $anger + 6))>>
+
+Your quiet hardens like a verdict. His shoulders rise; words turn sharp enough to bleed on.
+
+<div class="dialogue">
+"Don’t look at me like I’m a problem set. I’m not your homework."
+</div>
+
+<<if $anger > 60 || $stress > 80>>
+  <<timedprogressbar $timer>>
+    <<goto "P09">>
+  <</timedprogressbar>>
+<</if>>
+
+[[Act: Lower your gaze|P11]]
+[[Act: Soften stance|P04]]
+
+
+
+:: P06 [Passage]
+<<set $stress = Math.max(0, Math.min(100, $stress + 4))>>
+
+<div class="dialogue">
+"I lost the job. Paperwork kept catching fire in my head. Couldn’t carry the water and the matches."
+</div>
+
+<<timedprogressbar $timer>>
+  <<goto "P12">>
+<</timedprogressbar>>
+
+[[Act: Encourage him to continue|P07]]
+
+
+
+:: P07 [Passage]
+<<set $stress = Math.max(0, Math.min(100, $stress + 4))>>
+
+<div class="dialogue">
+"The marriage cracked down the middle. I chose the cut. Better a clean wound than rot."
+</div>
+
+<<timedprogressbar $timer>>
+  <<goto "P12">>
+<</timedprogressbar>>
+
+[[Act: Say nothing|P11]]
+<<if $anger > 50>>[[Act: Challenge him|P05]]<</if>>
+
+
+
+:: P08 [Passage]
+<<set $stress = Math.max(0, Math.min(100, $stress - 4))>>
+
+<div class="dialogue">
+"I just want to stand up without shaking. Childish, right?"
+</div>
+
+<<timedprogressbar $timer>>
+  <<goto "P12">>
+<</timedprogressbar>>
+
+[[Act: Promise to listen|P11]]
+
+
+
+:: P09 [Passage-GameOver]
+<<set $anger = Math.max(0, Math.min(100, $anger + 60))>>
+
+He tackles your shadow. Rafters shear. The beam comes down like wet wood over bone. Everything goes quiet.
+
+[[Try again|P01]]
+
+
+
+:: P10 [Passage-GameOver]
+<<set $stress = Math.max(0, Math.min(100, $stress + 60))>>
+
+Air thickens until it’s a flood. He drags you under it. Lungs tear; lips go blue; your body stills.
+
+[[Surface|P01]]
+
+
+
+:: P11 [Passage]
+<<set $stress = Math.max(0, Math.min(100, $stress - 3))>>
+
+<div class="dialogue">
+"If you really listen, I’ll stop performing. I don’t want applause. I want the floor to stop tilting."
+</div>
+
+<<timedprogressbar $timer>>
+  <<goto "P12">>
+<</timedprogressbar>>
+
+<<if visited("P01") >= 2>>[[Act: Promise to listen|P14]]<</if>>
+[[Act: Let him continue|P06]]
+
+
+
+:: P12 [Passage]
+Resignation pats his knee; he keeps talking so it won’t sit.
+
+<<if $stress > 70>>
+  <<timedprogressbar $timer>>
+    <<goto "P10">>
+  <</timedprogressbar>>
+<</if>>
+
+<<if visited("P01") >= 2>>[[Act: Wait quietly|P13]]<</if>>
+<<if $anger > 50>>[[Act: Look away|P05]]<</if>>
+
+<<if visited("P01") < 2 && $stress <= 70 && $anger <= 50>>
+  [[Keep breathing with him|P11]]
+<</if>>
+
+
+
+:: P13 [Passage]
+He marks your return with a small nod, like counting stitches.
+
+<<timedprogressbar $timer>>
+  <<goto "P12">>
+<</timedprogressbar>>
+
+[[Act: Nod quickly|P14]]
+<<if $anger > 60>>[[Act: Hold the stare|P05]]<</if>>
+
+
+
+:: P14 [Passage]
+<<set $stress = Math.max(0, Math.min(100, $stress - 6))>>
+<<set $anger = Math.max(0, Math.min(100, $anger - 6))>>
+
+<div class="dialogue">
+"Only later can I name the worst piece. It still hums at night. If you stay, I’ll show you where it’s buried."
+</div>
+
+[[Keep listening|P11]]
+
+

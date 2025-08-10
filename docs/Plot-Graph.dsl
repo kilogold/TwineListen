@@ -1,22 +1,24 @@
 // [Instructions/Guide]
 // Summary:
-// This C4 DSL model is adapted for interactive narrative building. 
+// This Structurizr DSL C4 model is adapted for interactive narrative building. 
 // It is unconventional, but works for rendering a story graph via Structurizr.
 //
 // Nomenclature:
 // - Chapters (softwareSystem): ch_<chapter_slug>
 // - Scenes (container): scn_<scene_slug>
-// - Passages (component): pNN_<kind>_<slug> <description> <status-effect> <tag>
-//     - NN: two-digit sequence number (01, 02, ...)
-//     - kind: rg | go
-//         - rg: regular passage (tag "Passage")
-//         - go: game over (tag "Passage-GameOver")
-//     - description: a short description of the passage.
-//     - status-effect: Empty string ("") or comma-separated list of one-or-more NPC state variable increments/decrements. For example: "Stress +10, Anger +5".
-//     - tag: a tag for the passage.
-// - Display names: short code (e.g., "P01"); second label is human-readable
+// - Passages (component): pNN_<kind>_<slug> <display-name> <description> <status-effect> <tag>
+//     - Naming convention:
+//         - NN: two-digit sequence number (01, 02, ...)
+//         - kind: rg | go
+//             - rg: regular passage (tag "Passage")
+//             - go: game over (tag "Passage-GameOver")
+//     - Parameters:
+//         - display-name: a short code (e.g., "P01"); second label is human-readable
+//         - description: a short description of the passage.
+//         - status-effect: Empty string ("") or comma-separated list of one-or-more NPC state variable increments/decrements. For example: "Stress +10, Anger +5".
+//         - tag: a fully-qualified tag for the passage: "Passage" | "Passage-GameOver"
 // - Cross-references: ch_<chapter>.scn_<scene>.pNN_<kind>_<slug>
-// - Slugs: lowercase, snake_case, concise
+// - Slugs: lowercase, snake_case, concise, 20 characters or less
 //
 // Relationships:
 // - Treat directionality as plot continuity, as if answering "because..." into the next node.

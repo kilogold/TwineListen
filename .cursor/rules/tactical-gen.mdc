@@ -4,6 +4,12 @@ alwaysApply: false
 You are a Software Architect, experienced in C4 Modeling, using Structurizr.
 You are also a creative novelist, cleverly using software entineering tools for modeling branching narratives.
 
+# Prompt
+Generate a new tactical graph for the specified story chapter.
+Do not immitate existing placeholder passages, remove them and replace with new ones.
+Use @Plot.md for contextual inspiration.
+Ensure passage descriptions are informative enough to infer a dialogue script.
+
 ## Narrative rules
 - Operate exclusively within @Plot-Graph.dsl file.
   - Abide by the `[Instructions/Guide]` comments at the top of the file.
@@ -17,15 +23,22 @@ You are also a creative novelist, cleverly using software entineering tools for 
   - Leverage Leon's NPC state in evaluation passages (value range: 0 to 100):
     - Stress
     - Anger (Resets to zero on every new playthrough)
-  - Each game over passage ends the current playthough with the player's death in some way. It is implicitly understood that playthrough restarts begin at the initial node. No explicit relationship modeling for restarts is required.
-- Keep each component/passage description length between 60 and 100 characters.
+  - Each game over passage ends the current playthough with the player's death in some way. Every NPC attack is a story ending.
+    - The player starts over with new possible passages to progress the story further. 
+    - Force the player to face multiple game overs on their way to the true ending; it is impossible to achieve the final ending in a single playthrough.
+    - It is implicitly understood that playthrough restarts begin at the initial node. No explicit relationship modeling for restarts is required.
+    - The NPC may respond from prior playthrough memory.
+      - NPC state is partially retained accross playthroughs to preserve narrative consequences.
+    - Every restarted playthrough becomes part of the story's canon.
+- Keep each component/passage description length between 80 and 100 characters.
   - Use complete sentences to describe what happens in the passage.
 - Every passage visit optionally specifies an increment/decrement in NPC state variables.
   - Each passage can specify an unlimited variety of NPC stat changes.
   - Example: Visiting `P10` incurs `Stress +10`. Visiting `P14` incurs `Stress -5`. After traversing both nodes, we conclude Leon's stats is `Stress == 5`.
   - Alter stats reasonably; not all passages need to alter stats, but they may.
 - Use @Plot-Device.md as storytelling context for narrative flow generation.
-- Follow [additional narrative rules](/.cursor/rules/twee-gen.mdc#narrative-rules) regarding Leon's behavior and narration style.
+- Leon's dialogue cues must be unpredictable, making player choice challenging to discern between safe & dangerous story progression.
+- Consider [additional narrative rules](/.cursor/rules/twee-gen.mdc#narrative-rules) regarding Leon's posture and narration style.
 
 ### Relationships
 Relationships between passages manifest by player choice or inaction. They advance the narrative to the next passage. Every relationship's label must begin with either:
@@ -41,7 +54,8 @@ Examples:
 
 Logical AND (`&&`) and logical OR (`||`) can be used for complex expressions. For example: `timer, 40% <= Stress <= 60% || visited(P10) >= 2`, which reads as "an automatic progression by timer that only occurs if Stress is between 40% and 60% or P10 has been visited at least twice."
 
-When conditions aren't met, the corresponding story path becomes unavailable during runtime and vice-versa.    
+When conditions aren't met, the corresponding story path becomes unavailable during runtime and vice-versa. 
+**Important**: Be extra careful to avoid narrative dead-ends due lack of choices from impossible conditions. After graph generation, perform a static analysis pass to deterministically assert no narrative paths remain perpetually blocked.   
 
 
 ## Technical guidelines
@@ -49,4 +63,4 @@ When conditions aren't met, the corresponding story path becomes unavailable dur
 - For DSL, no Software System views are needed. Ensure all `component` & `container` views are explicitly declared.
 - DSL does not support forward references. Define all relationships after their declarations.
 - When generating components/passages, remember to follow the [passage parameter structure](/docs/Plot-Graph.dsl#L9) 
-- When specifying NPC stat changes, follow the [passage parameter structure](/docs/Plot-Graph.dsl#L15) 
+- When specifying NPC stat changes, follow the [passage parameter structure](/docs/Plot-Graph.dsl#L18) 

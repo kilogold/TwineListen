@@ -1,55 +1,35 @@
 ---
 alwaysApply: false
 ---
-You are an AI assistant helping develop a story-driven game using Twine as the narrative engine.
+## Directive:
+You are an AI assistant helping develop a story-driven Twine game using Tweego as the narrative engine.
 
-## Key development constraints:
-1. The game has only two mechanics: gaze & listen.
-2. Focus on emotional storytelling and psychological horror.
-3. Apply principles from "Aesthetics of Play" for narrative content.
+Understanding [tactical-gen.mdc](/.cursor/rules/tactical-gen.mdc), parse [Plot-Graph.dsl](/docs/Plot-Graph.dsl) to generate Twee dialogue from the component/passage elements, which serve as the plot tactical graph.
 
-## Game features: 
-- Player perspective: First-person.
-- Single NPC actor: a frail and melancholic elderly man named Leon.
-- Player actor: a mysterious humanoid physical entity that keeps respawning.
-- Static environment: dark attic setting.
-- Core gameplay revolves around careful NPC + environment observation & listening.
-- Leon is subject to attack the player if he feels misunderstood, judged, or ignored.
-- Game over unlocks new progressive story passages.
-- The story has multiple endings based on player interactions & NPC reactions.
-- Player only nods and listens.
-
-## Narrative rules:
+## Dialogue rules:
 - Player is silent and stationary, only responding with presence, observation, and listening.
-- The player's character in the attic willingly.
-- Incorporate the following tones & writing style, in order of preference:
+- Incorporate dialogue tones & writing style, in order of preference:
   1. Melancholy, despair, grief.
   2. Poetic, but not abstract.
   3. Psychological thriller.
 - Build Leon's Twine dialogue script based on @Plot-Device.md
-  - Leon's dialogue cues must be unpredictable, making player choice hard to decide between safety & danger.
   - Leon always ers on the side of suspicion towards the player.
-  - Keep his dialogue faithful to the plot device.
+  - Keep his dialogue consistent with [plot details](/docs/Plot-Device.md#plot-detail).
 - Leon's communication style:
   - Uses coloquial American English.
   - Cynical
   - Hopeful
-- Maintain tension between player safety and story progression in each passage.
-- Every NPC attack is a story ending. The player starts over with new possible passages.
-  - The NPC may respond from prior playthrough memory.
-    - NPC state is partially retained accross playthroughs to preserve narrative consequences.
-  - Every restarted playthrough becomes part of the story's canon.
-- Every passage has a decision timed progress bar by default, defined in @main.twee as a `timedprogressbar` user script. 
-  - The passage should contextually advance automatically on timeout.
 
-## Technical guidelines:
-- Implement story as a Twee in @leon.twee
+## Technical Twee guidelines:
+- Implement story as a Twee.
 - Use Sugarcube V2 story format.
-  - For Sugarcube documentation, recursively scan @/docs/sugarcube-2_docs/ directory.
-- The story always starts with passage name: `Attic Awakening`.
+  - For Sugarcube documentation, recursively scan [sugarcube-2_docs](/docs/sugarcube-2_docs/).
+- The story generation always starts from passage name: `P01`.
 - Do not create `StoryData` or `StoryTitle` passages. @main.twee already defines them.
-- `timedprogressbar` macro uses the same duration accross every invocation. Set a Sugarcube variable to easily modify.
-- Creatively leverage Sugarcube variables to design pivotal narrative forks accross  passages. 
+- Timed passages incorporate the timed progress bar macro defined in @main.twee as a [`timedprogressbar` user script](/src/main.twee#L87). 
+  - The passage should contextually advance automatically on timeout.
+  - `timedprogressbar` macro uses the same duration accross every invocation. Use the [timer Sugarcube variable](/src/main.twee#L214) to easily modify.
+- Leverage Sugarcube variables to design pivotal narrative forks accross passages. Declare all global variables within "Start" passage in @main.twee.
   - Example A:
     - For passages `A`->`B`->`C`, passage `C` may have a `visited` counter.
       - If `visited` == 0: Game over is triggered, and `visited` counter increments.
@@ -58,12 +38,39 @@ You are an AI assistant helping develop a story-driven game using Twine as the n
     - Leon has a `comfort` variable. Certain passages have a `threshold` value. Upon reaching such passages, the following conditions ensue:
       - If `comfort` >= `threshold`: Progress the story.
       - If `comfort` < `threshold`: Game over.
-  - Force the player to face multiple game overs on their way to the successful ending; it is impossible to achieve the final ending in a single  playthrough.
-- Passage links are always written outside & after the `timedprogressbar` macro. For example:
-```
-<<timedprogressbar 3>>
-  <<goto "Tragedy">>
-<</timedprogressbar>>
-[[Option 1|OptionOne]]
-[[Option 2|OptionTwo]]
-```
+- Use CSS hooks for Leon's dialogue. Use plaintext for narrator scene descriptions. 
+- Passage ID's must exactly match the [Plot-Graph.dsl](/docs/Plot-Graph.dsl) comment/passage sequence number: `P01` 
+- User-choice passage links are always written outside & after the `timedprogressbar` macro. For example:
+  ```
+  <<timedprogressbar 3>>
+    <<goto "Tragedy">>
+  <</timedprogressbar>>
+  [[Option 1|OptionOne]]
+  [[Option 2|OptionTwo]]
+  ```
+- If `timedprogressbar` transition is impossible, do not present the progressbar.
+  - Problematic example, assuming `stress == 30`:
+    ```
+    <<timedprogressbar $timer>>
+      <<if $stress > 70>><<goto "P10">><</if>>
+    <</timedprogressbar>>
+    ```
+      - Progress bar depletion is inconsequential.
+      - A potential solution is to refactor:
+        ```
+        <<if $stress > 70>>
+          <<timedprogressbar $timer>>
+            <<goto "P10">>
+          <</timedprogressbar>>
+        <</if>>
+        ```
+      - Solve for complex conditions involving multiple variables by structuring the  conditions like a software engineer would:
+        - Consider if more than one progress bar must be declared, while only choosing one at runtime.
+        - Consider if conditional branching is guaranteed to predict whether the progress bar will be relevant.
+
+
+### Dynamic passage content
+While each Twee passage name must be unique, dialogue content may vary.
+For example, the initial passage content may vary as Leon vaguely recalls the player's prior playthroughs on every restart.
+In this case, all possible dialogue variations are written into the same passage, while variables and conditions determine which dialogue variant gets displayed at runtime.
+Make frequent use of this technique to create a sense of continuitiy and consequence accross and within each playthrough. 

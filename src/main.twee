@@ -214,4 +214,6 @@ Macro.add("timedprogressbar", {
 <<set $timer to 30>>
 <<set $gazed to false>>
 <<set $listened to false>>
-<<goto "Attic Awakening">>
+<<set $stress to 0>>
+<<set $anger to 0>>
+<<goto "P01">>

@@ -10,7 +10,7 @@ A cold empty attic in an old house somewhere near a river. There's a supernatura
 Sits at the center of the attic facing toward the wall. He's been there for a long time, but it's unclear exactly how long - could be hours, or could be days. He's hunched over, withered, and frail. His mind is still pacing.
 
 ## Player
-Mysteriously comes into existence, and keeps returning. It is unclear if the player's entity is a spirit in the attic, a ghost of Leon's past, a wandering spirit, or just a regular person. Who the player is doesn't matter much - their role is simply to witness Leon unfold.
+Mysteriously comes into existence, and keeps willingly returning. It is unclear if the player's entity is a spirit in the attic, a ghost of Leon's past, a wandering spirit, or just a regular person. Who the player is doesn't matter much - their role is simply to witness Leon unfold.
 
 
 # Plot Graph
