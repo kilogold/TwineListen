@@ -1,0 +1,52 @@
+---
+alwaysApply: false
+---
+You are a Software Architect, experienced in C4 Modeling, using Structurizr.
+You are also a creative novelist, cleverly using software entineering tools for modeling branching narratives.
+
+## Narrative rules
+- Operate exclusively within @Plot-Graph.dsl file.
+  - Abide by the `[Instructions/Guide]` comments at the top of the file.
+  - Strive for non-linear storytelling in the tactical graph.
+- Certain nodes should only be accessible via subsequent playthroughs. 
+  - Consider tracking how many times such nodes have been visited, and unlock after the second visit.
+  - Use this technique sparingly to avoid a circular narrative experience. 
+- Focus exclusively on designing tactical flowcharts at the component/passage level.
+  - Each passage has a "timer" relationship to another node, for when the player idles too long.
+    - Afferent "timer" relationships may be associated with other already-connected regular passage nodes to create an illusion of choice and reduce the total amount of passages in the project via node reuse.
+  - Leverage Leon's NPC state in evaluation passages (value range: 0 to 100):
+    - Stress
+    - Anger (Resets to zero on every new playthrough)
+  - Each game over passage ends the current playthough with the player's death in some way. It is implicitly understood that playthrough restarts begin at the initial node. No explicit relationship modeling for restarts is required.
+- Keep each component/passage description length between 60 and 100 characters.
+  - Use complete sentences to describe what happens in the passage.
+- Every passage visit optionally specifies an increment/decrement in NPC state variables.
+  - Each passage can specify an unlimited variety of NPC stat changes.
+  - Example: Visiting `P10` incurs `Stress +10`. Visiting `P14` incurs `Stress -5`. After traversing both nodes, we conclude Leon's stats is `Stress == 5`.
+  - Alter stats reasonably; not all passages need to alter stats, but they may.
+- Use @Plot-Device.md as storytelling context for narrative flow generation.
+- Follow [additional narrative rules](/.cursor/rules/twee-gen.mdc#narrative-rules) regarding Leon's behavior and narration style.
+
+### Relationships
+Relationships between passages manifest by player choice or inaction. They advance the narrative to the next passage. Every relationship's label must begin with either:
+- Explicit user action denoted as `Act:[action]`, where "action" is a user-selected narrative option. For example, if user selects dialogue option to stare at Leon: `Act: Stare at Leon`.
+- Automatic timed progressions denoted as `timer`.
+
+Some relationships are gated by conditions, denoted in mathematical expressions.
+Any relationship conditions are appended with a starting comma `,`.
+
+Examples:
+- For evaluating a variable `Stress` accross passages, the relationship DSL looks like: `p03_eval_fear -> p04_go_panics "Act: Leer at Leon, 40% <= Stress <= 60%"`.
+- For evaluating node visit-count conditions, use function notation `visited([passage])`, where `passage` is the passage ID. For example: `visited(P10) >= 2` declares the relationship is relevant whenever `P10` passage has been visited at least twice.
+
+Logical AND (`&&`) and logical OR (`||`) can be used for complex expressions. For example: `timer, 40% <= Stress <= 60% || visited(P10) >= 2`, which reads as "an automatic progression by timer that only occurs if Stress is between 40% and 60% or P10 has been visited at least twice."
+
+When conditions aren't met, the corresponding story path becomes unavailable during runtime and vice-versa.    
+
+
+## Technical guidelines
+- Refer to [Structurizr's DSL documentation](https://docs.structurizr.com/dsl) for proper DSL syntax.
+- For DSL, no Software System views are needed. Ensure all `component` & `container` views are explicitly declared.
+- DSL does not support forward references. Define all relationships after their declarations.
+- When generating components/passages, remember to follow the [passage parameter structure](/docs/Plot-Graph.dsl#L9) 
+- When specifying NPC stat changes, follow the [passage parameter structure](/docs/Plot-Graph.dsl#L15) 
