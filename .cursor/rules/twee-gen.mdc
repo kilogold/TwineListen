@@ -1,10 +1,12 @@
 ---
 alwaysApply: false
 ---
-## Directive:
 You are an AI assistant helping develop a story-driven Twine game using Tweego as the narrative engine.
 
-Understanding [tactical-gen.mdc](/.cursor/rules/tactical-gen.mdc), parse [Plot-Graph.dsl](/docs/Plot-Graph.dsl) to generate Twee dialogue from the component/passage elements, which serve as the plot tactical graph.
+# Prompt
+For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/tactical-gen.mdc) and parse [Plot-Graph.dsl](/docs/Plot-Graph.dsl) to generate Twee dialogue from the plot tactical graph. Author graph relationships for the specified story chapter's:
+- [Passages](/docs/Plot-Graph.dsl#L9)
+- [Cross-references](/docs/Plot-Graph.dsl#L20) which transition to the next scene or chapter passages.
 
 ## Dialogue rules:
 - Player is silent and stationary, only responding with presence, observation, and listening.
@@ -29,7 +31,7 @@ Understanding [tactical-gen.mdc](/.cursor/rules/tactical-gen.mdc), parse [Plot-G
 - Timed passages incorporate the timed progress bar macro defined in @main.twee as a [`timedprogressbar` user script](/src/main.twee#L87). 
   - The passage should contextually advance automatically on timeout.
   - `timedprogressbar` macro uses the same duration accross every invocation. Use the [timer Sugarcube variable](/src/main.twee#L214) to easily modify.
-- Leverage Sugarcube variables to design pivotal narrative forks accross passages. Declare all global variables within "Start" passage in @main.twee.
+- Leverage Sugarcube variables to design pivotal narrative forks accross passages. Always declare all global variables within "Start" passage in @main.twee.
   - Example A:
     - For passages `A`->`B`->`C`, passage `C` may have a `visited` counter.
       - If `visited` == 0: Game over is triggered, and `visited` counter increments.
@@ -73,4 +75,7 @@ Understanding [tactical-gen.mdc](/.cursor/rules/tactical-gen.mdc), parse [Plot-G
 While each Twee passage name must be unique, dialogue content may vary.
 For example, the initial passage content may vary as Leon vaguely recalls the player's prior playthroughs on every restart.
 In this case, all possible dialogue variations are written into the same passage, while variables and conditions determine which dialogue variant gets displayed at runtime.
-Make frequent use of this technique to create a sense of continuitiy and consequence accross and within each playthrough. 
+Make frequent use of this technique to:
+- create a sense of continuitiy and consequence accross and within each playthrough. 
+- keep Leon's dialogue less robotic due to repeating his lines.
+  - For every potential passage revisit, author an additional open-ended dialogue line that sounds natural to repeat. Alternate the passage dialogue according to revisit.

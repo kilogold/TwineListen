@@ -11,36 +11,44 @@ Use @Plot.md for contextual inspiration.
 Ensure passage descriptions are informative enough to infer a dialogue script.
 
 ## Narrative rules
+### Graph generation
 - Operate exclusively within @Plot-Graph.dsl file.
   - Abide by the `[Instructions/Guide]` comments at the top of the file.
   - Strive for non-linear storytelling in the tactical graph.
-- Certain nodes should only be accessible via subsequent playthroughs. 
-  - Consider tracking how many times such nodes have been visited, and unlock after the second visit.
+- Certain passages should only be accessible via subsequent playthroughs. 
+  - Consider tracking how many times such passages have been visited, and unlock after a second visit.
   - Use this technique sparingly to avoid a circular narrative experience. 
 - Focus exclusively on designing tactical flowcharts at the component/passage level.
   - Each passage has a "timer" relationship to another node, for when the player idles too long.
     - Afferent "timer" relationships may be associated with other already-connected regular passage nodes to create an illusion of choice and reduce the total amount of passages in the project via node reuse.
-  - Leverage Leon's NPC state in evaluation passages (value range: 0 to 100):
-    - Stress
-    - Anger (Resets to zero on every new playthrough)
+  - In every scene, always ensure at least one path toward a Game Over passage is always reachable through explicit user choice (without ever waiting for a timer).
   - Each game over passage ends the current playthough with the player's death in some way. Every NPC attack is a story ending.
     - The player starts over with new possible passages to progress the story further. 
     - Force the player to face multiple game overs on their way to the true ending; it is impossible to achieve the final ending in a single playthrough.
     - It is implicitly understood that playthrough restarts begin at the initial node. No explicit relationship modeling for restarts is required.
     - The NPC may respond from prior playthrough memory.
-      - NPC state is partially retained accross playthroughs to preserve narrative consequences.
-    - Every restarted playthrough becomes part of the story's canon.
+      - Every restarted playthrough becomes part of the story's canon.
 - Keep each component/passage description length between 80 and 100 characters.
   - Use complete sentences to describe what happens in the passage.
-- Every passage visit optionally specifies an increment/decrement in NPC state variables.
-  - Each passage can specify an unlimited variety of NPC stat changes.
-  - Example: Visiting `P10` incurs `Stress +10`. Visiting `P14` incurs `Stress -5`. After traversing both nodes, we conclude Leon's stats is `Stress == 5`.
-  - Alter stats reasonably; not all passages need to alter stats, but they may.
 - Use @Plot-Device.md as storytelling context for narrative flow generation.
 - Leon's dialogue cues must be unpredictable, making player choice challenging to discern between safe & dangerous story progression.
-- Consider [additional narrative rules](/.cursor/rules/twee-gen.mdc#narrative-rules) regarding Leon's posture and narration style.
+- Consider [additional dialogue rules](/.cursor/rules/twee-gen.mdc#dialogue-rules) for Leon's posture and narration style.
 
-### Relationships
+### NPC state
+As an NPC, Leon has the following numeric state variables, value range 0 to 100:
+- Stress (Halves on every playthrough)
+- Anger (Resets to zero on every new playthrough)
+
+Every passage visit optionally specifies an increment/decrement in NPC state variables.  
+Each passage may specify an unlimited variety & combination of NPC stat changes (none or stress and/or anger).
+Example: 
+1. Visiting `P10` incurs `Stress +10`. 
+2. Visiting `P14` incurs `Stress -5`. 
+3. After traversing both nodes, we conclude Leon's stats is `Stress == 5`.
+
+Alter stats reasonably according to story plot; not all passages need to alter stats, but they may.
+
+### DSL Relationships
 Relationships between passages manifest by player choice or inaction. They advance the narrative to the next passage. Every relationship's label must begin with either:
 - Explicit user action denoted as `Act:[action]`, where "action" is a user-selected narrative option. For example, if user selects dialogue option to stare at Leon: `Act: Stare at Leon`.
 - Automatic timed progressions denoted as `timer`.
@@ -49,14 +57,18 @@ Some relationships are gated by conditions, denoted in mathematical expressions.
 Any relationship conditions are appended with a starting comma `,`.
 
 Examples:
-- For evaluating a variable `Stress` accross passages, the relationship DSL looks like: `p03_eval_fear -> p04_go_panics "Act: Leer at Leon, 40% <= Stress <= 60%"`.
+- For evaluating a variable `Stress` accross passages, the relationship DSL looks like: `p03_eval_fear -> p04_go_panics "Act: Leer at Leon, 11 <= Stress <= 16"`.
 - For evaluating node visit-count conditions, use function notation `visited([passage])`, where `passage` is the passage ID. For example: `visited(P10) >= 2` declares the relationship is relevant whenever `P10` passage has been visited at least twice.
 
-Logical AND (`&&`) and logical OR (`||`) can be used for complex expressions. For example: `timer, 40% <= Stress <= 60% || visited(P10) >= 2`, which reads as "an automatic progression by timer that only occurs if Stress is between 40% and 60% or P10 has been visited at least twice."
+Logical AND (`&&`) and logical OR (`||`) can be used for complex expressions. For example: `timer, 11 <= Stress <= 16 || visited(P10) >= 2`, which reads as "an automatic progression by timer that only occurs if Stress is between 11 and 16 or P10 has been visited at least twice."
 
 When conditions aren't met, the corresponding story path becomes unavailable during runtime and vice-versa. 
-**Important**: Be extra careful to avoid narrative dead-ends due lack of choices from impossible conditions. After graph generation, perform a static analysis pass to deterministically assert no narrative paths remain perpetually blocked.   
 
+**Important**: 
+- Be extra careful to avoid narrative dead-ends due lack of choices from impossible conditions. 
+- After graph generation, perform a static analysis pass to deterministically assert no narrative paths remain perpetually blocked.
+- Prioritize progression by gating relationships with low conditional values to reduce repetitive story navigation.
+  - Passages gated by conditions should be traversable within one or two dialogue iterations.
 
 ## Technical guidelines
 - Refer to [Structurizr's DSL documentation](https://docs.structurizr.com/dsl) for proper DSL syntax.

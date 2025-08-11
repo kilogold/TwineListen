@@ -34,75 +34,78 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
     model {
         ch_start = softwareSystem "Start" {
             scn_attic = container "Encounter in an empty attic" {
-                p01_rg_attic_breath = component "P01" "He hears a breath not his; speaks as if to a witness he half-invents." "" "Passage"
-                p02_rg_set_terms = component "P02" "He sets a rule: no fixing, only witnessing; asks if you can bear that." "" "Passage"
-                p03_rg_check_for_judgment = component "P03" "He checks your face for judgment; wonders if staying here disgusts you." "Stress +3" "Passage"
-                p04_rg_trade_for_presence = component "P04" "He offers detail for presence; you stay, he peels back what's raw." "Stress -2" "Passage"
-                p05_rg_bristle_at_stillness = component "P05" "Your quiet feels like verdict; his shoulders rise, words sharpen." "Anger +6" "Passage"
-                p06_rg_confess_lost_work = component "P06" "He describes losing the job; vision dulled by home fires he couldn't tame." "Stress +4" "Passage"
-                p07_rg_confess_lost_home = component "P07" "He admits the marriage broke; says he chose the cut to stop the bleed." "Stress +4" "Passage"
-                p08_rg_name_small_hope = component "P08" "He wants to stand up without shaking; asks if that sounds childish." "Stress -4" "Passage"
-                p09_go_pick_a_fight = component "P09" "He tackles your shadow; rafters shear; the beam crushes your skull like wet wood." "Anger +60" "Passage-GameOver"
-                p10_go_drown_in_air = component "P10" "Air congeals; he drags you down; lungs tear, lips blue, and your body goes still." "Stress +60" "Passage-GameOver"
-                p11_rg_invite_real_listen = component "P11" "He invites real listening; promises not to perform if you don't." "Stress -3" "Passage"
-                p12_rg_tread_above_resign = component "P12" "Resignation pats his knee; he keeps talking to keep it from sitting." "" "Passage"
-                p13_rg_mark_return = component "P13" "He marks your return; decides maybe memory can be stitched, not erased." "" "Passage"
-                p14_rg_second_visit_truth = component "P14" "Only later he names the worst piece and how it still hums at night." "Stress -6, Anger -6" "Passage"
+                p01_rg_entry_unease = component "P01" "The attic hisses at your outline; he smiles like a cut and asks what you intend to be." "" "Passage"
+                p02_rg_terms_of_witness = component "P02" "He sets a witness pact: you stay quiet, you don't mend, and you let the dust decide." "" "Passage"
+                p03_rg_measure_breath = component "P03" "He counts your breaths aloud, gauging fog from spine; the test scratches his patience." "Stress +4, Anger +3" "Passage"
+                p04_rg_box_at_door = component "P04" "He recalls a final box at the door, a polite dismissal wrapped in winter's neat label." "Stress +6" "Passage"
+                p05_rg_name_her_shiver = component "P05" "You suggest her without her name; he flinches, then steadies like a fish learning the hook." "Stress +3, Anger +6" "Passage"
+                p06_rg_teeth_in_words = component "P06" "Your posture judges; his words grow teeth and circle, daring you to step one inch nearer." "Anger +10" "Passage"
+                p07_rg_listen_plain = component "P07" "He bargains for plain listening; fewer masks if you quit weighing the weight of each word." "Stress -6" "Passage"
+                p08_rg_vow_morning = component "P08" "He vows to face morning steady if you count; no rescue, only witness to each landing." "Stress -8" "Passage"
+                p09_go_step_into_grab = component "P09" "You reach to help; he misreads and grabs; nails kiss throat; the attic shuts its only eye." "Anger +70" "Passage-GameOver"
+                p10_go_fade_in_dust = component "P10" "Silence thickens to paste; lungs forget the trick; the fine dust rents your final breath." "Stress +70" "Passage-GameOver"
+                p11_rg_resigned_fast = component "P11" "Resignation paces the beams; he speaks faster so it cannot nest where you are standing." "" "Passage"
+                p12_rg_returned_echo = component "P12" "He marks your return's echo and tests what the room remembers that he himself cannot." "" "Passage"
+                p13_rg_true_risk = component "P13" "He risks a truer register; beneath every thought a bruise; asks if you can stand it now." "Stress -10, Anger -6" "Passage"
+                p14_rg_trapdoor_listen = component "P14" "He points to a warped trapdoor and begs you not to blink while it explains his stuck place." "" "Passage"
 
-                p01_rg_attic_breath -> p02_rg_set_terms "Act: Stay"
-                p01_rg_attic_breath -> p05_rg_bristle_at_stillness "Act: Look away, 40% < Anger || 50% < Stress"
-                p01_rg_attic_breath -> p03_rg_check_for_judgment "timer"
+                p01_rg_entry_unease -> p02_rg_terms_of_witness "Act: Stay"
+                p01_rg_entry_unease -> p06_rg_teeth_in_words "Act: Flinch, Anger > 10 || Stress > 20"
+                p01_rg_entry_unease -> p09_go_step_into_grab "Act: Reach to steady him"
+                p01_rg_entry_unease -> p03_rg_measure_breath "timer"
 
-                p02_rg_set_terms -> p04_rg_trade_for_presence "Act: Nod once"
-                p02_rg_set_terms -> p05_rg_bristle_at_stillness "Act: Stare too long, 50% < Stress || 40% < Anger"
-                p02_rg_set_terms -> p03_rg_check_for_judgment "timer"
+                p02_rg_terms_of_witness -> p04_rg_box_at_door "Act: Nod once"
+                p02_rg_terms_of_witness -> p06_rg_teeth_in_words "Act: Hold the stare, Stress > 30 || Anger > 15"
+                p02_rg_terms_of_witness -> p03_rg_measure_breath "timer"
+                p02_rg_terms_of_witness -> p12_rg_returned_echo "Act: Say nothing, visited(P02) >= 2"
 
-                p03_rg_check_for_judgment -> p06_rg_confess_lost_work "Act: Admit you're here, 20% <= Stress <= 60%"
-                p03_rg_check_for_judgment -> p05_rg_bristle_at_stillness "Act: Keep your distance"
-                p03_rg_check_for_judgment -> p10_go_drown_in_air "timer, 70% < Stress"
+                p03_rg_measure_breath -> p04_rg_box_at_door "Act: Admit you're here, 0 <= Stress <= 95"
+                p03_rg_measure_breath -> p06_rg_teeth_in_words "Act: Keep your distance"
+                p03_rg_measure_breath -> p10_go_fade_in_dust "timer, Stress > 55"
 
-                p04_rg_trade_for_presence -> p08_rg_name_small_hope "Act: Keep a soft gaze, Anger <= 30%"
-                p04_rg_trade_for_presence -> p05_rg_bristle_at_stillness "Act: Break eye contact, 40% < Anger"
-                p04_rg_trade_for_presence -> p12_rg_tread_above_resign "timer"
+                p04_rg_box_at_door -> p08_rg_vow_morning "Act: Keep a soft gaze, Anger <= 60"
+                p04_rg_box_at_door -> p05_rg_name_her_shiver "Act: Ask about her"
+                p04_rg_box_at_door -> p06_rg_teeth_in_words "Act: Break eye contact, Anger > 15"
+                p04_rg_box_at_door -> p11_rg_resigned_fast "timer"
 
-                p05_rg_bristle_at_stillness -> p11_rg_invite_real_listen "Act: Lower your gaze"
-                p05_rg_bristle_at_stillness -> p04_rg_trade_for_presence "Act: Soften stance"
-                p05_rg_bristle_at_stillness -> p09_go_pick_a_fight "timer, 60% < Anger || 80% < Stress"
+                p05_rg_name_her_shiver -> p07_rg_listen_plain "Act: Say nothing"
+                p05_rg_name_her_shiver -> p06_rg_teeth_in_words "Act: Challenge him, Anger > 25"
+                p05_rg_name_her_shiver -> p11_rg_resigned_fast "timer"
 
-                p06_rg_confess_lost_work -> p07_rg_confess_lost_home "Act: Encourage him to continue"
-                p06_rg_confess_lost_work -> p12_rg_tread_above_resign "timer"
+                p06_rg_teeth_in_words -> p07_rg_listen_plain "Act: Lower your gaze"
+                p06_rg_teeth_in_words -> p04_rg_box_at_door "Act: Soften stance"
+                p06_rg_teeth_in_words -> p09_go_step_into_grab "Act: Step closer fast"
+                p06_rg_teeth_in_words -> p09_go_step_into_grab "timer, Anger > 35 || Stress > 60"
 
-                p07_rg_confess_lost_home -> p11_rg_invite_real_listen "Act: Say nothing"
-                p07_rg_confess_lost_home -> p05_rg_bristle_at_stillness "Act: Challenge him, 50% < Anger"
-                p07_rg_confess_lost_home -> p12_rg_tread_above_resign "timer"
+                p07_rg_listen_plain -> p13_rg_true_risk "Act: Commit to listen, visited(P01) >= 2"
+                p07_rg_listen_plain -> p04_rg_box_at_door "Act: Let him continue"
+                p07_rg_listen_plain -> p11_rg_resigned_fast "timer"
 
-                p08_rg_name_small_hope -> p11_rg_invite_real_listen "Act: Promise to listen"
-                p08_rg_name_small_hope -> p12_rg_tread_above_resign "timer"
+                p08_rg_vow_morning -> p07_rg_listen_plain "Act: Promise to listen"
+                p08_rg_vow_morning -> p11_rg_resigned_fast "timer"
 
-                p11_rg_invite_real_listen -> p14_rg_second_visit_truth "Act: Promise to listen, visited(P01) >= 2"
-                p11_rg_invite_real_listen -> p06_rg_confess_lost_work "Act: Let him continue"
-                p11_rg_invite_real_listen -> p12_rg_tread_above_resign "timer"
+                p11_rg_resigned_fast -> p12_rg_returned_echo "Act: Wait quietly, visited(P01) >= 1"
+                p11_rg_resigned_fast -> p04_rg_box_at_door "Act: Ask for detail"
+                p11_rg_resigned_fast -> p10_go_fade_in_dust "timer, Stress > 45"
+                p11_rg_resigned_fast -> p06_rg_teeth_in_words "Act: Look away, Anger > 40"
 
-                p12_rg_tread_above_resign -> p13_rg_mark_return "Act: Wait quietly, visited(P01) >= 2"
-                p12_rg_tread_above_resign -> p10_go_drown_in_air "timer, 70% < Stress"
-                p12_rg_tread_above_resign -> p05_rg_bristle_at_stillness "Act: Look away, 50% < Anger"
+                p12_rg_returned_echo -> p13_rg_true_risk "Act: Ask for the true piece"
+                p12_rg_returned_echo -> p06_rg_teeth_in_words "Act: Hold the stare, Anger > 50"
+                p12_rg_returned_echo -> p11_rg_resigned_fast "timer"
 
-                p13_rg_mark_return -> p14_rg_second_visit_truth "Act: Nod quickly"
-                p13_rg_mark_return -> p05_rg_bristle_at_stillness "Act: Hold the stare, 60% < Anger"
-                p13_rg_mark_return -> p12_rg_tread_above_resign "timer"
-
-                
-                
+                p13_rg_true_risk -> p14_rg_trapdoor_listen "Act: Follow the hinge"
+                p13_rg_true_risk -> p06_rg_teeth_in_words "Act: Make him justify"
+                p13_rg_true_risk -> p11_rg_resigned_fast "timer"
             }
         }
         ch_lost = softwareSystem "Lost" {
             scn_feeling_stuck = container "Feeling stuck" {
-                p06_rg_mumble_grief = component "P06" "Mumble in grief" "" "Passage"
+                p15_rg_mumble_grief = component "P15" "Mumble in grief" "" "Passage"
             }
             
-            # Cross-chapter progression from Start → Lost
-            ch_start.scn_attic.p14_rg_second_visit_truth -> scn_feeling_stuck.p06_rg_mumble_grief "Act: Keep listening"
-            ch_start.scn_attic.p14_rg_second_visit_truth -> scn_feeling_stuck.p06_rg_mumble_grief "timer"
+            # Cross-references: chapter progression from Start → Lost
+            ch_start.scn_attic.p14_rg_trapdoor_listen -> scn_feeling_stuck.p15_rg_mumble_grief "Act: Keep listening"
+            ch_start.scn_attic.p14_rg_trapdoor_listen -> scn_feeling_stuck.p15_rg_mumble_grief "timer"
             scn_job = container "Lost job"
             scn_dead_dreams = container "Dead dreams of raising a family"
             scn_marriage = container "Lost marriage"
