@@ -134,6 +134,7 @@ Default delta magnitude 2..12; spikes up to 20 when directly preceding Game Over
 ### Quality checks (hard requirements)
 - No dead-ends: every regular passage has ≥1 explicit user action edge and 1 `timer` edge.
 - At least one explicit user-choice path to a Game Over exists in every scene.
+- Include ≥1 cross-scene relationship from a component in the current scene to a component in the designated next scene (prefer `Act: …`; timers allowed, but avoid timer-only if a meaningful action exists).
 - At least one unresolved thread persists across 3+ passages and is resolved or inverted in a later passage.
 - At generation end, verify anchor quotas and stat clamping.
 - Validate actions: no banned speech verbs; no duplicate action labels within the scene; touch actions include a GO branch under high Anger/Stress and non-GO branches otherwise.

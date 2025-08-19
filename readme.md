@@ -28,16 +28,16 @@ Suggested prompt:
 Using `/.cursor/rules/tactical-gen.mdc` and `/docs/Plot-Device.md`, produce a Scene Brief in strict JSON (no prose, no comments).
 
 Fields:
-{ "chapter": "Start", "scene": "Encounter in an empty attic", "anchors": [], "actions": [], "thresholds": { "angerHigh": 35, "stressHigh": 60 }, "quotas": { "anchor60": true, "doubleAnchor30": true }, "sourceDocVersion": "", "generatedAt": "" }
+{ "chapter": "Start", "scene": "Attic Encounter", "anchors": [], "actions": [], "thresholds": { "angerHigh": 35, "stressHigh": 60 }, "quotas": { "anchor60": true, "doubleAnchor30": true }, "sourceDocVersion": "", "generatedAt": "" }
 
 Requirements:
-- anchors: 8–12 concrete items/phrases from Plot-Device (e.g., HR video call, cardboard box, baby socks, hinge, Stoicism, prayer, rented-out home).
+- anchors: 8–12 concrete items/phrases copied verbatim from the provided source for the specified chapter/scene only. No inventions. No cross‑chapter items. Prefer physical objects and named nouns; avoid abstractions unless explicitly named. All anchors must be unique and must appear in the source text (exact substring match).
 - actions: 10–14 non‑verbal action labels. No speech verbs (ask/say/tell/etc.). Prefer object‑anchored; pronouns allowed when unambiguous. Include 2–3 “touch Leon” variants. Ensure ≥6 distinct verbs and no duplicates.
 - thresholds: angerHigh=35, stressHigh=60 for touch-triggered Game Over branching.
 - quotas: anchor60 and doubleAnchor30 set true.
 ```
 
-Recommended: save the JSON to `docs/briefs/start.json` (for versioning). In Cursor, reference this file in later prompts (no pasting).
+Save the JSON to `docs/briefs/start.json` (for versioning). In Cursor, reference this file in later prompts (no pasting).
 
 ### Prompt 1.5 — Audit the Scene Brief JSON (deterministic)
 Validate the Scene Brief JSON against required schema and constraints before generating the DSL. If fixes are needed, emit a corrected JSON and use it for the next step.
@@ -46,9 +46,11 @@ Suggested prompt (Cursor-friendly):
 ```text
 Audit the Scene Brief at `docs/briefs/start.json` against `/.cursor/rules/tactical-gen.mdc` and `/docs/Plot-Device.md`. List violations briefly, then output a corrected, final JSON only.
 
+Only change fields that violate checks; preserve all other values and their order. Do not modify generatedAt or sourceDocVersion if present. Do not reorder arrays. Do not rewrite anchors/actions unless they fail checks.
+
 Checks:
 - Fields present: chapter, scene, anchors, actions, thresholds.angerHigh, thresholds.stressHigh, quotas.anchor60, quotas.doubleAnchor30, sourceDocVersion, generatedAt. No extra properties.
-- anchors: 8–12 items; unique; concrete items/phrases drawn from Plot-Device only; no inventions.
+- anchors: 8–12 items; unique; copied verbatim as exact substrings from the provided source; scoped to the specified chapter/scene only; no cross‑chapter items; prefer physical objects and named nouns; avoid abstractions unless explicitly named; no inventions.
 - actions: 10–14 items; non‑verbal; unique; ≥6 distinct verbs; include 2–3 "touch Leon" variants; no speech verbs (ask/say/tell/etc.). Prefer object‑anchored labels; pronouns allowed when unambiguous.
 - thresholds: angerHigh=35, stressHigh=60 (exact values).
 - quotas: anchor60=true, doubleAnchor30=true (exact values).
@@ -59,7 +61,7 @@ Output:
 2) Corrected Scene Brief JSON only (strict JSON; no prose)
 ```
 
-Recommended: if corrections were made, update `docs/briefs/start.json` with the corrected JSON before proceeding.
+If corrections were made, update `docs/briefs/start.json` with the corrected JSON before proceeding.
 
 ### Prompt 2 — Generate the Tactical Graph DSL from the Brief
 Use the Brief to emit only the Structurizr DSL for `ch_start.scn_attic`.
@@ -79,6 +81,9 @@ Enforce:
 - Touch actions must branch: GO when `Anger > angerHigh` or `Stress > stressHigh`; otherwise continue with reasonable deltas.
 
 Output ONLY the `ch_start { scn_attic { ... } }` DSL block.
+Update `docs/briefs/start.json` with the corrected DSL before proceeding.
+
+Run the following terminal command for DSL syntax validation: `structurizr-cli validate -w docs/Plot-Graph.dsl`
 ```
 
 ### Prompt 3 — Audit/Fix pass (deterministic)
@@ -87,6 +92,8 @@ Run a validation pass and re‑emit a corrected DSL if needed.
 Suggested prompt (Cursor-friendly):
 ```text
 Audit the `ch_start.scn_attic` block in `/docs/Plot-Graph.dsl` against `/.cursor/rules/tactical-gen.mdc` and the Scene Brief at `docs/briefs/start.json`. List violations briefly, then output a corrected, final DSL block only.
+
+Update `docs/briefs/start.json` with the corrected DSL before proceeding.
 
 Checks:
 - Labels ∈ {Act: …, timer}. Non‑verbal only. No speech verbs.

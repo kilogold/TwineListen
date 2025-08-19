@@ -34,82 +34,72 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
     model {
         ch_start = softwareSystem "Start" {
             scn_attic = container "Attic Encounter" {
-                p01_rg_still_arrival = component "P01" "Leon sits hunched in the cold attic. Your shadow settles near the beam; the world map and backpack memory tug at you. He notices your presence without turning." "Stress +2" "Passage"
-                p02_rg_box_babysocks = component "P02" "A taped cardboard box near his feet leaks a pair of baby socks. Dust lifts as you angle closer; he follows your gaze, a tremor passing through his jaw." "Stress +4" "Passage"
-                p03_rg_hold_gaze = component "P03" "You hold the gaze on his averted face. Slow blinks meet you; he steadies as if practicing Stoicism, fingers worrying a frayed sleeve along the beam. A quiet prayer hovers between breaths." "Stress -4, Anger -2" "Passage"
-                p04_rg_count_breaths = component "P04" "You count your breaths; a prayer rhythm threads the silence. His shoulders lower a notch; Stoic breath in, breath out—the attic's chill rides your exhale across the dust." "Stress -8, Anger -4" "Passage"
-                p05_rg_point_map = component "P05" "You point toward the curled world map tacked crooked under a hinge. He squints, then looks away; travel dreams sour under the weight of divorce." "Stress +2, Anger +4" "Passage"
-                p06_rg_lower_gaze_box = component "P06" "You lower your gaze, tracing the cardboard seam back to the baby socks box. He swallows; the rented-out home years flicker like light through boards." "Stress +6" "Passage"
-                p07_rg_trace_dust = component "P07" "With one finger you trace a circle in the dust on the floorboard. The motion steadies him; breath matches yours, and the beam creaks softer." "Stress -6" "Passage"
-                p08_rg_rest_beam = component "P08" "You rest a hand on the beam beside him; he glances without flinching. A fragile trust tests whether quiet company can hold." "Stress -4, Anger -2" "Passage"
-                p09_rg_pick_socks = component "P09" "You pick up the baby socks from the box lip. Fabric is weightless; his eyes wet, a life deferred gathers in your palm." "Stress +4, Anger +6" "Passage"
-                p10_rg_touch_shoulder = component "P10" "You touch Leon's shoulder lightly; the bone under cloth is sharp. The contact threatens his brittle calm, but it could also ground him." "Stress +6, Anger +10" "Passage"
-                p11_rg_touch_forearm = component "P11" "You touch Leon's forearm, palm warm on a map of veins. He freezes, measuring you against old harms." "Stress +8, Anger +12" "Passage"
-                p12_rg_brush_sleeve = component "P12" "You brush Leon's sleeve as if to smooth lint; breath stalls, eyes glaze with memories he'd rather not unpack here." "Stress +6, Anger +12" "Passage"
-                p13_go_shove_break = component "P13" "He jerks and shoves you hard. The beam and dust blur as your heel slips on the stair lip; the attic swallows sound before the floor does." "" "Passage-GameOver"
-                p14_go_strike_burst = component "P14" "A brittle scream breaks; he swings the loose beam blindly and catches you at the temple. Light snaps out; dust keeps falling without you." "" "Passage-GameOver"
-                p15_rg_hr_memory = component "P15" "His eyes fix on nothing; the HR video call glare returns, cardboard box in lap, a career dropped into a silence heavier than this room." "Stress +6, Anger +2" "Passage"
-                p16_rg_tibetan_calm = component "P16" "You settle into stillness as if recalling Tibetan Buddhism lessons. His breath evens; a minor mercy threads the rafters." "Stress -10, Anger -6" "Passage"
+                # [example] p01_rg_still_arrival = component "P01" "Leon sits hunched in the cold attic. Your shadow settles near the beam; the world map and backpack memory tug at you. He notices your presence without turning." "Stress +2" "Passage"
 
-                # Relationships (actions and timers)
-                p01_rg_still_arrival -> p02_rg_box_babysocks "Act: Glance at the box"
-                p01_rg_still_arrival -> p03_rg_hold_gaze "timer"
+                p01_rg_arrival_view = component "P01" "A cold empty attic in an old house near a river wraps you in stillness. It's night time, shadows or spirits seem to lurk, and only you and Leon occupy this airless space." "Stress +4" "Passage"
+                p02_rg_shadows_listen = component "P02" "You hold in the dark as shadows or spirits toy with the edges of sight. Only Leon and the player are initially present; the room measures your patience while you listen." "Stress +4" "Passage"
+                p03_rg_centered_leon = component "P03" "Leon sits at the center of the attic, hunched over, withered and frail. His mind is still pacing; the posture reads like a confession pressed into wood and dust." "Stress +6" "Passage"
+                p04_rg_floor_attention = component "P04" "The cold empty attic breathes through the old house boards; you trace the grain, steadying yourself as night seeps in and the river's distance tightens your chest." "Stress +4" "Passage"
+                p05_rg_edge_of_presence = component "P05" "Only Leon and the player are initially present, and it's night time. You tilt your head toward him as his mind keeps pacing in silence, the room barely holding it." "Stress +6" "Passage"
+                p06_rg_kneel_beside = component "P06" "You kneel beside Leon at the center of the attic. He remains hunched over and frail; the cold empty attic funnels your attention into the small space between you." "Stress +6, Anger +2" "Passage"
+                p07_rg_touch_tension = component "P07" "Close now, you read the withered shoulders and the quielty muttering. Touch could steady him or break him; his mind is still pacing under the weight of night." "Stress +6, Anger +12" "Passage"
+                p08_rg_step_back_shadow = component "P08" "You step back into shadows as if spirits might mediate. The old house creaks; the river is somewhere out there, but the attic keeps you both inside its hush." "Stress -4" "Passage"
+                p09_go_shove = component "P09" "Your touch jolts Leon. He surges with sudden, brittle force; the attic snaps to violence and the night ends with your body against the boards and breath cut short." "" "Passage-GameOver"
+                p10_rg_calm_the_air = component "P10" "You rest a palm on your chest and count the cold empty attic breaths. His withered frame eases a notch; the center of the room loosens as the night holds steady." "Stress -8, Anger -4" "Passage"
+                p11_go_collapse = component "P11" "Leon slumps forward and does not rise. Frail bones meet wood; the silence becomes final and the attic swallows your presence as if only shadows or spirits remain." "" "Passage-GameOver"
+                p12_rg_listen_mutter = component "P12" "You listen in silence to the quielty muttering, a mind still pacing. The old house night frames his breath; only you and he exist within this narrow orbit." "Stress -4" "Passage"
+                p13_rg_floorboard_steady = component "P13" "A loose board shifts; you steady it with care, keeping to the edges. The cold empty attic offers no guidance but the river's far rhythm steadies your hands." "Stress -2" "Passage"
+                p14_go_suffocate = component "P14" "The room compresses; Leon's panic rides the night until your lungs fail to find pace. The attic closes like a lid; you black out to the whisper of distant water." "" "Passage-GameOver"
 
-                p03_rg_hold_gaze -> p04_rg_count_breaths "Act: Count your breaths"
-                p03_rg_hold_gaze -> p04_rg_count_breaths "timer"
-                p04_rg_count_breaths -> p06_rg_lower_gaze_box "Act: Lower your gaze"
+                // Relationships (actions from Scene Brief) and timers
+                p01_rg_arrival_view -> p02_rg_shadows_listen "timer"
+                p01_rg_arrival_view -> p04_rg_floor_attention "Act: trace finger along floorboard"
 
-                p02_rg_box_babysocks -> p09_rg_pick_socks "Act: Pick up the baby socks"
-                p02_rg_box_babysocks -> p06_rg_lower_gaze_box "timer"
+                p02_rg_shadows_listen -> p03_rg_centered_leon "timer"
+                p02_rg_shadows_listen -> p08_rg_step_back_shadow "Act: step back into shadows"
 
-                p07_rg_trace_dust -> p08_rg_rest_beam "Act: Rest a hand on the beam"
-                p07_rg_trace_dust -> p08_rg_rest_beam "timer"
+                p03_rg_centered_leon -> p05_rg_edge_of_presence "timer"
+                p03_rg_centered_leon -> p06_rg_kneel_beside "Act: kneel beside Leon"
 
-                p08_rg_rest_beam -> p05_rg_point_map "Act: Point to the world map"
-                p08_rg_rest_beam -> p07_rg_trace_dust "timer"
+                p04_rg_floor_attention -> p05_rg_edge_of_presence "timer"
+                p04_rg_floor_attention -> p13_rg_floorboard_steady "Act: steady a loose floorboard"
 
-                p05_rg_point_map -> p13_go_shove_break "Act: Step back"
-                p05_rg_point_map -> p07_rg_trace_dust "timer"
-                p05_rg_point_map -> p15_rg_hr_memory "timer, visited(p05_rg_point_map) >= 2"
+                p05_rg_edge_of_presence -> p07_rg_touch_tension "timer"
+                p05_rg_edge_of_presence -> p12_rg_listen_mutter "Act: listen in silence"
 
-                p06_rg_lower_gaze_box -> p07_rg_trace_dust "Act: Shift your weight"
-                p06_rg_lower_gaze_box -> p07_rg_trace_dust "timer"
+                p06_rg_kneel_beside -> p07_rg_touch_tension "timer"
+                p06_rg_kneel_beside -> p10_rg_calm_the_air "Act: rest palm on chest"
 
-                p09_rg_pick_socks -> p05_rg_point_map "Act: Point to the hinge"
-                p09_rg_pick_socks -> p05_rg_point_map "timer"
+                p07_rg_touch_tension -> p09_go_shove "Act: touch Leon's shoulder, Anger > 35 || Stress > 60"
+                p07_rg_touch_tension -> p10_rg_calm_the_air "Act: touch Leon's shoulder, Anger <= 35 && Stress <= 60"
+                p07_rg_touch_tension -> p11_go_collapse "Act: touch Leon's back, Anger > 35 || Stress > 60"
+                p07_rg_touch_tension -> p12_rg_listen_mutter "Act: touch Leon's hand, Anger <= 35 && Stress <= 60"
+                p07_rg_touch_tension -> p08_rg_step_back_shadow "timer"
 
-                # Touch sequences branch by thresholds via timers from the touch passages
-                p08_rg_rest_beam -> p10_rg_touch_shoulder "Act: Touch Leon's shoulder"
-                p10_rg_touch_shoulder -> p13_go_shove_break "timer, Anger > 35 || Stress > 60"
-                p10_rg_touch_shoulder -> p11_rg_touch_forearm "timer, Anger <= 35 && Stress <= 60"
-                p10_rg_touch_shoulder -> p12_rg_brush_sleeve "Act: Brush Leon's sleeve"
+                p08_rg_step_back_shadow -> p12_rg_listen_mutter "timer"
+                p08_rg_step_back_shadow -> p03_rg_centered_leon "Act: slide note closer"
 
-                p11_rg_touch_forearm -> p14_go_strike_burst "timer, Anger > 35 || Stress > 60"
-                p11_rg_touch_forearm -> p12_rg_brush_sleeve "timer, Anger <= 35 && Stress <= 60"
-                p11_rg_touch_forearm -> p03_rg_hold_gaze "Act: Hold the gaze"
+                p10_rg_calm_the_air -> p12_rg_listen_mutter "timer"
+                p10_rg_calm_the_air -> p03_rg_centered_leon "Act: tilt head toward Leon"
 
-                p12_rg_brush_sleeve -> p14_go_strike_burst "timer, Anger > 35 || Stress > 60"
-                p12_rg_brush_sleeve -> p15_rg_hr_memory "timer, Anger <= 35 && Stress <= 60"
-                p12_rg_brush_sleeve -> p11_rg_touch_forearm "Act: Touch Leon's forearm"
+                p12_rg_listen_mutter -> p04_rg_floor_attention "timer"
+                p12_rg_listen_mutter -> p06_rg_kneel_beside "Act: kneel beside Leon"
 
-                # Unlocks on calmer loops
-                p04_rg_count_breaths -> p08_rg_rest_beam "timer"
-                p04_rg_count_breaths -> p16_rg_tibetan_calm "timer, visited(p04_rg_count_breaths) >= 2"
+                p13_rg_floorboard_steady -> p05_rg_edge_of_presence "timer"
+                p13_rg_floorboard_steady -> p01_rg_arrival_view "Act: brush dust from floor"
 
-                p16_rg_tibetan_calm -> p08_rg_rest_beam "timer"
-                p15_rg_hr_memory -> p07_rg_trace_dust "timer"
-                p15_rg_hr_memory -> p07_rg_trace_dust "Act: Sit on the floor"
-                p16_rg_tibetan_calm -> p08_rg_rest_beam "Act: Place both hands on knees"
+                // A risk timer that can escalate to suffocation if sustained stress is high
+                p05_rg_edge_of_presence -> p14_go_suffocate "timer, Stress > 60"
             }
         }
         ch_lost = softwareSystem "Lost" {
             scn_feeling_stuck = container "Feeling stuck" {
-                p01_rg_bridge_forward = component "P01" "The attic hush in his chest turns to a heavier room; he weighs starting again or letting rot spread. Your stillness keeps pace as he edges toward naming the next wound." "Stress +4" "Passage"
+                p01_rg_bridge_forward = component "P01" "A placeholder forward bridge from Feeling stuck to later scenes; used to satisfy model wiring until the scene is authored." "" "Passage"
             }
             
             # Cross-chapter progression from Start → Lost
             # [example] ch_start.scn_attic.passage -> scn_feeling_stuck.passage "Player action"
-            ch_start.scn_attic.p16_rg_tibetan_calm -> scn_feeling_stuck.p01_rg_bridge_forward "timer"
+            ch_start.scn_attic.p12_rg_listen_mutter -> ch_lost.scn_feeling_stuck.p01_rg_bridge_forward "timer"
             scn_job = container "Lost job"
             scn_dead_dreams = container "Dead dreams of raising a family"
             scn_marriage = container "Lost marriage"
