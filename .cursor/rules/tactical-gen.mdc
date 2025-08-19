@@ -11,6 +11,7 @@ Use @Plot-Device.md for contextual inspiration.
 Ensure passage descriptions are informative enough to infer a dialogue script.
 
 ## Narrative rules
+IMPORTANT: Never embed or paste Structurizr DSL snapshots inside Scene Brief JSON files (e.g., `docs/briefs/*.json`). Briefs contain only the specified JSON schema. All DSL must live in `/docs/Plot-Graph.dsl`.
 ### Graph generation
 - Operate exclusively within @Plot-Graph.dsl file.
   - Abide by the `[Instructions/Guide]` comments at the top of the @Plot-Graph.dsl file.
@@ -19,7 +20,7 @@ Ensure passage descriptions are informative enough to infer a dialogue script.
   - Consider tracking how many times such passages have been visited, and unlock after a second visit.
   - Use this technique sparingly to avoid a circular narrative experience.
 - Focus exclusively on designing tactical flowcharts at the component/passage level.
-  - In every scene, always ensure at least one path toward a Game Over passage is always reachable through explicit user choice (without ever waiting for a timer).
+  - In every scene, include at least one explicit user‑choice path to a Game Over; at least one MUST be unconditional: `Act: …` → `pNN_go` with no conditions (no `Stress`/`Anger` thresholds, no `visited(...)`) and no timers.
   - Each game over passage ends the current playthrough with the player's death in some way. Every NPC attack is a story ending.
     - The player starts over with new possible passages to progress the story further. 
     - Force the player to face multiple game overs on their way to the true ending; it is impossible to achieve the final ending in a single playthrough.
@@ -88,7 +89,7 @@ When conditions aren't met, the corresponding story path becomes unavailable dur
 - Refer to [Structurizr's DSL documentation](https://docs.structurizr.com/dsl) for proper DSL syntax.
 - Software System views are optional. Ensure all `component` & `container` views are explicitly declared.
 - DSL does not support forward references. Define all relationships after their declarations.
-- When generating components/passages and specifying NPC stat changes, follow the "Nomenclature" and "Parameters" header comments in `/docs/Plot-Graph.dsl` (avoid relying on line numbers).
+- Naming & cross-references: follow the canonical scheme in `/docs/Plot-Graph.dsl` (IDs `cNN`, `sNN`, `pNN_<kind>`; cross-refs `cNN.sNN.pNN_<kind>`). Do not restate variants here.
 
 ## Plot-Device anchoring and engagement
 
@@ -134,6 +135,7 @@ Default delta magnitude 2..12; spikes up to 20 when directly preceding Game Over
 ### Quality checks (hard requirements)
 - No dead-ends: every regular passage has ≥1 explicit user action edge and 1 `timer` edge.
 - At least one explicit user-choice path to a Game Over exists in every scene.
+  - At least one of these GO edges must be unconditional: explicit `Act: ...` → `pNN_go` with no conditions; do not gate this path by state or visits; do not use timers.
 - Include ≥1 cross-scene relationship from a component in the current scene to a component in the designated next scene (prefer `Act: …`; timers allowed, but avoid timer-only if a meaningful action exists).
 - At least one unresolved thread persists across 3+ passages and is resolved or inverted in a later passage.
 - At generation end, verify anchor quotas and stat clamping.

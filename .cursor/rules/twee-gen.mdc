@@ -26,7 +26,7 @@ For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/t
 - Implement story as a Twee.
 - Use Sugarcube V2 story format.
   - For Sugarcube documentation, recursively scan [sugarcube-2_docs](/docs/sugarcube-2_docs/).
-- The story generation always starts from passage name: `P01`.
+- Entry point: the Twine story starts at the global `Start` passage, which initializes variables and should route to the first scene node `c01s01p01`.
 - Do not create `StoryData` or `StoryTitle` passages. @main.twee already defines them.
 - Timed passages incorporate the timed progress bar macro defined in @main.twee as a [`timedprogressbar` user script](/src/main.twee#L87). 
   - The passage should contextually advance automatically on timeout.
@@ -42,14 +42,23 @@ For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/t
       - If `comfort` < `threshold`: Game over.
 - Use CSS hooks for Leon's dialogue. Use plaintext for narrator scene descriptions. 
 - Passage ID's must exactly match the [Plot-Graph.dsl](/docs/Plot-Graph.dsl) comment/passage sequence number: `P01` 
+  - Naming & canonical IDs: follow `/docs/Plot-Graph.dsl` for element IDs and cross-refs (`cNN.sNN.pNN_<kind>`).
+  - Twee passage title mapping (SugarCube-safe): transform the fully-qualified DSL component ID by removing dots and the `_kind` suffix from `pNN_<kind>`.
+    - Mapping rule: `cNN.sNN.pNN_<kind>` → `cNNsNNpNN`
+    - Example: `c01.s01.p03_rg` → `c01s01p03`
+    - Use this exact transformed string as the Twee passage name and in `<<goto>>` and `[[link|target]]`.
 - User-choice passage links are always written outside & after the `timedprogressbar` macro. For example:
   ```
   <<timedprogressbar 3>>
-    <<goto "Tragedy">>
+    <<goto "c01s01p03">>
   <</timedprogressbar>>
-  [[Option 1|OptionOne]]
-  [[Option 2|OptionTwo]]
+  [[Act: Step back|c01s01p03]]
+  [[Act: Lower your gaze|c01s01p04]]
   ```
+
+- Game Over passages must present a restart option:
+  - Include a visible `[[Restart|Start]]` link that navigates to the global `Start` passage to reset variables.
+  - Do not auto-advance from GO passages; they terminate the run until the player chooses to restart.
 
 - Only render a timed progress bar when the timer edge is reachable under current conditions.
   - Problematic example to avoid, assuming `stress == 30`:
