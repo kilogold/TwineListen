@@ -1,166 +1,138 @@
 :: P01
-<<set $stress += 2>>
-Leon sits hunched in the cold attic. Your shadow settles near the beam; the world map and backpack memory tug at you. He notices your presence without turning.
+<<set $stress = Math.max(0, Math.min(100, $stress + 4))>>
+The cold empty attic in an old house near a river holds its breath. Night leans in; shadows hint at movement. Leon sits somewhere ahead, and the space asks you to commit to stillness.
+
+<<timedprogressbar $timer>>
+  <<goto "P02">>
+<</timedprogressbar>>
+[[Trace finger along floorboard|P04]]
+
+:: P02
+<<set $stress = Math.max(0, Math.min(100, $stress + 4))>>
+You linger with the shadows as if they might confess their tricks. Only you and Leon exist in this hush, and the room begins to measure how long you can keep listening.
 
 <<timedprogressbar $timer>>
   <<goto "P03">>
 <</timedprogressbar>>
-[[Glance at the box|P02]]
-
-:: P02
-<<set $stress += 4>>
-A taped cardboard box near his feet leaks a pair of baby socks. Dust lifts as you angle closer; he follows your gaze, a tremor passing through his jaw.
-
-<<timedprogressbar $timer>>
-  <<goto "P06">>
-<</timedprogressbar>>
-[[Pick up the baby socks|P09]]
+[[Step back into shadows|P08]]
 
 :: P03
-<<set $stress -= 4>><<set $anger -= 2>>
-You hold the gaze on his averted face. Slow blinks meet you; he steadies as if practicing Stoicism, fingers worrying a frayed sleeve along the beam. A quiet prayer hovers between breaths.
+<<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
+Leon sits at the center, hunched, withered, and frail. His mind still paces in silence; the posture reads like a confession pressed into wood and dust.
 
 <<timedprogressbar $timer>>
-  <<goto "P04">>
+  <<goto "P05">>
 <</timedprogressbar>>
-[[Count your breaths|P04]]
+[[Kneel beside Leon|P06]]
 
 :: P04
-<<set $stress -= 8>><<set $anger -= 4>>
-You count your breaths; a prayer rhythm threads the silence. His shoulders lower a notch; Stoic breath in, breath out—the attic's chill rides your exhale across the dust.
+<<set $stress = Math.max(0, Math.min(100, $stress + 4))>>
+Old boards breathe beneath your hand as you trace their grain. The river is only a rumor through the walls; the night tightens, asking if you mean to stay.
 
-<<if visited("P04") >= 2>>
-  <<timedprogressbar $timer>>
-    <<goto "P16">>
-  <</timedprogressbar>>
-<<else>>
-  <<timedprogressbar $timer>>
-    <<goto "P08">>
-  <</timedprogressbar>>
-<</if>>
-[[Lower your gaze|P06]]
+<<timedprogressbar $timer>>
+  <<goto "P05">>
+<</timedprogressbar>>
+[[Steady a loose floorboard|P13]]
 
 :: P05
-<<set $stress += 2>><<set $anger += 4>>
-You point toward the curled world map tacked crooked under a hinge. He squints, then looks away; travel dreams sour under the weight of divorce.
+<<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
+Only you and Leon are present, and it is night. You tilt your head toward him; the room barely holds the tension of a mind that keeps moving even while still.
 
-<<if visited("P05") >= 2>>
+<<if $stress > 60>>
   <<timedprogressbar $timer>>
-    <<goto "P15">>
+    <<goto "P14">>
   <</timedprogressbar>>
 <<else>>
   <<timedprogressbar $timer>>
     <<goto "P07">>
   <</timedprogressbar>>
 <</if>>
-[[Step back|P13]]
+[[Listen in silence|P12]]
 
 :: P06
-<<set $stress += 6>>
-You lower your gaze, tracing the cardboard seam back to the baby socks box. He swallows; the rented-out home years flicker like light through boards.
+<<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
+<<set $anger = Math.max(0, Math.min(100, $anger + 2))>>
+You lower yourself beside him. Up close, the frailty is a map of years; the attic funnels all sound into the small space between your breaths.
 
 <<timedprogressbar $timer>>
   <<goto "P07">>
 <</timedprogressbar>>
-[[Shift your weight|P07]]
+[[Rest palm on chest|P10]]
 
 :: P07
-<<set $stress -= 6>>
-With one finger you trace a circle in the dust on the floorboard. The motion steadies him; breath matches yours, and the beam creaks softer.
+<<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
+<<set $anger = Math.max(0, Math.min(100, $anger + 12))>>
+Withered shoulders tremble; his muttering is a thread on the edge of breaking. Touch could steady him—or snap whatever is left holding him together.
 
 <<timedprogressbar $timer>>
   <<goto "P08">>
 <</timedprogressbar>>
-[[Rest a hand on the beam|P08]]
+<<link "Touch Leon's shoulder">>
+  <<if $anger > 35 or $stress > 60>><<goto "P09">><<else>><<goto "P10">><</if>>
+<</link>>
+<<link "Touch Leon's back">>
+  <<if $anger > 35 or $stress > 60>><<goto "P11">><<else>><<goto "P12">><</if>>
+<</link>>
+<<if $anger <= 35 and $stress <= 60>>
+<<link "Touch Leon's hand">><<goto "P12">><</link>>
+<</if>>
 
 :: P08
-<<set $stress -= 4>><<set $anger -= 2>>
-You rest a hand on the beam beside him; he glances without flinching. A fragile trust tests whether quiet company can hold.
+<<set $stress = Math.max(0, Math.min(100, $stress - 4))>>
+You step back into the shadows as if they could mediate. The house creaks; somewhere the river keeps time, and the attic hush returns to its slow grind.
 
 <<timedprogressbar $timer>>
-  <<goto "P07">>
+  <<goto "P12">>
 <</timedprogressbar>>
-[[Point to the world map|P05]]
-[[Touch Leon's shoulder|P10]]
+[[Slide note closer|P03]]
 
 :: P09
-<<set $stress += 4>><<set $anger += 6>>
-You pick up the baby socks from the box lip. Fabric is weightless; his eyes wet, a life deferred gathers in your palm.
+Leon jolts at your touch and surges brittle and sudden. The attic snaps to violence; breath is a splintered thing, and the night ends against the boards.
+
+[[Restart|Start]]
+
+:: P10
+<<set $stress = Math.max(0, Math.min(100, $stress - 8))>>
+<<set $anger = Math.max(0, Math.min(100, $anger - 4))>>
+You count the cold attic breaths with a hand to your chest. His shoulders ease a notch; the room loosens just enough for the next choice to matter.
+
+<<timedprogressbar $timer>>
+  <<goto "P12">>
+<</timedprogressbar>>
+[[Tilt head toward Leon|P03]]
+
+:: P11
+He slumps forward and does not rise. Frail bones meet wood; the silence turns final, and the attic swallows what remains of your presence.
+
+[[Restart|Start]]
+
+:: P12
+<<set $stress = Math.max(0, Math.min(100, $stress - 4))>>
+You listen to the muttering—mind still pacing—as the old house frames each breath. Only you and he orbit this narrow night.
+
+<<timedprogressbar $timer>>
+  <<goto "P04">>
+<</timedprogressbar>>
+<<timedprogressbar $timer>>
+  <<goto "ch_lost.scn_feeling_stuck.P01">>
+<</timedprogressbar>>
+[[Kneel beside Leon|P06]]
+
+:: P13
+<<set $stress = Math.max(0, Math.min(100, $stress - 2))>>
+A loose board shifts; you steady it with careful fingers. The river’s far rhythm steadies you back as the attic waits for your next move.
 
 <<timedprogressbar $timer>>
   <<goto "P05">>
 <</timedprogressbar>>
-[[Point to the hinge|P05]]
-
-:: P10
-<<set $stress += 6>><<set $anger += 10>>
-You touch Leon's shoulder lightly; the bone under cloth is sharp. The contact threatens his brittle calm, but it could also ground him.
-
-<<if $anger > 35 || $stress > 60>>
-  <<timedprogressbar $timer>>
-    <<goto "P13">>
-  <</timedprogressbar>>
-<<else>>
-  <<timedprogressbar $timer>>
-    <<goto "P11">>
-  <</timedprogressbar>>
-<</if>>
-[[Brush Leon's sleeve|P12]]
-
-:: P11
-<<set $stress += 8>><<set $anger += 12>>
-You touch Leon's forearm, palm warm on a map of veins. He freezes, measuring you against old harms.
-
-<<if $anger > 35 || $stress > 60>>
-  <<timedprogressbar $timer>>
-    <<goto "P14">>
-  <</timedprogressbar>>
-<<else>>
-  <<timedprogressbar $timer>>
-    <<goto "P12">>
-  <</timedprogressbar>>
-<</if>>
-[[Hold the gaze|P03]]
-
-:: P12
-<<set $stress += 6>><<set $anger += 12>>
-You brush Leon's sleeve as if to smooth lint; breath stalls, eyes glaze with memories he'd rather not unpack here.
-
-<<if $anger > 35 || $stress > 60>>
-  <<timedprogressbar $timer>>
-    <<goto "P14">>
-  <</timedprogressbar>>
-<<else>>
-  <<timedprogressbar $timer>>
-    <<goto "P15">>
-  <</timedprogressbar>>
-<</if>>
-[[Touch Leon's forearm|P11]]
-
-:: P13
-He jerks and shoves you hard. The beam and dust blur as your heel slips on the stair lip; the attic swallows sound before the floor does.
-
-[[Restart|Start]]
+[[Brush dust from floor|P01]]
 
 :: P14
-A brittle scream breaks; he swings the loose beam blindly and catches you at the temple. Light snaps out; dust keeps falling without you.
+The room compresses until your lungs fail the pace. Night closes like a lid; distant water whispers as the dark takes everything that was left.
 
 [[Restart|Start]]
 
-:: P15
-<<set $stress += 6>><<set $anger += 2>>
-His eyes fix on nothing; the HR video call glare returns, cardboard box in lap, a career dropped into a silence heavier than this room.
+:: ch_lost.scn_feeling_stuck.P01 [stub]
+You slip from the attic’s hush into a heavier silence. The next scene takes hold.
 
-<<timedprogressbar $timer>>
-  <<goto "P07">>
-<</timedprogressbar>>
-[[Sit on the floor|P07]]
 
-:: P16
-<<set $stress -= 10>><<set $anger -= 6>>
-You settle into stillness as if recalling Tibetan Buddhism lessons. His breath evens; a minor mercy threads the rafters.
-
-<<timedprogressbar $timer>>
-  <<goto "P08">>
-<</timedprogressbar>>
-[[Place both hands on knees|P08]]

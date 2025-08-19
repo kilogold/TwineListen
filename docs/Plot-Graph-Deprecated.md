@@ -6,6 +6,11 @@ How to use the provided story graph:
 
 ## Graph
 ```mermaid
+---
+config:
+  theme: dark
+  layout: fixed
+---
 flowchart TD
  subgraph s1["Lost"]
         n3["Feeling stuck"]
@@ -20,9 +25,9 @@ flowchart TD
   end
  subgraph s3["Marriage"]
         n11["Porn addiction"]
-        n13["Sexual neglect"]
+        n13["Sexually neglect my wife"]
         n12["Heartbreak"]
-        n14["Coerced into an<br>Open Relationship"]
+        n14["I was coerced into an<br>Open Relationship"]
         n15["Infidelity"]
         n16["Abandonment<br>Isolation"]
         n17["Commitment<br>with<br>Uncertainty"]
@@ -35,16 +40,55 @@ flowchart TD
         n51["Breakup"]
         n52["Emotional immaturity"]
   end
+ subgraph s4["Adult Singlehood"]
+        n22["Herpes"]
+        n24["Promiscuity"]
+        n39["PUA<br>Manipulation"]
+        n44["Lost self-worth"]
+        n47["Lost friends<br>(Jeb)"]
+  end
+ subgraph s5["First Sexual Relationship"]
+        n23["Incredible sex"]
+        n25["Avoidant behavior<br>breakup"]
+        n41["Porn addiction"]
+        n42["Learned I cannot <br>influence others <br>to stay"]
+        n43["Rape guilt"]
+  end
+ subgraph s6["Teenage years"]
+        n26["Learning<br>sexual behavior"]
+        n33["Excessive <br>masturbation"]
+        n35["Early signs <br>of addiction"]
+        n36["First breakup"]
+        n37["Earning approval"]
+  end
+ subgraph s8["End"]
+        n28["Leaves to find himself"]
+        n29(["End"])
+  end
  subgraph s9["Long-term Relationship"]
         n45["Unhealthy conflict <br>resolution skills"]
         n46["Marriage <br>Proposal<br>under duress"]
         n53@{ label: "Wife's<br>non-citizen<br>deportation<br>risk<br>" }
   end
-    A(["Start"]) --> n6["Encounter in <br>an empty attic"]
+ subgraph s10["Childhood"]
+        n27["Connected with God"]
+        n34["Discover porn"]
+        n30["Emotional<br>neglect"]
+        n31["Emotional Retreat"]
+        n32["Earning <br>affection"]
+        n40["Sibling preference"]
+        n38["Performing <br>to be seen"]
+  end
+ subgraph s11["Start"]
+        A(["Start"])
+        n6["Encounter in <br>an empty attic"]
+  end
+    A --> n6
     n3 --> n4 & n5 & n48
     n6 --> n3
     n7 --> n9
     n5 --> n7 & n8
+    n28 --> n29
     n9 --> n8 & n21
     n48 --> n5
     n21 --> n50 & n49
@@ -62,4 +106,41 @@ flowchart TD
     n46 --> n53 & n45
     n52 <--> n18
     n52 --> n50
+    n48@{ shape: rect}
+    n8@{ shape: rect}
+    n13@{ shape: rect}
+    n12@{ shape: rect}
+    n14@{ shape: rect}
+    n15@{ shape: rect}
+    n16@{ shape: rect}
+    n17@{ shape: rect}
+    n18@{ shape: rect}
+    n19@{ shape: rect}
+    n20@{ shape: rect}
+    n21@{ shape: rect}
+    n49@{ shape: rect}
+    n50@{ shape: rect}
+    n24@{ shape: rect}
+    n39@{ shape: rect}
+    n44@{ shape: rect}
+    n47@{ shape: rect}
+    n25@{ shape: rect}
+    n41@{ shape: rect}
+    n42@{ shape: rect}
+    n43@{ shape: rect}
+    n33@{ shape: rect}
+    n35@{ shape: rect}
+    n36@{ shape: rect}
+    n37@{ shape: rect}
+    n28@{ shape: rect}
+    n46@{ shape: rect}
+    n53@{ shape: rect}
+    n27@{ shape: rect}
+    n34@{ shape: rect}
+    n30@{ shape: rect}
+    n31@{ shape: rect}
+    n32@{ shape: rect}
+    n40@{ shape: rect}
+    n38@{ shape: rect}
+
 ```    

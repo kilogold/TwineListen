@@ -211,7 +211,7 @@ Macro.add("timedprogressbar", {
   background: #00ff00;
 }
 :: Start
-<<set $timer to 30>>
+<<set $timer to 10>>
 <<set $gazed to false>>
 <<set $listened to false>>
 <<set $stress to 0>>

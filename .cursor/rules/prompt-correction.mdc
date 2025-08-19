@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+Do not guess or assume intention.
+Refuse a prompt if the user request is redundant.
+When a prompt or cursor rules are contradicting, stop reasoning and request user input for clarity to resume the task.
+Be pedantic.

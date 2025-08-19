@@ -143,7 +143,52 @@ Inputs (read by path; do not paste contents):
 
 Follow the rules in `/.cursor/rules/twee-gen.mdc`. Respect passage IDs and cross-refs defined in `/docs/Plot-Graph.dsl`.
 
-Output ONLY the Twee passages for chapter "Start" intended to replace the body of `/src/start.twee`.
+Replace the body of `/src/start.twee` with ONLY Twee passages:
+- from the currently specified scene.
+- connecting into the next scene.
+  - For each cross‑chapter relationship present in the DSL, add exactly one handoff from its source passage to the designated next scene.
+  - Mirror the DSL edge label and condition: if `"timer"`, use a timed auto‑advance; if `"Act: X"`, add a user link labeled `X`; include any conditions (e.g., `Anger`/`Stress` thresholds) in SugarCube conditionals.
+  - Target ID mapping: use `ch_<chapter>.scn_<scene>.PXX` where `PXX` equals the component passage‑name (e.g., `P01`).
+  - Stub rule: if the target passage does not exist yet, create a stub passage with that exact ID in the same Twee file, tagged `[stub]`, with minimal body; only create the stub if absent.
+```
+
+### Prompt 5 — Verify Twee against the Tactical Graph (deterministic)
+Ensure the generated Twee branches in `/src/start.twee` exactly correspond to affecting & effecting relationships for `ch_start.scn_attic` graph in `/docs/Plot-Graph.dsl`. Fix mismatches; report any source-of-truth conflicts with `/docs/Plot-Device.md`.
+
+Suggested prompt (Cursor-friendly):
+```text
+Audit `/src/start.twee` against:
+- `/.cursor/rules/twee-gen.mdc`
+- `/.cursor/rules/tactical-gen.mdc`
+- `/docs/Plot-Graph.dsl` (scene: `ch_start.scn_attic`)
+- `/docs/Plot-Device.md`
+
+Important: 
+DSL & Sugarcube syntax is intentionally different. Focus only on logical differences.
+
+Tasks:
+1) Build an adjacency list for `ch_start.scn_attic` (components and edges with labels & conditions).
+2) Parse `/src/start.twee` and extract passage links and timed progressions.
+3) Enforce the mapping rules from Prompt 4:
+   - Scope: the file contains ONLY passages for the specified scene plus connections into the next scene.
+   - Handoffs: for each cross‑chapter relationship in the DSL, add exactly one handoff from its source passage to the designated next scene.
+   - Edge modality: mirror DSL edge labels and conditions — if "timer", use a timed auto‑advance; if "Act: X", use a user link labeled X; include any `Anger`/`Stress` thresholds via SugarCube conditionals.
+   - Target ID mapping: targets follow `ch_<chapter>.scn_<scene>.PXX` where `PXX` equals the DSL component passage‑name.
+   - Stub rule: if a target passage does not exist yet, a stub with that exact ID exists in the same Twee file, tagged `[stub]`, with minimal body; created only if absent.
+4) Compare both graphs:
+   - Missing or extra passages or edges
+   - Label mismatches (`Act: ...`), timer presence, and conditions (`Stress`/`Anger` thresholds)
+   - Game Over targets and counts
+   - Stat delta consistency per passage (match intent and magnitude bands)
+   - ID format and cross‑ref mapping correctness
+   - Handoff presence/count and stub existence/tagging
+5) Source-of-truth policy:
+   - If `/src/start.twee` deviates from `/docs/Plot-Graph.dsl`, prefer the DSL and fix Twee.
+   - If the DSL contradicts `/docs/Plot-Device.md` themes or anchors, do NOT silently fix. List the contradiction and propose minimal DSL edits that realign with Plot-Device, then provide the matching Twee diff.
+
+Output:
+1) Violations (bullets) grouped by type (structure, labels, timers, conditions, stats, ids/handoffs/stubs)
+2) Corrected Twee snippets (only the changed passages)
 ```
 
 ### Cursor usage — reference files instead of pasting
