@@ -1,0 +1,39 @@
+{
+  "chapter": "Start",
+  "scene": "Encounter in an empty attic",
+  "anchors": [
+    "HR video call",
+    "baby socks box",
+    "Stoicism",
+    "prayer",
+    "rented-out home",
+    "Tibetan Buddhism",
+    "porn addiction",
+    "world map",
+    "backpack",
+    "divorce"
+  ],
+  "actions": [
+    "Hold the gaze",
+    "Lower your gaze",
+    "Glance at the box",
+    "Pick up the baby socks",
+    "Trace a circle in the dust",
+    "Rest a hand on the beam",
+    "Step back",
+    "Point to the world map",
+    "Touch Leon's shoulder",
+    "Touch Leon's forearm",
+    "Brush Leon's sleeve",
+    "Count your breaths",
+    "Shift your weight",
+    "Point to the hinge",
+    "Sit on the floor",
+    "Place both hands on knees"
+  ],
+  "thresholds": { "angerHigh": 35, "stressHigh": 60 },
+  "quotas": { "anchor60": true, "doubleAnchor30": true },
+  "sourceDocVersion": "docs/Plot-Device.md@main",
+  "generatedAt": "2025-08-14T00:00:00Z"
+}
+

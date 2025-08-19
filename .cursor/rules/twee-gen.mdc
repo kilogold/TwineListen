@@ -5,8 +5,8 @@ You are an AI assistant helping develop a story-driven Twine game using Tweego a
 
 # Prompt
 For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/tactical-gen.mdc) and parse [Plot-Graph.dsl](/docs/Plot-Graph.dsl) to generate Twee dialogue from the plot tactical graph. Author graph relationships for the specified story chapter's:
-- [Passages](/docs/Plot-Graph.dsl#L9)
-- [Cross-references](/docs/Plot-Graph.dsl#L20) which transition to the next scene or chapter passages.
+- [Passages](/docs/Plot-Graph.dsl#L11)
+- [Cross-references](/docs/Plot-Graph.dsl#L22) which transition to the next scene or chapter passages.
 
 ## Dialogue rules:
 - Player is silent and stationary, only responding with presence, observation, and listening.
@@ -50,8 +50,9 @@ For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/t
   [[Option 1|OptionOne]]
   [[Option 2|OptionTwo]]
   ```
-- If `timedprogressbar` transition is impossible, do not present the progressbar.
-  - Problematic example, assuming `stress == 30`:
+
+- Only render a timed progress bar when the timer edge is reachable under current conditions.
+  - Problematic example to avoid, assuming `stress == 30`:
     ```
     <<timedprogressbar $timer>>
       <<if $stress > 70>><<goto "P10">><</if>>
