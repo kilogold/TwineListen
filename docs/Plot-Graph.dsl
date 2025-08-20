@@ -111,7 +111,6 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
                 p01_rg = component "P01" "A placeholder forward bridge from Feeling stuck to later scenes; used to satisfy model wiring until the scene is authored." "" "Passage"
             }
             
-            # Cross-chapter progression from Start → Lost
             s02 = container "Lost job"
             s03 = container "Dead dreams of raising a family"
             s04 = container "Lost marriage"
