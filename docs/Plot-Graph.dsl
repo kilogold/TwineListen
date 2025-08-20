@@ -47,7 +47,63 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
     model {
         c01 = softwareSystem "Start" {
             s01 = container "Attic Encounter" {
-                p01_rg = component "P01" "A placeholder forward bridge from Feeling stuck to later scenes; used to satisfy model wiring until the scene is authored." "" "Passage"
+                # Components (passages)
+                p01_rg = component "P01" "He repeats 'Another day, another night' under his breath, looping in tiny rocks as if going in circles. The still attic waits while you decide how to attend his frail motion." "Stress +4" "Passage"
+                p02_rg = component "P02" "A rasped 'I deserve my fate' leaks out, then he shrinks, eyes wet. The words hang while you weigh whether stillness soothes or stings in this brittle quiet—does anyone even care?" "Stress +6" "Passage"
+                p03_rg = component "P03" "He flares—'It's her fault'—then retreats to 'no one is to blame.' The reversal frays the room; blame loops back on itself and tests the air around you." "Anger +8, Stress +2" "Passage"
+                p04_rg = component "P04" "His memories blur with time and age; fingertips hover over notes as if steadying thought. You read the tremor and choose whether to guide the reach or let it blur longer." "Stress +6" "Passage"
+                p05_rg = component "P05" "He eyes the notes he wrote; reading feels worse because he'll remember the pain. Paper scratches, breath shortens, and the attic seems to lean closer to listen." "Stress +8" "Passage"
+                p06_rg = component "P06" "He shifts, going in circles; 'rotting away in misery' escapes. The cadence invites either grounding or a sharper snap that might split this night open." "Stress +6, Anger +2" "Passage"
+                p07_rg = component "P07" "Your presence steadies the rhythm; his shoulders loosen as breath syncs. The loop softens toward the notes he fears, and a quiet chance to nudge without force appears." "Stress -4, Anger -4" "Passage"
+                p08_rg = component "P08" "You hold the gaze; 'Another day, another night' thins to a murmur while dust hangs over the notes. A measured pause offers calm instead of a push." "Stress -2" "Passage"
+                p09_rg = component "P09" "A tremor crawls his arm as your shadow shifts; the thought of 'rotting away in misery' tightens his jaw. Touch might steady the loop or snap it into something worse." "Anger +6" "Passage"
+                p10_rg = component "P10" "He edges closer to the notes, then freezes. Bridging the gap feels like thin ice; the wrong weight could crack the night in two and flood the room with memory." "Stress +4, Anger +4" "Passage"
+                p11_rg = component "P11" "'Remember the pain' rasps out as fingers hover; the attic hum closes in. A small gesture might soothe the memory or set it alight with blame and blur." "Stress +2, Anger +8" "Passage"
+                p12_rg = component "P12" "He softens: 'no one is to blame' almost finds peace. The attic loosens its grip as you either step back into shadows or hold, letting him choose the pace." "Stress -6, Anger -4" "Passage"
+                p13_go = component "P13" "His eyes flash; contact detonates the night. He lunges with sudden, brittle fury, and everything folds to black before breath can return." "" "Passage-GameOver"
+                p14_go = component "P14" "Your touch tips him past the brink. A hoarse cry splits the stillness, wood cracks, and the scene ends with the weight of your mistake." "" "Passage-GameOver"
+
+                # Relationships
+                # Each non–GO passage has ≥1 timer; include ≥1 explicit user-choice GO (unconditional); touch actions branch by thresholds.
+                p01_rg -> p02_rg "Act: hold the gaze on Leon"
+                p01_rg -> p03_rg "timer"
+
+                p02_rg -> p04_rg "Act: tilt head toward Leon"
+                p02_rg -> p03_rg "timer"
+
+                p03_rg -> p05_rg "Act: slide the notes closer"
+                p03_rg -> p06_rg "timer"
+
+                p04_rg -> p05_rg "Act: trace a circle in dust"
+                p04_rg -> p06_rg "timer"
+
+                p05_rg -> p07_rg "Act: brush dust from the floor"
+                p05_rg -> p06_rg "timer"
+
+                # Unconditional GO path
+                p06_rg -> p13_go "Act: kneel beside Leon"
+                p06_rg -> p07_rg "timer"
+
+                p07_rg -> p09_rg "Act: steady your breath"
+                p07_rg -> p08_rg "timer"
+
+                p08_rg -> p10_rg "Act: glance at the notes"
+                p08_rg -> p09_rg "timer"
+
+                # Touch branches: GO when Anger > 35 or Stress > 60; otherwise continue
+                p09_rg -> p13_go "Act: touch Leon's shoulder, Anger > 35 || Stress > 60"
+                p09_rg -> p10_rg "Act: touch Leon's shoulder"
+                p09_rg -> p08_rg "timer"
+
+                p10_rg -> p14_go "Act: touch Leon's hand, Anger > 35 || Stress > 60"
+                p10_rg -> p11_rg "Act: touch Leon's hand"
+                p10_rg -> p11_rg "timer"
+
+                p11_rg -> p14_go "Act: touch Leon's back, Anger > 35 || Stress > 60"
+                p11_rg -> p12_rg "Act: touch Leon's back"
+                p11_rg -> p12_rg "timer"
+
+                p12_rg -> p01_rg "timer"
             }
         }
         c02 = softwareSystem "Lost" {
@@ -76,6 +132,9 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
         c02 -> c03
         c03 -> c04
         c04 -> c05
+
+        # Cross-scene relationships (declared after both endpoints exist)
+        c01.s01.p12_rg -> c02.s01.p01_rg "Act: step back into the shadows"
 
     }
 

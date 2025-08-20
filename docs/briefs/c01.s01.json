@@ -1,0 +1,38 @@
+{
+  "chapter": "Start",
+  "scene": "Attic Encounter",
+  "anchors": [
+    "Another day, another night",
+    "How long has it been?",
+    "Does anyone even care?",
+    "I deserve my fate",
+    "It's her fault",
+    "no one is to blame",
+    "blur with time and age",
+    "I wrote  notes",
+    "reading feels worse",
+    "remember the pain",
+    "going in circles",
+    "rotting away in misery"
+  ],
+  "actions": [
+    "glance at the notes",
+    "hold the gaze on Leon",
+    "tilt head toward Leon",
+    "slide the notes closer",
+    "trace a circle in dust",
+    "brush dust from the floor",
+    "steady your breath",
+    "step back into the shadows",
+    "kneel beside Leon",
+    "touch Leon's shoulder",
+    "touch Leon's hand",
+    "touch Leon's back"
+  ],
+  "thresholds": { "angerHigh": 35, "stressHigh": 60 },
+  "quotas": { "anchor60": true, "doubleAnchor30": true },
+  "sourceDocVersion": "Plot-Device.md#Start/Attic Encounter",
+  "generatedAt": "2025-08-20T00:00:00Z"
+}
+
+

@@ -216,4 +216,4 @@ Macro.add("timedprogressbar", {
 <<set $listened to false>>
 <<set $stress to 0>>
 <<set $anger to 0>>
-<<goto "P01">>
+<<goto "c01s01p01">>
