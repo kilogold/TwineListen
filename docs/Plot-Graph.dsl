@@ -108,10 +108,69 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
         }
         c02 = softwareSystem "Lost" {
             s01 = container "Feeling stuck" {
-                p01_rg = component "P01" "A placeholder forward bridge from Feeling stuck to later scenes; used to satisfy model wiring until the scene is authored." "" "Passage"
+                # Components (passages)
+                p01_rg = component "P01" "He weighs whether to start over or salvage what's left; in this attic the air hardens. Your quiet posture can steady the loop or press him toward a sharper turn." "Stress +6" "Passage"
+                p02_rg = component "P02" "He mutters he set aside my passions in exchange for money; the words lost the job dry his mouth. A small shift could cool the shame or set it burning." "Stress +6" "Passage"
+                p03_rg = component "P03" "The marriage ledger opens in his stare; no legacy gnaws at his breath. Your stance might buffer the ache or tilt it into blame." "Anger +8, Stress +2" "Passage"
+                p04_rg = component "P04" "To be remembered flickers beside no legacy; he tests the weight of both. A measured move could thin the sting or make the silence ring louder." "Stress +6" "Passage"
+                p05_rg = component "P05" "He counts paths to salvage what's left or let it all go; the attic boards listen. Your rhythm can slow the churn or tighten its loop." "Stress +6" "Passage"
+                p06_rg = component "P06" "Let it all go knots with start over; his jaw sets. A careless lean might creak the night and draw him to snap." "Stress +4, Anger +2" "Passage"
+                p07_rg = component "P07" "A long breath takes to this attic; the ache thins as you hold steady. He feels the floor again, less like a trap and more like a place to stand." "Stress -6, Anger -4" "Passage"
+                p08_rg = component "P08" "He traces options: start over, no legacy; both sting. Your small release might soften comparisons without promising a cure." "Stress -4" "Passage"
+                p09_rg = component "P09" "He hovers near you; the marriage ledger strains. A wrong touch could flip the page into fury; a gentler cue might keep it from tearing." "Anger +6" "Passage"
+                p10_rg = component "P10" "He names the cost of lost the job and the bargain in exchange for money. You decide if nearness steadies him or tips him into shame." "Stress +4, Anger +4" "Passage"
+                p11_rg = component "P11" "No legacy rubs raw; your presence could ground the edge or sharpen it. The next motion will test whether pity feels like pressure." "Stress +2, Anger +8" "Passage"
+                p12_rg = component "P12" "Set aside my passions softens under quieter air; he almost loosens. If you move with care, he may hold the calmer thread." "Stress -6, Anger -4" "Passage"
+                p13_go = component "P13" "The post groans; he flares and rushes. Wood and breath collide—everything blanks before you can find balance." "" "Passage-GameOver"
+                p14_go = component "P14" "Your contact detonates the moment; his brittle strength surges and the night cuts to black." "" "Passage-GameOver"
+
+                # Relationships
+                p01_rg -> p02_rg "Act: lower your gaze to the floor"
+                p01_rg -> p03_rg "timer"
+
+                p02_rg -> p04_rg "Act: glance at the ceiling beam"
+                p02_rg -> p03_rg "timer"
+
+                p03_rg -> p04_rg "Act: rest a hand on the beam"
+                p03_rg -> p05_rg "timer"
+
+                p04_rg -> p06_rg "Act: shift your weight"
+                p04_rg -> p05_rg "timer"
+
+                p05_rg -> p07_rg "Act: lengthen your exhale"
+                p05_rg -> p06_rg "timer"
+
+                # Unconditional GO path
+                p06_rg -> p13_go "Act: lean against the post"
+                p06_rg -> p07_rg "timer"
+
+                p07_rg -> p08_rg "Act: unclench your jaw"
+                p07_rg -> p09_rg "timer"
+
+                p08_rg -> p10_rg "Act: knead your palms together"
+                p08_rg -> p09_rg "timer"
+
+                # Touch branches: GO when Anger > 35 or Stress > 60; otherwise continue
+                p09_rg -> p14_go "Act: brush Leon's elbow, Anger > 35 || Stress > 60"
+                p09_rg -> p10_rg "Act: brush Leon's elbow"
+                p09_rg -> p10_rg "timer"
+
+                p10_rg -> p14_go "Act: place a palm on Leon's forearm, Anger > 35 || Stress > 60"
+                p10_rg -> p11_rg "Act: place a palm on Leon's forearm"
+                p10_rg -> p11_rg "timer"
+
+                p11_rg -> p14_go "Act: steady Leon's knee, Anger > 35 || Stress > 60"
+                p11_rg -> p12_rg "Act: steady Leon's knee"
+                p11_rg -> p12_rg "timer"
+
+                p12_rg -> p08_rg "Act: trace the grain on a floorboard"
+                p12_rg -> p01_rg "timer"
             }
             
-            s02 = container "Lost job"
+            s02 = container "Lost job" {
+                # Placeholder entry to enable cross-scene handoff from c02.s01
+                p01_rg = component "P01" "A placeholder entry for Lost job; receiving handoff from Feeling stuck until the scene is authored." "" "Passage"
+            }
             s03 = container "Dead dreams of raising a family"
             s04 = container "Lost marriage"
             
@@ -134,6 +193,7 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
 
         # Cross-scene relationships (declared after both endpoints exist)
         c01.s01.p12_rg -> c02.s01.p01_rg "Act: step back into the shadows"
+        c02.s01.p12_rg -> c02.s02.p01_rg "Act: square your shoulders"
 
     }
 

@@ -1,5 +1,7 @@
-### LLM generation workflow
+# LLM generation workflow
 As a developer, follow this constrained, multi-step LLM prompting workflow to generate and maintain the tactical plot graph while staying faithful to the rules in `/.cursor/rules/tactical-gen.mdc` and the context in `/docs/Plot-Device.md`.
+
+Single source of truth for rules: `/.cursor/rules/tactical-gen.mdc` and `/.cursor/rules/twee-gen.mdc`. This workflow summarizes steps and references those files rather than duplicating rule text.
 
 Parameterization:
 - Use a `SCENE_ID` in DSL format `cNN.sNN` (e.g., `c01.s01`).
@@ -9,7 +11,7 @@ Parameterization:
   - Twee output: `src/{SCENE_ID}.twee` (e.g., `src/c01.s01.twee`)
  - Existing scenes: if `SCENE_ID` already exists in `/docs/Plot-Graph.dsl`, skip Prompt 3 and run Prompt 5 for `SCENE_ID`, then continue with Prompt 6.
 
-#### Prompt 1 — Produce a Scene Brief (JSON only)
+## Prompt 1 — Produce a Scene Brief (JSON only)
 Output strict JSON (no prose) capturing anchors, non‑verbal actions, and thresholds for a single scene.
 
 Suggested prompt:
@@ -21,7 +23,7 @@ Fields:
 
 Requirements:
 - anchors: 8–12 concrete items/phrases copied verbatim from the provided source for the specified chapter/scene only. No inventions. No cross‑chapter items. Prefer physical objects and named nouns; avoid abstractions unless explicitly named. All anchors must be unique and must appear in the source text (exact substring match).
-- actions: 10–14 non‑verbal action labels. No speech verbs (ask/say/tell/etc.). Prefer object‑anchored; pronouns allowed when unambiguous. Include 2–3 “touch Leon” variants. Ensure ≥6 distinct verbs and no duplicates.
+- actions: 10–14 non‑verbal action labels; validate against `/.cursor/rules/tactical-gen.mdc` (non‑verbal only; ≥6 distinct verbs; include 2–3 “touch Leon” variants; cross‑scene variance with gaze exception). Prefer object‑anchored; pronouns allowed when unambiguous.
 - thresholds: angerHigh=35, stressHigh=60 for touch-triggered Game Over branching.
 - quotas: anchor60 and doubleAnchor30 set true.
 - Do NOT add any extra properties. Specifically, do not include any DSL snapshots or large text blobs in the brief; the DSL belongs only in `/docs/Plot-Graph.dsl`.
@@ -31,7 +33,7 @@ Invocation: Execute Prompt 1 for `SCENE_ID`.
 
 Save the JSON to `docs/briefs/{SCENE_ID}.json` (for versioning). In Cursor, reference this file in later prompts (no pasting).
 
-#### Prompt 2 — Audit the Scene Brief JSON (deterministic)
+## Prompt 2 — Audit the Scene Brief JSON (deterministic)
 Validate the Scene Brief JSON against required schema and constraints before generating the DSL. If fixes are needed, emit a corrected JSON and use it for the next step.
 
 Suggested prompt (Cursor-friendly):
@@ -43,7 +45,7 @@ Only change fields that violate checks; preserve all other values and their orde
 Checks:
 - Fields present: chapter, scene, anchors, actions, thresholds.angerHigh, thresholds.stressHigh, quotas.anchor60, quotas.doubleAnchor30, sourceDocVersion, generatedAt. No extra properties.
 - anchors: 8–12 items; unique; copied verbatim as exact substrings from the provided source; scoped to the specified chapter/scene only; no cross‑chapter items; prefer physical objects and named nouns; avoid abstractions unless explicitly named; no inventions.
-- actions: 10–14 items; non‑verbal; unique; ≥6 distinct verbs; include 2–3 "touch Leon" variants; no speech verbs (ask/say/tell/etc.). Prefer object‑anchored labels; pronouns allowed when unambiguous.
+- actions: 10–14 items; validate against `/.cursor/rules/tactical-gen.mdc` (non‑verbal; uniqueness; ≥6 distinct verbs; touch branching; cross‑scene variance with gaze exception). Prefer object‑anchored labels; pronouns allowed when unambiguous.
 - thresholds: angerHigh=35, stressHigh=60 (exact values).
 - quotas: anchor60=true, doubleAnchor30=true (exact values).
 - Strings non‑empty; consistent casing and spelling; no comments or prose.
@@ -57,7 +59,7 @@ Invocation: Execute Prompt 2 for `SCENE_ID`.
 
 If corrections were made, update `docs/briefs/{SCENE_ID}.json` with the corrected JSON before proceeding.
 
-#### Prompt 3 — Generate the Tactical Graph DSL from the Brief
+## Prompt 3 — Generate the Tactical Graph DSL from the Brief
 Use the Brief to emit only the Structurizr DSL for `SCENE_ID`.
 
 Note: If the `SCENE_ID` block already exists in `/docs/Plot-Graph.dsl`, do not regenerate here; execute Prompt 5 for `SCENE_ID` instead.
@@ -83,7 +85,7 @@ Run the following terminal command for DSL syntax validation: `structurizr-cli v
 
 Invocation: Execute Prompt 3 for `SCENE_ID`.
 
-#### Prompt 4 — Audit/Fix pass (deterministic)
+## Prompt 4 — Audit/Fix pass (deterministic)
 Run a validation pass and re‑emit a corrected DSL if needed.
 
 Suggested prompt (Cursor-friendly):
@@ -106,7 +108,7 @@ Output:
 
 Invocation: Execute Prompt 4 for `SCENE_ID`.
 
-#### Prompt 5 — Refactor existing scene (optional)
+## Prompt 5 — Refactor existing scene (optional)
 Use this when updating an existing graph without adding nodes unnecessarily.
 
 Suggested prompt:
@@ -127,7 +129,7 @@ Output ONLY the updated DSL block.
 
 Invocation: Execute Prompt 5 for `SCENE_ID` when needed.
 
-#### Prompt 6 — Generate Twee from the Plot Graph (Cursor-friendly)
+## Prompt 6 — Generate Twee from the Plot Graph (Cursor-friendly)
 Convert the validated plot graph into SugarCube v2 Twee passages for the specified scene.
 
 Suggested prompt (Cursor-friendly):
@@ -149,11 +151,12 @@ Create or replace `/src/{SCENE_ID}.twee` with ONLY Twee passages:
   - Mirror the DSL edge label and condition: if `"timer"`, use a timed auto‑advance; if `"Act: X"`, add a user link labeled `X`; include any conditions (e.g., `Anger`/`Stress` thresholds) in SugarCube conditionals.
   - Target ID mapping and Twee passage naming: see `/.cursor/rules/twee-gen.mdc` (single source of truth).
   - Stub rule: if the target passage does not exist yet, create a stub passage with that exact ID in the same Twee file, tagged `[stub]`, with minimal body; only create the stub if absent.
+  - Monologue expansion: include at least one narrator line and an unrestricted, immersive Leon monologue (multiple `.dialogue` paragraphs as needed), grounded in anchors from `@Plot-Device.md`.
 ```
 
 Invocation: Execute Prompt 6 for `SCENE_ID`.
 
-#### Prompt 7 — Verify Twee against the Tactical Graph (deterministic)
+## Prompt 7 — Verify Twee against the Tactical Graph (deterministic)
 Ensure the generated Twee branches in `/src/{SCENE_ID}.twee` exactly correspond to affecting & effecting relationships for `SCENE_ID`'s graph in `/docs/Plot-Graph.dsl`. Fix mismatches; report any source-of-truth conflicts with `/docs/Plot-Device.md`.
 
 Suggested prompt (Cursor-friendly):
@@ -176,6 +179,9 @@ Tasks:
    - Edge modality: mirror DSL edge labels and conditions — if "timer", use a timed auto‑advance; if "Act: X", use a user link labeled X; include any `Anger`/`Stress` thresholds via SugarCube conditionals.
    - Target ID mapping: targets follow `cNN.sNN.PNN` where `PNN` equals the DSL component passage‑name.
    - Stub rule: if a target passage does not exist yet, a stub with that exact ID exists in the same Twee file, tagged `[stub]`, with minimal body; created only if absent.
+4) Dialogue expansion checks:
+   - Each non–GO passage contains substantive, multi-line Leon monologue (not a single-sentence body); length is not capped. Prefer `.dialogue` paragraphs.
+   - GO passages include a consequence line and a visible `[[Restart|Start]]` link.
 4) Compare both graphs:
    - Missing or extra passages or edges
    - Label mismatches (`Act: ...`), timer presence, and conditions (`Stress`/`Anger` thresholds)
@@ -194,7 +200,7 @@ Output:
 
 Invocation: Execute Prompt 7 for `SCENE_ID`.
 
-#### Cursor usage — reference files instead of pasting
+## Cursor usage — reference files instead of pasting
 - In Cursor, reference files by path (e.g., `docs/briefs/{SCENE_ID}.json`, `/docs/Plot-Graph.dsl`, `/.cursor/rules/tactical-gen.mdc`, `/.cursor/rules/twee-gen.mdc`, `src/{SCENE_ID}.twee`) directly in prompts.
 - This avoids copy/paste drift and keeps a single source of truth. The assistant can open and read these paths.
 - If working outside Cursor or another file-aware IDE, you may paste JSON/DSL snapshots in the chat for discussion, but never persist DSL snapshots inside Scene Brief JSON files. The authoritative rule lives in `/.cursor/rules/tactical-gen.mdc`.

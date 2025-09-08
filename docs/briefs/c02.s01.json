@@ -1,0 +1,36 @@
+{
+  "chapter": "Lost",
+  "scene": "Feeling stuck",
+  "anchors": [
+    "start over",
+    "salvage what's left",
+    "let it all go",
+    "set aside my passions",
+    "in exchange for money",
+    "lost the job",
+    "marriage",
+    "To be remembered",
+    "no legacy",
+    "this attic"
+  ],
+  "actions": [
+    "lower your gaze to the floor",
+    "glance at the ceiling beam",
+    "rest a hand on the beam",
+    "shift your weight",
+    "lengthen your exhale",
+    "trace the grain on a floorboard",
+    "lean against the post",
+    "unclench your jaw",
+    "knead your palms together",
+    "brush Leon's elbow",
+    "place a palm on Leon's forearm",
+    "steady Leon's knee"
+  ],
+  "thresholds": { "angerHigh": 35, "stressHigh": 60 },
+  "quotas": { "anchor60": true, "doubleAnchor30": true },
+  "sourceDocVersion": "",
+  "generatedAt": "2025-08-20T00:00:00Z"
+}
+
+

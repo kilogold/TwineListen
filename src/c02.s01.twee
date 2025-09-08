@@ -1,0 +1,166 @@
+:: c02s01p01
+<<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
+The attic air hardens as he weighs whether to start over or salvage what's left. Your quiet posture could steady the loop or press him toward a sharper turn.
+<p class="dialogue">Start over? Salvage what's left? Feels like choosing between drowning slow or drinking the river.</p>
+<p class="dialogue">You stand there like a lighthouse that forgot how to blink. Maybe that's what I need.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p03">>
+<</timedprogressbar>>
+[[Act: lower your gaze to the floor|c02s01p02]]
+
+:: c02s01p02
+<<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
+"Set aside my passions… in exchange for money," he mutters. The words "lost the job" dry his mouth. A small shift could cool the shame—or set it burning.
+<p class="dialogue">I traded breath for coins and then forgot to spend them on living.</p>
+<p class="dialogue">The day they fired me, the world got quiet—and I finally heard how loud I was inside.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p03">>
+<</timedprogressbar>>
+[[Act: glance at the ceiling beam|c02s01p04]]
+
+:: c02s01p03
+<<set $anger = Math.max(0, Math.min(100, $anger + 8))>>
+<<set $stress = Math.max(0, Math.min(100, $stress + 2))>>
+The marriage ledger opens in his stare; "no legacy" gnaws at breath. Your stance might buffer the ache—or tilt it into blame.
+<p class="dialogue">Our house had walls; we never learned how to live inside them.</p>
+<p class="dialogue">No legacy—just dust that remembers the shape of our fight.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p05">>
+<</timedprogressbar>>
+[[Act: rest a hand on the beam|c02s01p04]]
+
+:: c02s01p04
+<<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
+"To be remembered" flickers beside "no legacy" as he tests their weight. A measured move could thin the sting—or make the silence ring louder.
+<p class="dialogue">I used to chase monuments. Turns out the only statues I could lift were in my head.</p>
+<p class="dialogue">If memory is all I get, then let it be kind. Or let it be honest. Maybe both is too much.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p05">>
+<</timedprogressbar>>
+[[Act: shift your weight|c02s01p06]]
+
+:: c02s01p05
+<<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
+He counts paths: salvage what's left or let it all go. The boards listen. Your rhythm can slow the churn—or tighten its loop.
+<p class="dialogue">Every fork looks like a circle. I keep choosing and arrive back here anyway.</p>
+<p class="dialogue">If you breathe steady, I might borrow it.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p06">>
+<</timedprogressbar>>
+[[Act: lengthen your exhale|c02s01p07]]
+
+:: c02s01p06
+<<set $stress = Math.max(0, Math.min(100, $stress + 4))>>
+<<set $anger = Math.max(0, Math.min(100, $anger + 2))>>
+"Let it all go" knots with "start over"; his jaw sets. A careless lean might creak the night and draw him to snap.
+<p class="dialogue">I can feel the break in the wood and in me. Don't lean too hard.</p>
+<p class="dialogue">If I go, I go brittle.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p07">>
+<</timedprogressbar>>
+[[Act: lean against the post|c02s01p13]]
+
+:: c02s01p07
+<<set $stress = Math.max(0, Math.min(100, $stress - 6))>>
+<<set $anger = Math.max(0, Math.min(100, $anger - 4))>>
+A long breath takes to the attic; the ache thins as you hold steady. The floor feels less like a trap, more like a place to stand.
+<p class="dialogue">That's better. The room stops chewing on me when you breathe like that.</p>
+<p class="dialogue">I could stand here a little longer.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p09">>
+<</timedprogressbar>>
+[[Act: unclench your jaw|c02s01p08]]
+
+:: c02s01p08
+<<set $stress = Math.max(0, Math.min(100, $stress - 4))>>
+He traces options—start over, no legacy—both sting. Your small release softens comparison without promising a cure.
+<p class="dialogue">Maybe I don't need a grand reason. Maybe one honest step is enough.</p>
+<p class="dialogue">If I speak it aloud, will it turn on me?</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p09">>
+<</timedprogressbar>>
+[[Act: knead your palms together|c02s01p10]]
+
+:: c02s01p09
+<<set $anger = Math.max(0, Math.min(100, $anger + 6))>>
+He hovers near; the marriage ledger strains. The wrong touch could flip the page into fury; a gentler cue might keep it from tearing.
+<p class="dialogue">If you touch me, make it light. If you don't, I won't blame you.</p>
+<p class="dialogue">Some pages tear even when you mean to be careful.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p10">>
+<</timedprogressbar>>
+<<if $anger > 35 || $stress > 60>>
+  [[Act: brush Leon's elbow|c02s01p14]]
+<<else>>
+  [[Act: brush Leon's elbow|c02s01p10]]
+<</if>>
+
+:: c02s01p10
+<<set $stress = Math.max(0, Math.min(100, $stress + 4))>>
+<<set $anger = Math.max(0, Math.min(100, $anger + 4))>>
+He names the cost of lost the job and the bargain in exchange for money. Nearness can steady him—or tip him into shame.
+<p class="dialogue">I can still hear the HR call in the empty part of the night.</p>
+<p class="dialogue">I keep paying for it after the bill was due.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p11">>
+<</timedprogressbar>>
+<<if $anger > 35 || $stress > 60>>
+  [[Act: place a palm on Leon's forearm|c02s01p14]]
+<<else>>
+  [[Act: place a palm on Leon's forearm|c02s01p11]]
+<</if>>
+
+:: c02s01p11
+<<set $stress = Math.max(0, Math.min(100, $stress + 2))>>
+<<set $anger = Math.max(0, Math.min(100, $anger + 8))>>
+"No legacy" rubs raw; your presence could ground the edge—or sharpen it. The next motion will test whether pity feels like pressure.
+<p class="dialogue">I wanted to be remembered. Now I just want to stop remembering.</p>
+<p class="dialogue">If pity is all you have, keep it in your pocket. Give me steadiness instead.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p12">>
+<</timedprogressbar>>
+<<if $anger > 35 || $stress > 60>>
+  [[Act: steady Leon's knee|c02s01p14]]
+<<else>>
+  [[Act: steady Leon's knee|c02s01p12]]
+<</if>>
+
+:: c02s01p12
+<<set $stress = Math.max(0, Math.min(100, $stress - 6))>>
+<<set $anger = Math.max(0, Math.min(100, $anger - 4))>>
+"Set aside my passions" softens under quieter air; he almost loosens. If you move with care, he may hold the calmer thread.
+<p class="dialogue">Maybe I can hold both—loss and breath—without breaking either.</p>
+<p class="dialogue">Don't promise me anything. Stay. Breathe. That's enough.</p>
+
+<<timedprogressbar $timer>>
+  <<goto "c02s01p01">>
+<</timedprogressbar>>
+[[Act: trace the grain on a floorboard|c02s01p08]]
+[[Act: square your shoulders|c02s02p01]]
+
+:: c02s01p13 [GO]
+The post groans; he flares and rushes. Wood and breath collide—everything blanks before you find balance.
+<p class="dialogue">I warned you about the weight. It learned my name before I did.</p>
+
+[[Restart|Start]]
+
+:: c02s01p14 [GO]
+Your contact detonates the moment; brittle strength surges and the night cuts to black.
+<p class="dialogue">Sometimes touch is a prayer. Tonight it was a trigger.</p>
+
+[[Restart|Start]]
+
+:: c02s02p01 [stub]
+This is a stub for the next scene. Replace once `c02.s02` passages are authored.
+

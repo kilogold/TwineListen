@@ -22,6 +22,14 @@ For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/t
   - Cynical
   - Hopeful
 
+### Monologue expansion (required)
+- For every non–Game Over passage, write multi-line content:
+  - At least one narrator line (plaintext; no `.dialogue`).
+  - Leon monologue: unrestricted length; use as many lines/paragraphs as needed for immersion. Prefer `<p class="dialogue">…</p>` per line or paragraph.
+- Ground Leon’s lines in anchors from @Plot-Device.md; never reduce to a one‑sentence summary.
+- Long monologues are encouraged; maintain readability with paragraph breaks.
+- Game Over passages may be shorter, but must include a clear consequence line and a visible `[[Restart|Start]]` link.
+
 ## Technical Twee guidelines:
 - Implement story as a Twee.
 - Use Sugarcube V2 story format.

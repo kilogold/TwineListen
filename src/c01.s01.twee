@@ -1,6 +1,9 @@
 :: c01s01p01
 <<set $stress = Math.max(0, Math.min(100, $stress + 4))>>
 The attic holds its breath. Leon rocks in a small loop, a whisper worn thin: "Another day, another night." Dust hangs, waiting to see if your stillness steadies him or lets the loop tighten.
+<p class="dialogue">Another day, another night. I keep trying to count them like it will mean something.</p>
+<p class="dialogue">You… you just watch. Maybe that's all I deserve. Maybe that's all that's left.</p>
+<p class="dialogue">If I stay still long enough, maybe the room will forget I'm here.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p03">>
@@ -10,6 +13,8 @@ The attic holds its breath. Leon rocks in a small loop, a whisper worn thin: "An
 :: c01s01p02
 <<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
 "I deserve my fate," he rasps, shoulders caving. The words search your posture for judgment or mercy. In the brittle quiet, even the floorboards listen for your answerless presence.
+<p class="dialogue">I earned this, didn't I? Every choice a little cut, and here I am bleeding time.</p>
+<p class="dialogue">Don't say anything. If you speak, it turns into hope… and hope is expensive up here.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p03">>
@@ -20,6 +25,8 @@ The attic holds its breath. Leon rocks in a small loop, a whisper worn thin: "An
 <<set $anger = Math.max(0, Math.min(100, $anger + 8))>>
 <<set $stress = Math.max(0, Math.min(100, $stress + 2))>>
 "It's her fault." A beat. "No one is to blame." The reversal frays the air. His gaze tests you, as if the room itself might choose whether blame hardens or softens.
+<p class="dialogue">I want a villain so I can stop hating myself. Some days it's her. Some days it's no one.</p>
+<p class="dialogue">Maybe the attic likes me confused—keeps me from moving, keeps me from breaking.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p06">>
@@ -29,6 +36,8 @@ The attic holds its breath. Leon rocks in a small loop, a whisper worn thin: "An
 :: c01s01p04
 <<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
 Fingertips hover over the notes like steadying thought on thin ice. Memory blurs at the edges, waiting to see whether you guide or let it blur a little longer.
+<p class="dialogue">I wrote it down to keep it from changing. Funny—my hands still shake when I read it.</p>
+<p class="dialogue">If I don't look, it's still the past. If I read, it becomes right now.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p06">>
@@ -38,6 +47,8 @@ Fingertips hover over the notes like steadying thought on thin ice. Memory blurs
 :: c01s01p05
 <<set $stress = Math.max(0, Math.min(100, $stress + 8))>>
 He eyes the notes he once wrote. Reading promises pain. Paper scratches like a match in the dark; the night leans closer to listen.
+<p class="dialogue">I told myself, "remember the pain," like I was training a wild thing.</p>
+<p class="dialogue">But every time I touch the page, it claws back. I don't know who wins anymore.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p06">>
@@ -48,6 +59,8 @@ He eyes the notes he once wrote. Reading promises pain. Paper scratches like a m
 <<set $stress = Math.max(0, Math.min(100, $stress + 6))>>
 <<set $anger = Math.max(0, Math.min(100, $anger + 2))>>
 The loop tightens—"rotting away in misery"—half confession, half curse. A single misstep could split the night; a breath could ground it.
+<p class="dialogue">I circle the same thought like a drain. I can hear the water going somewhere, just not me.</p>
+<p class="dialogue">You think I'm dangerous? I'm mostly hollow. It's the hollowness that breaks things.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p07">>
@@ -58,6 +71,8 @@ The loop tightens—"rotting away in misery"—half confession, half curse. A si
 <<set $stress = Math.max(0, Math.min(100, $stress - 4))>>
 <<set $anger = Math.max(0, Math.min(100, $anger - 4))>>
 Your presence evens the rhythm; his shoulders loosen. The circle widens toward the notes he fears, without force.
+<p class="dialogue">There. That breath. Feels almost like a person could live inside it.</p>
+<p class="dialogue">Don't move too fast. The attic spooks easy. So do I.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p08">>
@@ -67,6 +82,8 @@ Your presence evens the rhythm; his shoulders loosen. The circle widens toward t
 :: c01s01p08
 <<set $stress = Math.max(0, Math.min(100, $stress - 2))>>
 You hold the gaze. "Another day, another night" thins to a thread while dust settles over the paper. Stillness chooses patience.
+<p class="dialogue">It's strange—being seen without being fixed. I don't know what to do with that.</p>
+<p class="dialogue">Maybe let the night do its slow work. Maybe that's the only honest way.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p09">>
@@ -76,6 +93,8 @@ You hold the gaze. "Another day, another night" thins to a thread while dust set
 :: c01s01p09
 <<set $anger = Math.max(0, Math.min(100, $anger + 6))>>
 A tremor crawls his arm when your shadow shifts. Touch could steady the loop—or snap it into something worse.
+<p class="dialogue">Careful. I snap like old wood. I don't want to. It still happens.</p>
+<p class="dialogue">If you have to touch me, let it be like a thought you could take back.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p08">>
@@ -90,6 +109,8 @@ A tremor crawls his arm when your shadow shifts. Touch could steady the loop—o
 <<set $stress = Math.max(0, Math.min(100, $stress + 4))>>
 <<set $anger = Math.max(0, Math.min(100, $anger + 4))>>
 He edges toward the notes, then freezes—thin ice waiting on a choice of weight.
+<p class="dialogue">There's a sentence on that page that still bites. I keep offering it my hand.</p>
+<p class="dialogue">Maybe the trick is to bleed a little on purpose. Maybe it's to stop looking.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p11">>
@@ -104,6 +125,8 @@ He edges toward the notes, then freezes—thin ice waiting on a choice of weight
 <<set $stress = Math.max(0, Math.min(100, $stress + 2))>>
 <<set $anger = Math.max(0, Math.min(100, $anger + 8))>>
 "Remember the pain," he breathes, fingers hovering. The attic hum tightens; a small gesture could soothe or ignite.
+<p class="dialogue">I thought memory would save me. It only taught me new ways to ache.</p>
+<p class="dialogue">Tell me nothing. Let the room decide if it forgives me first.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p12">>
@@ -118,6 +141,8 @@ He edges toward the notes, then freezes—thin ice waiting on a choice of weight
 <<set $stress = Math.max(0, Math.min(100, $stress - 6))>>
 <<set $anger = Math.max(0, Math.min(100, $anger - 4))>>
 "No one is to blame," nearly lands. The room loosens its grip as you choose distance or stay.
+<p class="dialogue">Maybe that's the mercy—no villain, just two people who ran out of gentle.</p>
+<p class="dialogue">If I let that be true, I might sleep. If I can't, I keep circling.</p>
 
 <<timedprogressbar $timer>>
   <<goto "c01s01p01">>
@@ -126,14 +151,12 @@ He edges toward the notes, then freezes—thin ice waiting on a choice of weight
 
 :: c01s01p13 [GO]
 His eyes flash; contact detonates the night. Brittle fury lunges and the world folds to black.
+<p class="dialogue">I told you not to touch. I don't know what I become when the floor gives way.</p>
 
 [[Restart|Start]]
 
 :: c01s01p14 [GO]
 Your touch tips him past the brink. A hoarse cry splits the stillness; wood cracks underfoot; the scene goes dark.
+<p class="dialogue">It wasn't you. It was the weight. It just found me first.</p>
 
 [[Restart|Start]]
-
-:: c02s01p01 [stub]
-This is a stub for the next scene. Replace once `c02.s01` passages are authored.
-

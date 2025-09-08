@@ -68,6 +68,8 @@ Only these two labels are valid: `Act: …` and `timer`. Do not use variants (e.
 - Touching Leon is allowed. Any touch action must include a conditional Game Over branch when Anger or Stress exceed safe thresholds (e.g., `Anger > 35` or `Stress > 60`). When below thresholds, apply reasonable deltas and continue.
 - Diversity rule: Within a scene, do not repeat the exact same action phrase. Use ≥6 distinct action verbs across available choices.
 
+- Scene Brief actions variance (cross-scene): Avoid reusing exact action phrases that appeared in other Scene Briefs; prefer fresh, object‑anchored phrasings per scene. Exception: gaze actions (hold/lower/raise gaze, glance/look/stare) may repeat across scenes.
+
 Some relationships are gated by conditions, denoted in mathematical expressions.
 Any relationship conditions are appended with a starting comma `,`.
 
