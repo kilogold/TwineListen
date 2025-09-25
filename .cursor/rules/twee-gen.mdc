@@ -64,9 +64,14 @@ For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/t
   [[Act: Lower your gaze|c01s01p04]]
   ```
 
-- Game Over passages must present a restart option:
+ - Game Over passages must present a restart option:
   - Include a visible `[[Restart|Start]]` link that navigates to the global `Start` passage to reset variables.
   - Do not auto-advance from GO passages; they terminate the run until the player chooses to restart.
+
+ - GO fan‑out in Twee (on the GO passage):
+  - The DSL may define `timer` edges from GO nodes to model narrative restarts. In Twee, do NOT auto‑advance from GO.
+  - In each GO passage, render conditional links to the mapped restart targets (regular passages) using the same conditions as the DSL fan‑out (e.g., `visited(...)`). Show only links whose conditions are met; hide others. Always include a visible `[[Restart|Start]]` as a baseline restart.
+  - Respawn targets are regular passages. They should reconnect into the scene’s entry flow within ≤2 hops, per tactical rules.
 
 - Only render a timed progress bar when the timer edge is reachable under current conditions.
   - Problematic example to avoid, assuming `stress == 30`:

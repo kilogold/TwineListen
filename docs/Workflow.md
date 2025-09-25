@@ -1,7 +1,7 @@
 # LLM generation workflow
 As a developer, follow this constrained, multi-step LLM prompting workflow to generate and maintain the tactical plot graph while staying faithful to the rules in `/.cursor/rules/tactical-gen.mdc` and the context in `/docs/Plot-Device.md`.
 
-Single source of truth for rules: `/.cursor/rules/tactical-gen.mdc` and `/.cursor/rules/twee-gen.mdc`. This workflow summarizes steps and references those files rather than duplicating rule text.
+Single source of truth for rules: `/.cursor/rules/tactical-gen.mdc` and `/.cursor/rules/twee-gen.mdc`. This workflow summarizes steps and references those files rather than duplicating rule text. When in doubt, defer to `/.cursor/rules/tactical-gen.mdc`.
 
 Parameterization:
 - Use a `SCENE_ID` in DSL format `cNN.sNN` (e.g., `c01.s01`).
@@ -9,7 +9,7 @@ Parameterization:
 - Persist artifacts using `SCENE_ID`:
   - Scene Brief JSON: `docs/briefs/{SCENE_ID}.json` (e.g., `docs/briefs/c01.s01.json`)
   - Twee output: `src/{SCENE_ID}.twee` (e.g., `src/c01.s01.twee`)
- - Existing scenes: if `SCENE_ID` already exists in `/docs/Plot-Graph.dsl`, skip Prompt 3 and run Prompt 5 for `SCENE_ID`, then continue with Prompt 6.
+- Existing scenes: by default, if `SCENE_ID` already exists in `/docs/Plot-Graph.dsl`, skip Prompt 3 and run Prompt 5 for `SCENE_ID`, then continue with Prompt 6. To force regeneration with Prompt 3, append the flag `override=true` to the invocation. Example: "Execute Prompt 3 for `c01.s01` override=true".
 
 ## Prompt 1 — Produce a Scene Brief (JSON only)
 Output strict JSON (no prose) capturing anchors, non‑verbal actions, and thresholds for a single scene.
@@ -62,28 +62,29 @@ If corrections were made, update `docs/briefs/{SCENE_ID}.json` with the correcte
 ## Prompt 3 — Generate the Tactical Graph DSL from the Brief
 Use the Brief to emit only the Structurizr DSL for `SCENE_ID`.
 
-Note: If the `SCENE_ID` block already exists in `/docs/Plot-Graph.dsl`, do not regenerate here; execute Prompt 5 for `SCENE_ID` instead.
+Note: If the `SCENE_ID` block already exists in `/docs/Plot-Graph.dsl`, the default workflow is to execute Prompt 5 for `SCENE_ID` instead. You MAY regenerate with Prompt 3 when explicitly invoked with `override=true`.
 
 Suggested prompt (Cursor-friendly):
 ```text
 Using `/.cursor/rules/tactical-gen.mdc`, the Scene Brief at `docs/briefs/{SCENE_ID}.json`, and the header conventions in `/docs/Plot-Graph.dsl`, generate ONLY the Structurizr DSL for `SCENE_ID`.
 
-Enforce:
-- Descriptions 100–200 chars; complete sentences; meet anchor quotas (≥60% anchored; ≥30% double-anchored).
-- Non‑verbal actions only. Labels: `Act: ...` and `timer` only. Use action labels from the Brief; no duplicates; ≥6 distinct verbs.
-- 12–16 components with at least 2 Game Over nodes.
-- Every non–GameOver passage has ≥1 outgoing `timer`.
-- At least one explicit user‑choice path to Game Over exists; see `/.cursor/rules/tactical-gen.mdc` for the unconditional GO path requirement.
-- Use `visited(...)` gates sparingly (1–2 unlocks) and keep reachable in 1–2 iterations.
-- Stat deltas: integers, clamp [0,100]; default magnitudes 2..12; spikes up to 20 only when directly preceding GO.
-- Touch actions must branch: GO when `Anger > angerHigh` or `Stress > stressHigh`; otherwise continue with reasonable deltas.
+Enforce (see `/.cursor/rules/tactical-gen.mdc` for exact definitions and edge cases):
+- Descriptions 100–200 chars; complete sentences; anchor quotas.
+- Non‑verbal actions only. Labels: `Act: ...` and `timer` only; ≥6 distinct verbs.
+- 12–16 components with ≥2 Game Over nodes.
+- Timers on all non‑GO passages; ≥1 explicit user‑choice GO (one unconditional).
+- GO respawn policy: GO → respawn (regular passage) → P01; direct GO→P01 disallowed.
+- Use `visited(...)` sparingly (1–2 unlocks), reachable within 1–2 iterations.
+- Integer stat deltas; clamp [0,100]; spikes ≤20 only directly before GO.
+- Touch actions branch with thresholds from the Brief.
 
-Output ONLY the `cNN { sNN { ... } }` DSL block for `SCENE_ID`.
+Output the `cNN { sNN { ... } }` DSL block for `SCENE_ID`, and also write the single model‑scope cross‑scene handoff per the Cross‑scene handoff policy in `/.cursor/rules/tactical-gen.mdc`.
 
-Run the following terminal command for DSL syntax validation: `structurizr-cli validate -w docs/Plot-Graph.dsl`
+Run the following terminal command verbatim for DSL syntax validation: `structurizr-cli validate -w docs/Plot-Graph.dsl`.
+Empty output means successful validation. 
 ```
 
-Invocation: Execute Prompt 3 for `SCENE_ID`.
+Invocation: Execute Prompt 3 for `SCENE_ID`. To regenerate an existing scene, use: "Execute Prompt 3 for `SCENE_ID` override=true".
 
 ## Prompt 4 — Audit/Fix pass (deterministic)
 Run a validation pass and re‑emit a corrected DSL if needed.
@@ -100,6 +101,9 @@ Checks:
 - Stat deltas: 2..12 defaults; spikes ≤20 only when directly preceding GO; clamp [0,100].
 - Touch actions include conditional GO branches using thresholds from the Brief.
 - At least one explicit GO path exists; no dead‑ends; gated paths reachable within 1–2 iterations.
+- GO respawn policy: every `pNN_go` must unconditionally `timer` to a contextual respawn passage (regular). Each respawn MUST unconditionally `timer` to `p01_rg`. Direct GO→`p01_rg` is disallowed to preserve narrative continuity.
+
+- Cross‑scene handoff: exactly one model‑scope relationship exists per the Cross‑scene handoff policy (label, gating, placement, origin). If missing or malformed, repair it. The handoff gate counts toward the scene’s 1–2 `visited(...)` unlock budget.
 
 Output:
 1) Violations (bullets)
@@ -121,7 +125,7 @@ Inputs (read by path; do not paste contents):
 
 Tasks:
 - Replace any speech‑like actions (e.g., "Act: Ask about her") with non‑verbal, object‑anchored actions from the Brief.
-- Ensure every non–GO passage has ≥1 outgoing timer.
+- Ensure every non–GO passage has ≥1 outgoing timer. Ensure every GO passage has ≥1 outgoing timer restart (and ≤3 total), with progressive gates on optional restarts.
 - Add conditional branches for any touch actions: GO when `Anger > angerHigh` or `Stress > stressHigh`; otherwise continue with deltas (2..12).
 - Enforce 100–200 char descriptions and anchor quotas; keep node IDs stable; don’t bloat node count.
 Output ONLY the updated DSL block.
@@ -143,15 +147,18 @@ Inputs (read by path; do not paste contents):
 - `/docs/sugarcube-2_docs/` (reference only)
 
 Follow the rules in `/.cursor/rules/twee-gen.mdc`. Respect passage IDs and cross-refs defined in `/docs/Plot-Graph.dsl`.
+Implement GO fan‑out on GO passages: GO shows conditional links to restart targets (regular passages) using the same conditions as the DSL (e.g., `visited(...)`). Also include a visible `[[Restart|Start]]` link. `Start` performs reset and then routes to default entry (e.g., `c01s01p01`).
 
 Create or replace `/src/{SCENE_ID}.twee` with ONLY Twee passages:
 - from the currently specified scene.
 - connecting into the next scene.
-  - For each cross‑chapter relationship present in the DSL, add exactly one handoff from its source passage to the designated next scene.
+  - For each cross‑scene handoff present in the DSL, add exactly one handoff from its source passage to the designated next scene.
   - Mirror the DSL edge label and condition: if `"timer"`, use a timed auto‑advance; if `"Act: X"`, add a user link labeled `X`; include any conditions (e.g., `Anger`/`Stress` thresholds) in SugarCube conditionals.
+  - Cross‑scene handoffs MAY use `timer`, but prefer `Act: ...` when meaningful player agency exists.
   - Target ID mapping and Twee passage naming: see `/.cursor/rules/twee-gen.mdc` (single source of truth).
   - Stub rule: if the target passage does not exist yet, create a stub passage with that exact ID in the same Twee file, tagged `[stub]`, with minimal body; only create the stub if absent.
   - Monologue expansion: include at least one narrator line and an unrestricted, immersive Leon monologue (multiple `.dialogue` paragraphs as needed), grounded in anchors from `@Plot-Device.md`.
+  - GO fan‑out: implement conditional links directly on GO passages (see `/.cursor/rules/twee-gen.mdc`). `Start` only resets state and routes to the default entry.
 ```
 
 Invocation: Execute Prompt 6 for `SCENE_ID`.
