@@ -2,36 +2,32 @@
   "chapter": "Start",
   "scene": "Attic Encounter",
   "anchors": [
-    "The player",
     "The attic environment",
     "muttering to himself",
     "in the darkness",
     "the center of the attic",
     "Another day, another night",
     "How long has it been",
-    "It's her fault.",
-    "memories of the past",
     "I wrote notes",
-    "reading feels worse",
-    "rotting away in misery"
+    "reading feels worse"
   ],
   "actions": [
     "Hold the gaze",
     "Lower your gaze",
     "Look into the darkness",
     "Glance at the attic",
-    "Step closer to the center",
-    "Point at the notes",
+    "Notice the notes",
     "Pick up the notes",
     "Rest a hand on Leon's shoulder",
     "Touch Leon's back",
     "Brush Leon's arm",
-    "Count breaths"
+    "Count breaths",
+    "Step closer to the center",
+    "Withdraw your hand"
   ],
-  "thresholds": { "angerHigh": 35, "stressHigh": 60 },
+  "thresholds": { "angerHigh": 8, "stressHigh": 16 },
   "quotas": { "anchor60": true, "doubleAnchor30": true },
   "sourceDocVersion": "Plot-Device.md@2025-09-25",
   "generatedAt": "2025-09-25T00:00:00Z"
 }
-
 

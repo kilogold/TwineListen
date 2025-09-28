@@ -28,10 +28,11 @@ For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/t
   - Leon monologue: unrestricted length; use as many lines/paragraphs as needed for immersion. Prefer `<p class="dialogue">…</p>` per line or paragraph.
 - Ground Leon’s lines in anchors from @Plot-Device.md; never reduce to a one‑sentence summary.
 - Long monologues are encouraged; maintain readability with paragraph breaks.
-- Game Over passages may be shorter, but must include a clear consequence line and a visible `[[Restart|Start]]` link.
+- Game Over passages may be shorter, but must include a clear consequence line and visible Respawn links only (no Restart).
 
 ## Technical Twee guidelines:
 - Implement story as a Twee.
+- Follow SugarCube's spec for passage declaration, using `::`.
 - Use Sugarcube V2 story format.
   - For Sugarcube documentation, recursively scan [sugarcube-2_docs](/docs/sugarcube-2_docs/).
 - Entry point: the Twine story starts at the global `Start` passage, which initializes variables and should route to the first scene node `c01s01p01`.
@@ -39,11 +40,12 @@ For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/t
 - Timed passages incorporate the timed progress bar macro defined in @main.twee as a [`timedprogressbar` user script](/src/main.twee#L87). 
   - The passage should contextually advance automatically on timeout.
   - `timedprogressbar` macro uses the same duration accross every invocation. Use the [timer Sugarcube variable](/src/main.twee#L214) to easily modify.
-- Leverage Sugarcube variables to design pivotal narrative forks accross passages. Always declare all global variables within "Start" passage in @main.twee.
-  - Example A:
-    - For passages `A`->`B`->`C`, passage `C` may have a `visited` counter.
-      - If `visited` == 0: Game over is triggered, and `visited` counter increments.
-      - If `visited` > 0: Passage continues sequence; `C`->`D`->`E`, and so on.
+- Leverage SugarCube variables to design pivotal narrative forks across passages. Always declare all global variables within "Start" passage in @main.twee.
+  - Visit checks MUST use SugarCube's built‑in `visited()` API. Do NOT create custom `$visited*` counters. Map DSL `visited(PNN)` to `visited("cNNsNNpNN")` using the Twee title mapping rule.
+  - Example A (using visited()):
+    - For passages `A`->`B`->`C`, in passage `C` gate with `visited()`:
+      - If `visited("C") == 0`: trigger Game Over.
+      - If `visited("C") > 0`: continue sequence `C`->`D`->`E`.
   - Example B:
     - Leon has a `comfort` variable. Certain passages have a `threshold` value. Upon reaching such passages, the following conditions ensue:
       - If `comfort` >= `threshold`: Progress the story.
@@ -64,14 +66,14 @@ For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/t
   [[Act: Lower your gaze|c01s01p04]]
   ```
 
- - Game Over passages must present a restart option:
-  - Include a visible `[[Restart|Start]]` link that navigates to the global `Start` passage to reset variables.
-  - Do not auto-advance from GO passages; they terminate the run until the player chooses to restart.
+- Game Over passages must present Respawn options only:
+  - Render visible links to DSL-mapped respawn targets; do not include any Restart link.
+  - Do not auto-advance from GO passages.
 
- - GO fan‑out in Twee (on the GO passage):
-  - The DSL may define `timer` edges from GO nodes to model narrative restarts. In Twee, do NOT auto‑advance from GO.
-  - In each GO passage, render conditional links to the mapped restart targets (regular passages) using the same conditions as the DSL fan‑out (e.g., `visited(...)`). Show only links whose conditions are met; hide others. Always include a visible `[[Restart|Start]]` as a baseline restart.
-  - Respawn targets are regular passages. They should reconnect into the scene’s entry flow within ≤2 hops, per tactical rules.
+- GO fan‑out in Twee (on the GO passage):
+  - The DSL defines `Respawn` relationships from GO nodes to model narrative restarts. In Twee, do NOT auto‑advance from GO.
+  - In each GO passage, render visible links to the mapped respawn targets (regular passages) using the same conditions as the DSL fan‑out (e.g., `visited(...)`). Use SugarCube `visited("...")` with the Twee passage title.
+  - Respawn targets are regular passages. They should reconnect into the scene’s entry flow within ≤1 hops, per tactical rules, typically via an unconditional `timer` within the respawn passage to `p01`.
 
 - Only render a timed progress bar when the timer edge is reachable under current conditions.
   - Problematic example to avoid, assuming `stress == 30`:
@@ -95,6 +97,7 @@ For the specified story chapter, internalize [tactical-gen.mdc](/.cursor/rules/t
 
 
 ### Dynamic passage content
+- Object‑intro enforcement (Twee): In any passage that emits object‑anchored `Act: …` links, include a narrator sentence that mentions the object phrase before rendering links. Prefer routing manipulative actions from the object’s intro passage.
 While each Twee passage name must be unique, dialogue content may vary.
 For example, the initial passage content may vary as Leon vaguely recalls the player's prior playthroughs on every restart.
 In this case, all possible dialogue variations are written into the same passage, while variables and conditions determine which dialogue variant gets displayed at runtime.

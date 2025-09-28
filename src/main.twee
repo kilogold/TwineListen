@@ -191,6 +191,11 @@ Macro.add("timedprogressbar", {
 
       }, 40);
 
+      // If clicked, set duration to 0 so existing logic terminates
+      progressbar.on("click", function() {
+        duration = 0;
+      });
+
     });
   },
 });

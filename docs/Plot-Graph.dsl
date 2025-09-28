@@ -25,6 +25,7 @@
 //
 // Relationship syntax:
 // - Labels allowed (exact): "Act: <non-verbal action>" | "timer" (no variants)
+//   - "Act: Respawn" is GO-only: allowed only from `pNN_go` to regular passages; use for restarts instead of `timer`.
 // - Optional conditions append after a comma. Operands may include NPC state (Stress, Anger ∈ [0,100]) and visit counts via visited(PNN).
 //   Example: p03_rg -> p04_go "Act: Hold the gaze, 11 <= Stress <= 16 || visited(P10) >= 2"
 //
@@ -55,7 +56,7 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
                 p10_rg = component "P10" "Edges blur at the center as you inch closer; how long has it been hangs between you, and the floor threatens to shift under a reckless step." "Stress +6" "Passage"
                 p11_go = component "P11" "You step without caution; the floor snaps your balance and Leon flinches hard—panic flashes, the fragile scene shatters into a hard reset." "" "Passage-GameOver"
                 p12_rg = component "P12" "Breath returns in a shiver; shadows reseat and the attic owns your stillness again, a quiet respawn that leads you back to the first position." "" "Passage"
-                p13_rg = component "P13" "Your gentleness steadies him; touch withdraws as if prayer, and the muttering softens without breaking the brittle quiet." "Stress -4, Anger -2" "Passage"
+                p13_rg = component "P13" "Your gentleness steadies him; touch withdraws as if prayer, and the muttering softens without breaking the brittle quiet." "Stress -2" "Passage"
                 p14_go = component "P14" "The contact spikes old anger; he jerks away and the room turns hostile—his withered frame recoils, and the moment collapses to black." "" "Passage-GameOver"
                 p15_rg = component "P15" "He recoils, then settles; the attic rewrites the distance, returning you to a safer remove that funnels back to the beginning stance." "" "Passage"
                 p16_rg = component "P16" "Touch hangs on a knife-edge; if his Stress or Anger runs high, the same gesture backfires; if low, patience buys you another breath." "" "Passage"
@@ -74,16 +75,17 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
                 p04_rg -> p09_rg "Act: Look into the darkness"
 
                 p05_rg -> p06_rg "timer"
-                p05_rg -> p07_rg "Act: Point at the notes"
+                p05_rg -> p07_rg "Act: Notice the notes"
 
-                p06_rg -> p16_rg "timer"
+                p06_rg -> p05_rg "timer"
                 p06_rg -> p16_rg "Act: Rest a hand on Leon's shoulder"
                 p06_rg -> p16_rg "Act: Touch Leon's back"
                 p06_rg -> p16_rg "Act: Brush Leon's arm"
 
                 p07_rg -> p08_rg "timer"
                 p07_rg -> p08_rg "Act: Pick up the notes"
-                p07_rg -> p10_rg "timer, visited(P01) >= 2"
+                p07_rg -> p08_rg "Act: Point at the notes"
+                p07_rg -> p10_rg "timer, visited(P01) >= 1"
 
                 p08_rg -> p05_rg "timer"
                 p08_rg -> p06_rg "Act: Raise your gaze"
@@ -94,16 +96,16 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
                 p10_rg -> p06_rg "timer"
                 p10_rg -> p11_go "Act: Step closer to the center"
 
-                p11_go -> p12_rg "timer"
+                p11_go -> p12_rg "Act: Respawn"
                 p12_rg -> p01_rg "timer"
 
-                p16_rg -> p14_go "timer, Anger > 35 || Stress > 60"
-                p16_rg -> p13_rg "timer, Anger <= 35 && Stress <= 60"
+                p16_rg -> p14_go "timer, Anger > 4 || Stress > 10 || visited(P16) >= 2"
+                p16_rg -> p05_rg "timer, Anger <= 4 && Stress <= 10 && visited(P16) < 2"
                 p16_rg -> p13_rg "Act: Withdraw your hand"
 
                 p13_rg -> p05_rg "timer"
                 p13_rg -> p06_rg "Act: Step back"
-                p14_go -> p15_rg "timer"
+                p14_go -> p15_rg "Act: Respawn"
                 p15_rg -> p01_rg "timer"
             }
         }
@@ -129,7 +131,7 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
         c04 -> c05
 
         # Cross-scene relationships (declared after both endpoints exist)
-        c01.s01.p06_rg -> c02.s01.p01_rg "Act: Shift your weight, visited(P11) >= 1 || visited(P14) >= 1"
+        c01.s01.p06_rg -> c02.s01.p01_rg "timer, visited(P11) >= 1 || visited(P14) >= 1"
 
     }
 

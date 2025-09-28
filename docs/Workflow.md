@@ -19,12 +19,12 @@ Suggested prompt:
 Using `/.cursor/rules/tactical-gen.mdc` and `/docs/Plot-Device.md`, produce a Scene Brief in strict JSON (no prose, no comments) for `SCENE_ID`.
 
 Fields:
-{ "chapter": "<chapter-name>", "scene": "<scene-name>", "anchors": [], "actions": [], "thresholds": { "angerHigh": 35, "stressHigh": 60 }, "quotas": { "anchor60": true, "doubleAnchor30": true }, "sourceDocVersion": "", "generatedAt": "" }
+{ "chapter": "<chapter-name>", "scene": "<scene-name>", "anchors": [], "actions": [], "thresholds": { "angerHigh": 0, "stressHigh": 0 }, "quotas": { "anchor60": true, "doubleAnchor30": true }, "sourceDocVersion": "", "generatedAt": "" }
 
 Requirements:
 - anchors: 8–12 concrete items/phrases copied verbatim from the provided source for the specified chapter/scene only. No inventions. No cross‑chapter items. Prefer physical objects and named nouns; avoid abstractions unless explicitly named. All anchors must be unique and must appear in the source text (exact substring match).
 - actions: 10–14 non‑verbal action labels; validate against `/.cursor/rules/tactical-gen.mdc` (non‑verbal only; ≥6 distinct verbs; include 2–3 “touch Leon” variants; cross‑scene variance with gaze exception). Prefer object‑anchored; pronouns allowed when unambiguous.
-- thresholds: angerHigh=35, stressHigh=60 for touch-triggered Game Over branching.
+- thresholds: choose `angerHigh` and `stressHigh` per the Adaptive Threshold Policy in `/.cursor/rules/tactical-gen.mdc`.
 - quotas: anchor60 and doubleAnchor30 set true.
 - Do NOT add any extra properties. Specifically, do not include any DSL snapshots or large text blobs in the brief; the DSL belongs only in `/docs/Plot-Graph.dsl`.
 ```
@@ -46,7 +46,7 @@ Checks:
 - Fields present: chapter, scene, anchors, actions, thresholds.angerHigh, thresholds.stressHigh, quotas.anchor60, quotas.doubleAnchor30, sourceDocVersion, generatedAt. No extra properties.
 - anchors: 8–12 items; unique; copied verbatim as exact substrings from the provided source; scoped to the specified chapter/scene only; no cross‑chapter items; prefer physical objects and named nouns; avoid abstractions unless explicitly named; no inventions.
 - actions: 10–14 items; validate against `/.cursor/rules/tactical-gen.mdc` (non‑verbal; uniqueness; ≥6 distinct verbs; touch branching; cross‑scene variance with gaze exception). Prefer object‑anchored labels; pronouns allowed when unambiguous.
-- thresholds: angerHigh=35, stressHigh=60 (exact values).
+- thresholds: angerHigh and stressHigh selected per Adaptive Threshold Policy (range and intent validated).
 - quotas: anchor60=true, doubleAnchor30=true (exact values).
 - Strings non‑empty; consistent casing and spelling; no comments or prose.
 
@@ -68,7 +68,7 @@ Suggested prompt (Cursor-friendly):
 ```text
 Using `/.cursor/rules/tactical-gen.mdc`, the Scene Brief at `docs/briefs/{SCENE_ID}.json`, and the header conventions in `/docs/Plot-Graph.dsl`, generate ONLY the Structurizr DSL for `SCENE_ID`.
 
-Enforce (see `/.cursor/rules/tactical-gen.mdc` for exact definitions and edge cases):
+Enforce (see `/.cursor/rules/tactical-gen.mdc` — single source of truth):
 - Descriptions 100–200 chars; complete sentences; anchor quotas.
 - Non‑verbal actions only. Labels: `Act: ...` and `timer` only; ≥6 distinct verbs.
 - 12–16 components with ≥2 Game Over nodes.
@@ -77,6 +77,8 @@ Enforce (see `/.cursor/rules/tactical-gen.mdc` for exact definitions and edge ca
 - Use `visited(...)` sparingly (1–2 unlocks), reachable within 1–2 iterations.
 - Integer stat deltas; clamp [0,100]; spikes ≤20 only directly before GO.
 - Touch actions branch with thresholds from the Brief.
+- Cross‑scene handoff: follow the Cross‑scene handoff policy in `/.cursor/rules/tactical-gen.mdc`.
+- Object‑intro passages: follow the Object‑intro passages policy in `/.cursor/rules/tactical-gen.mdc`.
 
 Output the `cNN { sNN { ... } }` DSL block for `SCENE_ID`, and also write the single model‑scope cross‑scene handoff per the Cross‑scene handoff policy in `/.cursor/rules/tactical-gen.mdc`.
 
@@ -93,17 +95,12 @@ Suggested prompt (Cursor-friendly):
 ```text
 Audit the `SCENE_ID` block in `/docs/Plot-Graph.dsl` against `/.cursor/rules/tactical-gen.mdc` and the Scene Brief at `docs/briefs/{SCENE_ID}.json`. List violations briefly, then output a corrected, final DSL block only.
 
-Checks:
-- Labels ∈ {Act: …, timer}. Non‑verbal only. No speech verbs.
-- Each non–GO passage has ≥1 outgoing timer.
-- Action labels unique within scene; ≥6 distinct verbs overall.
-- Descriptions 100–200 chars; anchor quotas met.
-- Stat deltas: 2..12 defaults; spikes ≤20 only when directly preceding GO; clamp [0,100].
-- Touch actions include conditional GO branches using thresholds from the Brief.
-- At least one explicit GO path exists; no dead‑ends; gated paths reachable within 1–2 iterations.
-- GO respawn policy: every `pNN_go` must unconditionally `timer` to a contextual respawn passage (regular). Each respawn MUST unconditionally `timer` to `p01_rg`. Direct GO→`p01_rg` is disallowed to preserve narrative continuity.
-
-- Cross‑scene handoff: exactly one model‑scope relationship exists per the Cross‑scene handoff policy (label, gating, placement, origin). If missing or malformed, repair it. The handoff gate counts toward the scene’s 1–2 `visited(...)` unlock budget.
+Checks: see these sections in `/.cursor/rules/tactical-gen.mdc`:
+- Quality checks (hard requirements): see `/.cursor/rules/tactical-gen.mdc#quality-checks`.
+- Adaptive Threshold Policy (anger/stress): see `/.cursor/rules/tactical-gen.mdc#adaptive-thresholds`.
+- Cross‑scene handoff policy (canonical): see `/.cursor/rules/tactical-gen.mdc#cross-scene-handoff`.
+- Object‑intro passages (procedural): see `/.cursor/rules/tactical-gen.mdc#object-intro`.
+If any referenced policy fails, fix only within the `SCENE_ID` block, preserve component IDs, and avoid adding nodes unless strictly required by the policy.
 
 Output:
 1) Violations (bullets)
@@ -147,7 +144,7 @@ Inputs (read by path; do not paste contents):
 - `/docs/sugarcube-2_docs/` (reference only)
 
 Follow the rules in `/.cursor/rules/twee-gen.mdc`. Respect passage IDs and cross-refs defined in `/docs/Plot-Graph.dsl`.
-Implement GO fan‑out on GO passages: GO shows conditional links to restart targets (regular passages) using the same conditions as the DSL (e.g., `visited(...)`). Also include a visible `[[Restart|Start]]` link. `Start` performs reset and then routes to default entry (e.g., `c01s01p01`).
+Implement GO fan‑out on GO passages: GO shows conditional links to respawn targets (regular passages) using the same conditions as the DSL (e.g., `visited(...)`). Do not include any Restart link. Respawn passages route to default entry (e.g., `c01s01p01`) via their own timers.
 
 Create or replace `/src/{SCENE_ID}.twee` with ONLY Twee passages:
 - from the currently specified scene.
@@ -188,7 +185,7 @@ Tasks:
    - Stub rule: if a target passage does not exist yet, a stub with that exact ID exists in the same Twee file, tagged `[stub]`, with minimal body; created only if absent.
 4) Dialogue expansion checks:
    - Each non–GO passage contains substantive, multi-line Leon monologue (not a single-sentence body); length is not capped. Prefer `.dialogue` paragraphs.
-   - GO passages include a consequence line and a visible `[[Restart|Start]]` link.
+   - GO passages include a consequence line and visible Respawn links only (no Restart).
 4) Compare both graphs:
    - Missing or extra passages or edges
    - Label mismatches (`Act: ...`), timer presence, and conditions (`Stress`/`Anger` thresholds)

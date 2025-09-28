@@ -26,7 +26,7 @@ Use the provided node context as hints for story generation.
 This is a brief seamless intro chapter. The player witnesses the environment for the first time. The attic environment is described in detail to engage the player in atmosphere. Leon is found quielty muttering to himself in the darkness, at the center of the attic.
 
 ### Attic Encounter
-Another day, another night... How long has it been? Does it matter? Does anyone even care? I deserve my fate. No... It's her fault. Maybe no one is to blame, and this is just life. My memories of the past have begun to blur with time and age. I wrote  notes to not forget, but reading feels worse because I'll remember the pain. Meanwhile, I just sit here going in circles, rotting away in misery.
+Another day, another night... How long has it been? Does it matter? Does anyone even care? I deserve my fate. No... It's her fault. Maybe no one is to blame, and this is just life. My memories of the past have begun to blur with time and age. I wrote notes to not forget, but reading feels worse because I'll remember the pain. Meanwhile, I just sit here going in circles, rotting away in misery.
 
 
 ## Lost
