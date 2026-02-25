@@ -1,9 +1,16 @@
 # LLM generation workflow
-As a developer, follow this constrained, multi-step LLM prompting workflow to generate and maintain the tactical plot graph while staying faithful to the rules in `/.cursor/rules/tactical-gen.mdc` and the context in `/docs/Plot-Device.md`.
+## Concepts
 
-Single source of truth for rules: `/.cursor/rules/tactical-gen.mdc` and `/.cursor/rules/twee-gen.mdc`. This workflow summarizes steps and references those files rather than duplicating rule text. When in doubt, defer to `/.cursor/rules/tactical-gen.mdc`.
+## Workflow rules
+As a developer, follow this constrained, multi-step LLM prompting workflow to generate and maintain the tactical plot graph (defined in `/.cursor/skills/tactical-gen/SKILL.md`) while staying faithful to the context in `/docs/Plot-Device.md`.
 
-Parameterization:
+Single source-of-truth for rules (per domain): 
+- `/.cursor/skills/tactical-gen/SKILL.md`
+- `/.cursor/skills/twee-gen/SKILL.md`
+
+This workflow summarizes steps and references those files rather than duplicating rule text. When in doubt, defer to said files.
+
+## Prompt Parameterization
 - Use a `SCENE_ID` in DSL format `cNN.sNN` (e.g., `c01.s01`).
 - Invoke each step with: "Execute Prompt N for `SCENE_ID`" (e.g., "Execute Prompt 1 for `c01.s01`").
 - Persist artifacts using `SCENE_ID`:
@@ -11,20 +18,21 @@ Parameterization:
   - Twee output: `src/{SCENE_ID}.twee` (e.g., `src/c01.s01.twee`)
 - Existing scenes: by default, if `SCENE_ID` already exists in `/docs/Plot-Graph.dsl`, skip Prompt 3 and run Prompt 5 for `SCENE_ID`, then continue with Prompt 6. To force regeneration with Prompt 3, append the flag `override=true` to the invocation. Example: "Execute Prompt 3 for `c01.s01` override=true".
 
+# Prompts
 ## Prompt 1 — Produce a Scene Brief (JSON only)
 Output strict JSON (no prose) capturing anchors, non‑verbal actions, and thresholds for a single scene.
 
 Suggested prompt:
 ```text
-Using `/.cursor/rules/tactical-gen.mdc` and `/docs/Plot-Device.md`, produce a Scene Brief in strict JSON (no prose, no comments) for `SCENE_ID`.
+Using `/.cursor/skills/tactical-gen/SKILL.md` and `/docs/Plot-Device.md`, produce a Scene Brief in strict JSON (no prose, no comments) for `SCENE_ID`.
 
 Fields:
 { "chapter": "<chapter-name>", "scene": "<scene-name>", "anchors": [], "actions": [], "thresholds": { "angerHigh": 0, "stressHigh": 0 }, "quotas": { "anchor60": true, "doubleAnchor30": true }, "sourceDocVersion": "", "generatedAt": "" }
 
 Requirements:
 - anchors: 8–12 concrete items/phrases copied verbatim from the provided source for the specified chapter/scene only. No inventions. No cross‑chapter items. Prefer physical objects and named nouns; avoid abstractions unless explicitly named. All anchors must be unique and must appear in the source text (exact substring match).
-- actions: 10–14 non‑verbal action labels; validate against `/.cursor/rules/tactical-gen.mdc` (non‑verbal only; ≥6 distinct verbs; include 2–3 “touch Leon” variants; cross‑scene variance with gaze exception). Prefer object‑anchored; pronouns allowed when unambiguous.
-- thresholds: choose `angerHigh` and `stressHigh` per the Adaptive Threshold Policy in `/.cursor/rules/tactical-gen.mdc`.
+- actions: 10–14 non‑verbal action labels; validate against `/.cursor/skills/tactical-gen/SKILL.md` (non‑verbal only; ≥6 distinct verbs; include 2–3 “touch Leon” variants; cross‑scene variance with gaze exception). Prefer object‑anchored; pronouns allowed when unambiguous.
+- thresholds: choose `angerHigh` and `stressHigh` per the Adaptive Threshold Policy in `/.cursor/skills/tactical-gen/SKILL.md`.
 - quotas: anchor60 and doubleAnchor30 set true.
 - Do NOT add any extra properties. Specifically, do not include any DSL snapshots or large text blobs in the brief; the DSL belongs only in `/docs/Plot-Graph.dsl`.
 ```
@@ -38,14 +46,14 @@ Validate the Scene Brief JSON against required schema and constraints before gen
 
 Suggested prompt (Cursor-friendly):
 ```text
-Audit the Scene Brief at `docs/briefs/{SCENE_ID}.json` against `/.cursor/rules/tactical-gen.mdc` and `/docs/Plot-Device.md`. List violations briefly, then output a corrected, final JSON only.
+Audit the Scene Brief at `docs/briefs/{SCENE_ID}.json` against `/.cursor/skills/tactical-gen/SKILL.md` and `/docs/Plot-Device.md`. List violations briefly, then output a corrected, final JSON only.
 
 Only change fields that violate checks; preserve all other values and their order. Do not modify generatedAt or sourceDocVersion if present. Do not reorder arrays. Do not rewrite anchors/actions unless they fail checks.
 
 Checks:
 - Fields present: chapter, scene, anchors, actions, thresholds.angerHigh, thresholds.stressHigh, quotas.anchor60, quotas.doubleAnchor30, sourceDocVersion, generatedAt. No extra properties.
 - anchors: 8–12 items; unique; copied verbatim as exact substrings from the provided source; scoped to the specified chapter/scene only; no cross‑chapter items; prefer physical objects and named nouns; avoid abstractions unless explicitly named; no inventions.
-- actions: 10–14 items; validate against `/.cursor/rules/tactical-gen.mdc` (non‑verbal; uniqueness; ≥6 distinct verbs; touch branching; cross‑scene variance with gaze exception). Prefer object‑anchored labels; pronouns allowed when unambiguous.
+- actions: 10–14 items; validate against `/.cursor/skills/tactical-gen/SKILL.md` (non‑verbal; uniqueness; ≥6 distinct verbs; touch branching; cross‑scene variance with gaze exception). Prefer object‑anchored labels; pronouns allowed when unambiguous.
 - thresholds: angerHigh and stressHigh selected per Adaptive Threshold Policy (range and intent validated).
 - quotas: anchor60=true, doubleAnchor30=true (exact values).
 - Strings non‑empty; consistent casing and spelling; no comments or prose.
@@ -66,9 +74,9 @@ Note: If the `SCENE_ID` block already exists in `/docs/Plot-Graph.dsl`, the defa
 
 Suggested prompt (Cursor-friendly):
 ```text
-Using `/.cursor/rules/tactical-gen.mdc`, the Scene Brief at `docs/briefs/{SCENE_ID}.json`, and the header conventions in `/docs/Plot-Graph.dsl`, generate ONLY the Structurizr DSL for `SCENE_ID`.
+Using `/.cursor/skills/tactical-gen/SKILL.md`, the Scene Brief at `docs/briefs/{SCENE_ID}.json`, and the header conventions in `/docs/Plot-Graph.dsl`, generate ONLY the Structurizr DSL for `SCENE_ID`.
 
-Enforce (see `/.cursor/rules/tactical-gen.mdc` — single source of truth):
+Enforce (see `/.cursor/skills/tactical-gen/SKILL.md` — single source of truth):
 - Descriptions 100–200 chars; complete sentences; anchor quotas.
 - Non‑verbal actions only. Labels: `Act: ...` and `timer` only; ≥6 distinct verbs.
 - 12–16 components with ≥2 Game Over nodes.
@@ -77,10 +85,10 @@ Enforce (see `/.cursor/rules/tactical-gen.mdc` — single source of truth):
 - Use `visited(...)` sparingly (1–2 unlocks), reachable within 1–2 iterations.
 - Integer stat deltas; clamp [0,100]; spikes ≤20 only directly before GO.
 - Touch actions branch with thresholds from the Brief.
-- Cross‑scene handoff: follow the Cross‑scene handoff policy in `/.cursor/rules/tactical-gen.mdc`.
-- Object‑intro passages: follow the Object‑intro passages policy in `/.cursor/rules/tactical-gen.mdc`.
+- Cross‑scene handoff: follow the Cross‑scene handoff policy in `/.cursor/skills/tactical-gen/SKILL.md`.
+- Object‑intro passages: follow the Object‑intro passages policy in `/.cursor/skills/tactical-gen/SKILL.md`.
 
-Output the `cNN { sNN { ... } }` DSL block for `SCENE_ID`, and also write the single model‑scope cross‑scene handoff per the Cross‑scene handoff policy in `/.cursor/rules/tactical-gen.mdc`.
+Output the `cNN { sNN { ... } }` DSL block for `SCENE_ID`, and also write the single model‑scope cross‑scene handoff per the Cross‑scene handoff policy in `/.cursor/skills/tactical-gen/SKILL.md`.
 
 Run the following terminal command verbatim for DSL syntax validation: `structurizr-cli validate -w docs/Plot-Graph.dsl`.
 Empty output means successful validation. 
@@ -93,13 +101,13 @@ Run a validation pass and re‑emit a corrected DSL if needed.
 
 Suggested prompt (Cursor-friendly):
 ```text
-Audit the `SCENE_ID` block in `/docs/Plot-Graph.dsl` against `/.cursor/rules/tactical-gen.mdc` and the Scene Brief at `docs/briefs/{SCENE_ID}.json`. List violations briefly, then output a corrected, final DSL block only.
+Audit the `SCENE_ID` block in `/docs/Plot-Graph.dsl` against `/.cursor/skills/tactical-gen/SKILL.md` and the Scene Brief at `docs/briefs/{SCENE_ID}.json`. List violations briefly, then output a corrected, final DSL block only.
 
-Checks: see these sections in `/.cursor/rules/tactical-gen.mdc`:
-- Quality checks (hard requirements): see `/.cursor/rules/tactical-gen.mdc#quality-checks`.
-- Adaptive Threshold Policy (anger/stress): see `/.cursor/rules/tactical-gen.mdc#adaptive-thresholds`.
-- Cross‑scene handoff policy (canonical): see `/.cursor/rules/tactical-gen.mdc#cross-scene-handoff`.
-- Object‑intro passages (procedural): see `/.cursor/rules/tactical-gen.mdc#object-intro`.
+Checks: see these sections in `/.cursor/skills/tactical-gen/SKILL.md`:
+- Quality checks (hard requirements): see `/.cursor/skills/tactical-gen/SKILL.md#quality-checks`.
+- Adaptive Threshold Policy (anger/stress): see `/.cursor/skills/tactical-gen/SKILL.md#adaptive-thresholds`.
+- Cross‑scene handoff policy (canonical): see `/.cursor/skills/tactical-gen/SKILL.md#cross-scene-handoff`.
+- Object‑intro passages (procedural): see `/.cursor/skills/tactical-gen/SKILL.md#object-intro`.
 If any referenced policy fails, fix only within the `SCENE_ID` block, preserve component IDs, and avoid adding nodes unless strictly required by the policy.
 
 Output:
@@ -114,7 +122,7 @@ Use this when updating an existing graph without adding nodes unnecessarily.
 
 Suggested prompt:
 ```text
-Transform the `SCENE_ID` block in `/docs/Plot-Graph.dsl` to comply with `/.cursor/rules/tactical-gen.mdc` and the Scene Brief:
+Transform the `SCENE_ID` block in `/docs/Plot-Graph.dsl` to comply with `/.cursor/skills/tactical-gen/SKILL.md` and the Scene Brief:
 
 Inputs (read by path; do not paste contents):
 - `/docs/Plot-Graph.dsl` (use block for `SCENE_ID`)
@@ -135,15 +143,15 @@ Convert the validated plot graph into SugarCube v2 Twee passages for the specifi
 
 Suggested prompt (Cursor-friendly):
 ```text
-Using `/.cursor/rules/twee-gen.mdc`, read the scene graph for `SCENE_ID` from `/docs/Plot-Graph.dsl` and generate the corresponding SugarCube v2 Twee passages.
+Using `/.cursor/skills/twee-gen/SKILL.md`, read the scene graph for `SCENE_ID` from `/docs/Plot-Graph.dsl` and generate the corresponding SugarCube v2 Twee passages.
 
 Inputs (read by path; do not paste contents):
-- `/.cursor/rules/twee-gen.mdc`
+- `/.cursor/skills/twee-gen/SKILL.md`
 - `/docs/Plot-Graph.dsl` (use `SCENE_ID`)
 - `/src/main.twee` (macros and globals)
 - `/docs/sugarcube-2_docs/` (reference only)
 
-Follow the rules in `/.cursor/rules/twee-gen.mdc`. Respect passage IDs and cross-refs defined in `/docs/Plot-Graph.dsl`.
+Follow the rules in `/.cursor/skills/twee-gen/SKILL.md`. Respect passage IDs and cross-refs defined in `/docs/Plot-Graph.dsl`.
 Implement GO fan‑out on GO passages: GO shows conditional links to respawn targets (regular passages) using the same conditions as the DSL (e.g., `visited(...)`). Do not include any Restart link. Respawn passages route to default entry (e.g., `c01s01p01`) via their own timers.
 
 Create or replace `/src/{SCENE_ID}.twee` with ONLY Twee passages:
@@ -152,10 +160,10 @@ Create or replace `/src/{SCENE_ID}.twee` with ONLY Twee passages:
   - For each cross‑scene handoff present in the DSL, add exactly one handoff from its source passage to the designated next scene.
   - Mirror the DSL edge label and condition: if `"timer"`, use a timed auto‑advance; if `"Act: X"`, add a user link labeled `X`; include any conditions (e.g., `Anger`/`Stress` thresholds) in SugarCube conditionals.
   - Cross‑scene handoffs MAY use `timer`, but prefer `Act: ...` when meaningful player agency exists.
-  - Target ID mapping and Twee passage naming: see `/.cursor/rules/twee-gen.mdc` (single source of truth).
+  - Target ID mapping and Twee passage naming: see `/.cursor/skills/twee-gen/SKILL.md` (single source of truth).
   - Stub rule: if the target passage does not exist yet, create a stub passage with that exact ID in the same Twee file, tagged `[stub]`, with minimal body; only create the stub if absent.
   - Monologue expansion: include at least one narrator line and an unrestricted, immersive Leon monologue (multiple `.dialogue` paragraphs as needed), grounded in anchors from `@Plot-Device.md`.
-  - GO fan‑out: implement conditional links directly on GO passages (see `/.cursor/rules/twee-gen.mdc`). `Start` only resets state and routes to the default entry.
+  - GO fan‑out: implement conditional links directly on GO passages (see `/.cursor/skills/twee-gen/SKILL.md`). `Start` only resets state and routes to the default entry.
 ```
 
 Invocation: Execute Prompt 6 for `SCENE_ID`.
@@ -166,8 +174,8 @@ Ensure the generated Twee branches in `/src/{SCENE_ID}.twee` exactly correspond 
 Suggested prompt (Cursor-friendly):
 ```text
 Audit `/src/{SCENE_ID}.twee` against:
-- `/.cursor/rules/twee-gen.mdc`
-- `/.cursor/rules/tactical-gen.mdc`
+- `/.cursor/skills/twee-gen/SKILL.md`
+- `/.cursor/skills/tactical-gen/SKILL.md`
 - `/docs/Plot-Graph.dsl` (scene: `SCENE_ID`)
 - `/docs/Plot-Device.md`
 
@@ -205,6 +213,6 @@ Output:
 Invocation: Execute Prompt 7 for `SCENE_ID`.
 
 ## Cursor usage — reference files instead of pasting
-- In Cursor, reference files by path (e.g., `docs/briefs/{SCENE_ID}.json`, `/docs/Plot-Graph.dsl`, `/.cursor/rules/tactical-gen.mdc`, `/.cursor/rules/twee-gen.mdc`, `src/{SCENE_ID}.twee`) directly in prompts.
+- In Cursor, reference files by path (e.g., `docs/briefs/{SCENE_ID}.json`, `/docs/Plot-Graph.dsl`, `/.cursor/skills/tactical-gen/SKILL.md`, `/.cursor/skills/twee-gen/SKILL.md`, `src/{SCENE_ID}.twee`) directly in prompts.
 - This avoids copy/paste drift and keeps a single source of truth. The assistant can open and read these paths.
-- If working outside Cursor or another file-aware IDE, you may paste JSON/DSL snapshots in the chat for discussion, but never persist DSL snapshots inside Scene Brief JSON files. The authoritative rule lives in `/.cursor/rules/tactical-gen.mdc`.
+- If working outside Cursor or another file-aware IDE, you may paste JSON/DSL snapshots in the chat for discussion, but never persist DSL snapshots inside Scene Brief JSON files. The authoritative rule lives in `/.cursor/skills/tactical-gen/SKILL.md`.

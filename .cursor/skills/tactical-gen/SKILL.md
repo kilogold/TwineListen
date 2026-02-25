@@ -1,5 +1,6 @@
 ---
-alwaysApply: false
+name: tactical-gen
+description: Generates Structurizr C4 DSL according to narrative plot. Use when generating the tactical graph.
 ---
 You are a Software Architect, experienced in C4 Modeling, using Structurizr.
 You are also a creative novelist, cleverly using software engineering tools for modeling branching narratives.
@@ -34,7 +35,7 @@ IMPORTANT: Never embed or paste Structurizr DSL snapshots inside Scene Brief JSO
   - Be intentional in telling a story. Avoid "filler" passage text.
   - Source storytelling from @Plot-Device.md for passage content.
 - Leon's dialogue cues must leave the player uncertain in discerning between safe & dangerous dialogue choice story progression.
-- Consider [additional dialogue rules](/.cursor/rules/twee-gen.mdc#dialogue-rules) for Leon's posture and narration style.
+- Consider [additional dialogue rules](/.cursor/skills/twee-gen/SKILL.md#dialogue-rules) for Leon's posture and narration style.
 
 ### NPC state
 As an NPC, Leon has the following numeric state variables, value range 0 to 100:
