@@ -1,5 +1,44 @@
 # LLM generation workflow
 ## Concepts
+To produce more deterministic & reviewable output, this workflow is split into multiple prompts.
+The basic outputs are as follows:
+```mermaid
+---
+config:
+  theme: dark
+  layout: fixed
+---
+flowchart
+subgraph Prompt 1
+1A[Plot prose]-->1B[Scene brief]
+end
+
+subgraph Prompt 2
+2A[Scene brief]-->2A
+end
+
+subgraph Prompt 3
+3A[Scene brief]-->3B[Tactical graph]
+end
+
+subgraph Prompt 4
+4A[Tactical graph]-->4A
+end
+
+subgraph Prompt 5
+5A[Scene brief]-->5B[Tactical graph]
+5B-->5B
+end
+
+subgraph Prompt 6
+6A[Tactical graph]-->6B[Twee]
+end
+
+subgraph Prompt 7
+7A[Tactical graph]-->7B[Twee]
+7B-->7B
+end
+```
 
 ## Workflow rules
 As a developer, follow this constrained, multi-step LLM prompting workflow to generate and maintain the tactical plot graph (defined in `/.cursor/skills/tactical-gen/SKILL.md`) while staying faithful to the context in `/docs/Plot-Device.md`.
@@ -118,7 +157,7 @@ Output:
 Invocation: Execute Prompt 4 for `SCENE_ID`.
 
 ## Prompt 5 — Refactor existing scene (optional)
-Use this when updating an existing graph without adding nodes unnecessarily.
+Use this when updating an existing graph without adding unnecessary nodes.
 
 Suggested prompt:
 ```text
