@@ -1,1 +1,0 @@
-[ -f build/game.html ] && rm build/game.html; tools/tweego src -o build/game.html
