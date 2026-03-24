@@ -35,27 +35,71 @@
 // - Interpret relationship direction as narrative continuity ("because ...").
 // - Multiple incoming edges complement narrative ("and ...").
 // - Multiple outgoing edges revisit with new information; ensure overall forward motion.
-//
 
 workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
 
     !identifiers hierarchical
-    
+
     model {
         c01 = softwareSystem "Start" {
             s01 = container "Attic Encounter" {
-                p01_rg = component "P01" "PLACEHOLDER" "" "Passage"
+                p01_rg = component "P01" "In the cold empty wooden attic at night time, Leon faces the wall and mutters in circles; your stillness must decide whether this room gets witnessed or disturbed." "Stress +4" "Passage"
+                p02_rg = component "P02" "He remains facing toward the wall, hunched over, withered, and frail, while your fixed attention tightens the dark and pressures the moment toward contact or restraint." "Stress +4, Anger +2" "Passage"
+                p03_rg = component "P03" "A few pages lie by the floorboards where he wrote notes to not forget; their edges flutter in the draft and tempt you to handle memory like evidence." "Stress +3" "Passage"
+                p04_rg = component "P04" "Dust and splinters show how he has been going in circles, and each quiet second in the attic makes his pacing mind feel close enough to pull you off balance." "Stress +5" "Passage"
+                p05_rg = component "P05" "The paper admits that reading feels worse, and the scrape of graphite turns the old house within a forest into a trap where memory sharpens faster than mercy." "Stress +7" "Passage"
+                p06_rg = component "P06" "You follow his breath through the supernatural sense in the air while the floorboards cool your hand, and patience becomes the only way to keep the night from tightening." "Stress -4, Anger -2" "Passage"
+                p07_rg = component "P07" "From beside him you see how he stays facing toward the wall, rotting away in misery, and any closer movement now risks being mistaken for pressure instead of care." "Stress +2, Anger +6" "Passage"
+                p08_rg = component "P08" "When you match the attic's still rhythm, his muttering loosens around night time and going in circles stops feeling endless, as if he may finally tolerate a witness." "Stress -3, Anger -2" "Passage"
+                p10_go = component "P10" "His frail arm snaps with impossible force; boards crack under you, and the cold attic fills your mouth with dust as he teaches how badly touch can betray witness." "" "Passage-GameOver"
+                p11_go = component "P11" "You crowd the wall and notes at once; Leon wheels with a feral shove, and the room turns splinters and black air, proving his pain punishes being handled like a puzzle." "" "Passage-GameOver"
+                p12_rg = component "P12" "After the blow, the cold empty wooden attic returns with your body unmade and reformed; the sting teaches that sudden touch only proves you misread his boundary." "" "Passage"
+                p13_rg = component "P13" "You gather again by the notes and wall dust, keeping the old house within a forest at a distance; dying here teaches that prying makes his pain strike back." "" "Passage"
+
+                p01_rg -> p02_rg "Act: Hold the gaze"
+                p01_rg -> p06_rg "Act: Lower your gaze"
+                p01_rg -> p04_rg "timer"
+
+                p02_rg -> p07_rg "Act: Shift your weight"
+                p02_rg -> p10_go "Act: Touch his shoulder"
+                p02_rg -> p06_rg "timer"
+
+                p03_rg -> p05_rg "Act: Glance at the notes"
+                p03_rg -> p06_rg "timer"
+
+                p04_rg -> p03_rg "Act: Trace a circle in dust"
+                p04_rg -> p07_rg "Act: Lean toward the wall"
+                p04_rg -> p02_rg "timer"
+
+                p05_rg -> p11_go "Act: Reach toward the notes, 14 <= Stress <= 100"
+                p05_rg -> p08_rg "timer"
+
+                p06_rg -> p08_rg "Act: Count breaths"
+                p06_rg -> p03_rg "Act: Rest a hand on the floorboards"
+                p06_rg -> p04_rg "timer"
+
+                p07_rg -> p11_go "Act: Step around Leon"
+                p07_rg -> p08_rg "timer"
+
+                p08_rg -> p10_go "Act: Touch his wrist, 8 <= Anger <= 100"
+                p08_rg -> p05_rg "timer, visited(P10) < 1 && visited(P11) < 1"
+
+                p10_go -> p12_rg "Act: Respawn"
+                p11_go -> p13_rg "Act: Respawn"
+
+                p12_rg -> p01_rg "timer"
+                p13_rg -> p01_rg "timer"
             }
         }
         c02 = softwareSystem "Lost" {
             s01 = container "Feeling stuck" {
                 p01_rg = component "P01" "PLACEHOLDER" "" "Passage"
             }
-            
+
             s02 = container "Lost job" {
             }
             s03 = container "Dead dreams of raising a family"
-            s04 = container "Lost marriage"      
+            s04 = container "Lost marriage"
         }
         c03 = softwareSystem "Family"
         c04 = softwareSystem "Marriage"
@@ -69,7 +113,7 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
         c04 -> c05
 
         # Cross-scene relationships (declared after both endpoints exist)
-        c01.s01.p06_rg -> c02.s01.p01_rg "PLACEHOLDER"
+        c01.s01.p08_rg -> c02.s01.p01_rg "timer, visited(P10) >= 1 || visited(P11) >= 1"
 
     }
 

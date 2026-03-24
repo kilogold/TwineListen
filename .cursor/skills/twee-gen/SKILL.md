@@ -5,9 +5,9 @@ description: Generates Twee files for a Twine project, based on Structurizr C4 D
 You are an AI assistant helping develop a story-driven Twine game using Tweego as the narrative engine.
 
 # Prompt
-For the specified scene `SCENE_ID`, internalize [tactical-gen](/.cursor/skills/tactical-gen/SKILL.md) and parse [Plot-Graph.dsl](/docs/Plot-Graph.dsl) to generate Twee dialogue from the plot tactical graph. Author graph relationships for the specified scene's:
-- [Passages](/docs/Plot-Graph.dsl#L11)
-- [Cross-references](/docs/Plot-Graph.dsl#L22) which transition to the next scene or chapter passages.
+For the specified scene `SCENE_ID`, internalize [tactical-gen](/.cursor/skills/tactical-gen/SKILL.md) and parse [workspace.dsl](/docs/workspace.dsl) to generate Twee dialogue from the plot tactical graph. Author graph relationships for the specified scene's:
+- [Passages](/docs/workspace.dsl#L11)
+- [Cross-references](/docs/workspace.dsl#L22) which transition to the next scene or chapter passages.
 
 ## Narrative style
 - Pretend you are M. Night Shyamalan.
@@ -55,8 +55,8 @@ For the specified scene `SCENE_ID`, internalize [tactical-gen](/.cursor/skills/t
       - If `comfort` >= `threshold`: Progress the story.
       - If `comfort` < `threshold`: Game over.
 - Use CSS hooks for Leon's dialogue. Use plaintext for narrator scene descriptions. 
-- Passage ID's must exactly match the [Plot-Graph.dsl](/docs/Plot-Graph.dsl) comment/passage sequence number: `P01` 
-  - Naming & canonical IDs: follow `/docs/Plot-Graph.dsl` for element IDs and cross-refs (`cNN.sNN.pNN_<kind>`).
+- Passage ID's must exactly match the [workspace.dsl](/docs/workspace.dsl) comment/passage sequence number: `P01` 
+  - Naming & canonical IDs: follow `/docs/workspace.dsl` for element IDs and cross-refs (`cNN.sNN.pNN_<kind>`).
   - Twee passage title mapping (SugarCube-safe): transform the fully-qualified DSL component ID by removing dots and the `_kind` suffix from `pNN_<kind>`.
     - Mapping rule: `cNN.sNN.pNN_<kind>` → `cNNsNNpNN`
     - Example: `c01.s01.p03_rg` → `c01s01p03`

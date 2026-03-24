@@ -23,4 +23,4 @@ A Twine narrative prototype.
 - [docs](/docs/): Story context for narrative generation. See [workflow](/docs/Workflow.md) for details.
 - [include](/include/): Assets bundled with the build.
 - [tools](/tools/): Misc automations for development.
-- [.cursor](/.cursor/): LLM generation rules for [Plot Graph](/docs/Plot-Graph.dsl).
+- [.cursor](/.cursor/): LLM generation rules for [Plot Graph](/docs/workspace.dsl).

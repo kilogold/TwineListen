@@ -32,13 +32,12 @@ if ! docker info >/dev/null 2>&1; then
   until docker info >/dev/null 2>&1; do sleep 1; done
 fi
 
-docker pull structurizr/lite >/dev/null 2>&1 || true
-docker rm -f structurizr-lite >/dev/null 2>&1 || true
+docker pull structurizr/structurizr >/dev/null 2>&1 || true
+docker rm -f structurizr/structurizr >/dev/null 2>&1 || true
 docker run -d --rm \
-  --name structurizr-lite \
+  --name structurizr-local \
   -p 8080:8080 \
   -v "$(pwd)/docs:/usr/local/structurizr" \
-  -e STRUCTURIZR_WORKSPACE_FILENAME=Plot-Graph \
-  structurizr/lite >/dev/null
+  structurizr/structurizr local >/dev/null
 
 echo "http://localhost:8080"

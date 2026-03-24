@@ -2,6 +2,6 @@
 twine-specs
 build
 
-docs/Plot-Graph.json
+docs/workspace.json
 docs/.structurizr
 docs/structurizr.properties

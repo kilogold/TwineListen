@@ -13,10 +13,10 @@ Sits at the center of the attic facing toward the wall. He's been there for a lo
 Mysteriously comes into existence, and keeps willingly returning. It is unclear if the player's entity is a spirit in the attic, a ghost of Leon's past, a wandering spirit, or just a regular person. Who the player is doesn't matter much - their role is simply to witness Leon unfold.
 
 # Plot Graph
-The plot progression is documented as a C4 model, adapted for storytelling purposes. See [Structurizr DSL Model](/docs/Plot-Graph.dsl) header comments for docs on interpreting C4 as storytelling.
+The plot progression is documented as a C4 model, adapted for storytelling purposes. See [Structurizr DSL Model](/docs/workspace.dsl) header comments for docs on interpreting C4 as storytelling.
 
 # Plot Detail
-The following is detailed context corresponding to the [Plot Graph](/docs/Plot-Graph.dsl) nodes:
+The following is detailed context corresponding to the [Plot Graph](/docs/workspace.dsl) nodes:
 - Each H2 heading below matches a `scene`/`container` by `<scene-name>`. The section describes what happens in the scene.
 - Each H3 heading matches a `passage`/`component` by `<passage-name>`. The section describes Leon's inner thoughts & monolouge.
 

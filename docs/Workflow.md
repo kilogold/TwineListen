@@ -55,7 +55,7 @@ This workflow summarizes steps and references those files rather than duplicatin
 - Persist artifacts using `SCENE_ID`:
   - Scene Brief JSON: `docs/briefs/{SCENE_ID}.json` (e.g., `docs/briefs/c01.s01.json`)
   - Twee output: `src/{SCENE_ID}.twee` (e.g., `src/c01.s01.twee`)
-- Existing scenes: by default, if `SCENE_ID` already exists in `/docs/Plot-Graph.dsl`, skip Prompt 3 and run Prompt 5 for `SCENE_ID`, then continue with Prompt 6. To force regeneration with Prompt 3, append the flag `override=true` to the invocation. Example: "Execute Prompt 3 for `c01.s01` override=true".
+- Existing scenes: by default, if `SCENE_ID` already exists in `/docs/workspace.dsl`, skip Prompt 3 and run Prompt 5 for `SCENE_ID`, then continue with Prompt 6. To force regeneration with Prompt 3, append the flag `override=true` to the invocation. Example: "Execute Prompt 3 for `c01.s01` override=true".
 
 # Prompts
 ## Prompt 1 — Produce a Scene Brief (JSON only)
@@ -75,7 +75,7 @@ Requirements:
 - actions: 10–14 non‑verbal action labels. Follow the Player agency and action vocabulary rules and Supportive listener posture in `/.cursor/skills/tactical-gen/SKILL.md`.
 - thresholds: choose `angerHigh` and `stressHigh` per the Adaptive Threshold Policy and First-run scope in `/.cursor/skills/tactical-gen/SKILL.md`.
 - quotas: anchor60 and doubleAnchor30 set true.
-- Do NOT add any extra properties. Specifically, do not include any DSL snapshots or large text blobs in the brief; the DSL belongs only in `/docs/Plot-Graph.dsl`.
+- Do NOT add any extra properties. Specifically, do not include any DSL snapshots or large text blobs in the brief; the DSL belongs only in `/docs/workspace.dsl`.
 ```
 
 Invocation: Execute Prompt 1 for `SCENE_ID`.
@@ -113,11 +113,11 @@ If corrections were made, update `docs/briefs/{SCENE_ID}.json` with the correcte
 ## Prompt 3 — Generate the Tactical Graph DSL from the Brief
 Use the Brief to emit only the Structurizr DSL for `SCENE_ID`.
 
-Note: If the `SCENE_ID` block already exists in `/docs/Plot-Graph.dsl`, the default workflow is to execute Prompt 5 for `SCENE_ID` instead. You MAY regenerate with Prompt 3 when explicitly invoked with `override=true`.
+Note: If the `SCENE_ID` block already exists in `/docs/workspace.dsl`, the default workflow is to execute Prompt 5 for `SCENE_ID` instead. You MAY regenerate with Prompt 3 when explicitly invoked with `override=true`.
 
 Suggested prompt (Cursor-friendly):
 ```text
-Using `/.cursor/skills/tactical-gen/SKILL.md`, the Scene Brief at `docs/briefs/{SCENE_ID}.json`, and the header conventions in `/docs/Plot-Graph.dsl`, generate ONLY the Structurizr DSL for `SCENE_ID`.
+Using `/.cursor/skills/tactical-gen/SKILL.md`, the Scene Brief at `docs/briefs/{SCENE_ID}.json`, and the header conventions in `/docs/workspace.dsl`, generate ONLY the Structurizr DSL for `SCENE_ID`.
 
 Enforce (see `/.cursor/skills/tactical-gen/SKILL.md` — single source of truth):
 - Descriptions 100–200 chars; complete sentences; anchor quotas.
@@ -137,7 +137,7 @@ Enforce (see `/.cursor/skills/tactical-gen/SKILL.md` — single source of truth)
 
 Output the `cNN { sNN { ... } }` DSL block for `SCENE_ID`, and also write the single model‑scope cross‑scene handoff per the Cross‑scene handoff policy in `/.cursor/skills/tactical-gen/SKILL.md`.
 
-Run the following terminal command verbatim for DSL syntax validation: `structurizr-cli validate -w docs/Plot-Graph.dsl`.
+Run the following terminal command verbatim for DSL syntax validation: `structurizr-cli validate -w docs/workspace.dsl`.
 Empty output means successful validation. 
 ```
 
@@ -148,7 +148,7 @@ Run a validation pass and re‑emit a corrected DSL if needed.
 
 Suggested prompt (Cursor-friendly):
 ```text
-Audit the `SCENE_ID` block in `/docs/Plot-Graph.dsl` against `/.cursor/skills/tactical-gen/SKILL.md` and the Scene Brief at `docs/briefs/{SCENE_ID}.json`. List violations briefly, then output a corrected, final DSL block only.
+Audit the `SCENE_ID` block in `/docs/workspace.dsl` against `/.cursor/skills/tactical-gen/SKILL.md` and the Scene Brief at `docs/briefs/{SCENE_ID}.json`. List violations briefly, then output a corrected, final DSL block only.
 
 Checks: see these sections in `/.cursor/skills/tactical-gen/SKILL.md`:
 - Quality checks (hard requirements): see `/.cursor/skills/tactical-gen/SKILL.md#quality-checks`.
@@ -170,10 +170,10 @@ Use this when updating an existing graph without adding unnecessary nodes.
 
 Suggested prompt:
 ```text
-Transform the `SCENE_ID` block in `/docs/Plot-Graph.dsl` to comply with `/.cursor/skills/tactical-gen/SKILL.md` and the Scene Brief:
+Transform the `SCENE_ID` block in `/docs/workspace.dsl` to comply with `/.cursor/skills/tactical-gen/SKILL.md` and the Scene Brief:
 
 Inputs (read by path; do not paste contents):
-- `/docs/Plot-Graph.dsl` (use block for `SCENE_ID`)
+- `/docs/workspace.dsl` (use block for `SCENE_ID`)
 - `docs/briefs/{SCENE_ID}.json`
 
 Tasks:
@@ -193,15 +193,15 @@ Convert the validated plot graph into SugarCube v2 Twee passages for the specifi
 
 Suggested prompt (Cursor-friendly):
 ```text
-Using `/.cursor/skills/twee-gen/SKILL.md`, read the scene graph for `SCENE_ID` from `/docs/Plot-Graph.dsl` and generate the corresponding SugarCube v2 Twee passages.
+Using `/.cursor/skills/twee-gen/SKILL.md`, read the scene graph for `SCENE_ID` from `/docs/workspace.dsl` and generate the corresponding SugarCube v2 Twee passages.
 
 Inputs (read by path; do not paste contents):
 - `/.cursor/skills/twee-gen/SKILL.md`
-- `/docs/Plot-Graph.dsl` (use `SCENE_ID`)
+- `/docs/workspace.dsl` (use `SCENE_ID`)
 - `/src/main.twee` (macros and globals)
 - `/docs/sugarcube-2_docs/` (reference only)
 
-Follow the rules in `/.cursor/skills/twee-gen/SKILL.md`. Respect passage IDs and cross-refs defined in `/docs/Plot-Graph.dsl`.
+Follow the rules in `/.cursor/skills/twee-gen/SKILL.md`. Respect passage IDs and cross-refs defined in `/docs/workspace.dsl`.
 Implement GO fan‑out on GO passages: GO shows conditional links to respawn targets (regular passages) using the same conditions as the DSL (e.g., `visited(...)`). Do not include any Restart link. Respawn passages route to default entry (e.g., `c01s01p01`) via their own timers.
 
 Create or replace `/src/{SCENE_ID}.twee` with ONLY Twee passages:
@@ -219,14 +219,14 @@ Create or replace `/src/{SCENE_ID}.twee` with ONLY Twee passages:
 Invocation: Execute Prompt 6 for `SCENE_ID`.
 
 ## Prompt 7 — Verify Twee against the Tactical Graph (deterministic)
-Ensure the generated Twee branches in `/src/{SCENE_ID}.twee` exactly correspond to affecting & effecting relationships for `SCENE_ID`'s graph in `/docs/Plot-Graph.dsl`. Fix mismatches; report any source-of-truth conflicts with `/docs/Plot-Device.md`.
+Ensure the generated Twee branches in `/src/{SCENE_ID}.twee` exactly correspond to affecting & effecting relationships for `SCENE_ID`'s graph in `/docs/workspace.dsl`. Fix mismatches; report any source-of-truth conflicts with `/docs/Plot-Device.md`.
 
 Suggested prompt (Cursor-friendly):
 ```text
 Audit `/src/{SCENE_ID}.twee` against:
 - `/.cursor/skills/twee-gen/SKILL.md`
 - `/.cursor/skills/tactical-gen/SKILL.md`
-- `/docs/Plot-Graph.dsl` (scene: `SCENE_ID`)
+- `/docs/workspace.dsl` (scene: `SCENE_ID`)
 - `/docs/Plot-Device.md`
 
 Important: 
@@ -252,7 +252,7 @@ Tasks:
    - ID format and cross‑ref mapping correctness
    - Handoff presence/count and stub existence/tagging
 5) Source-of-truth policy:
-   - If `/src/{SCENE_ID}.twee` deviates from `/docs/Plot-Graph.dsl`, prefer the DSL and fix Twee.
+   - If `/src/{SCENE_ID}.twee` deviates from `/docs/workspace.dsl`, prefer the DSL and fix Twee.
    - If the DSL contradicts `/docs/Plot-Device.md` themes or anchors, do NOT silently fix. List the contradiction and propose minimal DSL edits that realign with Plot-Device, then provide the matching Twee diff.
 
 Output:
@@ -263,6 +263,6 @@ Output:
 Invocation: Execute Prompt 7 for `SCENE_ID`.
 
 ## Cursor usage — reference files instead of pasting
-- In Cursor, reference files by path (e.g., `docs/briefs/{SCENE_ID}.json`, `/docs/Plot-Graph.dsl`, `/.cursor/skills/tactical-gen/SKILL.md`, `/.cursor/skills/twee-gen/SKILL.md`, `src/{SCENE_ID}.twee`) directly in prompts.
+- In Cursor, reference files by path (e.g., `docs/briefs/{SCENE_ID}.json`, `/docs/workspace.dsl`, `/.cursor/skills/tactical-gen/SKILL.md`, `/.cursor/skills/twee-gen/SKILL.md`, `src/{SCENE_ID}.twee`) directly in prompts.
 - This avoids copy/paste drift and keeps a single source of truth. The assistant can open and read these paths.
 - If working outside Cursor or another file-aware IDE, you may paste JSON/DSL snapshots in the chat for discussion, but never persist DSL snapshots inside Scene Brief JSON files. The authoritative rule lives in `/.cursor/skills/tactical-gen/SKILL.md`.

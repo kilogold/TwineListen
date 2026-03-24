@@ -12,10 +12,10 @@ Use @Plot-Device.md for contextual inspiration.
 Ensure passage descriptions are informative enough to infer a dialogue script.
 
 ## Narrative rules
-IMPORTANT: Never embed or paste Structurizr DSL snapshots inside Scene Brief JSON files (e.g., `docs/briefs/*.json`). Briefs contain only the specified JSON schema. All DSL must live in `/docs/Plot-Graph.dsl`.
+IMPORTANT: Never embed or paste Structurizr DSL snapshots inside Scene Brief JSON files (e.g., `docs/briefs/*.json`). Briefs contain only the specified JSON schema. All DSL must live in `/docs/workspace.dsl`.
 ### Graph generation
-- Operate exclusively within @Plot-Graph.dsl file.
-  - Abide by the `[Instructions/Guide]` comments at the top of the @Plot-Graph.dsl file.
+- Operate exclusively within @workspace.dsl file.
+  - Abide by the `[Instructions/Guide]` comments at the top of the @workspace.dsl file.
   - Strive for non-linear storytelling in the tactical graph.
 - Certain passages should only be accessible via subsequent playthroughs. 
   - Consider tracking how many times such passages have been visited, and unlock after a second visit.
@@ -140,7 +140,7 @@ When conditions aren't met, the corresponding story path becomes unavailable dur
 - Refer to [Structurizr's DSL documentation](https://docs.structurizr.com/dsl) for proper DSL syntax.
 - Software System views are optional. Ensure all `component` & `container` views are explicitly declared.
 - DSL does not support forward references. Define all relationships after their declarations.
-- Naming & cross-references: follow the canonical scheme in `/docs/Plot-Graph.dsl` (IDs `cNN`, `sNN`, `pNN_<kind>`; cross-refs `cNN.sNN.pNN_<kind>`). Do not restate variants here.
+- Naming & cross-references: follow the canonical scheme in `/docs/workspace.dsl` (IDs `cNN`, `sNN`, `pNN_<kind>`; cross-refs `cNN.sNN.pNN_<kind>`). Do not restate variants here.
   - Kinds include `go` for Game Over (e.g., `p07_go`).
 
 ## Plot-Device anchoring and engagement
