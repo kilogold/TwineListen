@@ -5,3 +5,5 @@ build
 docs/workspace.json
 docs/.structurizr
 docs/structurizr.properties
+
+include/images/
