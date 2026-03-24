@@ -41,7 +41,7 @@ end
 ```
 
 ## Workflow rules
-As a developer, follow this constrained, multi-step LLM prompting workflow to generate and maintain the tactical plot graph (defined in `/.cursor/skills/tactical-gen/SKILL.md`) while staying faithful to the context in `/docs/Plot-Device.md`.
+As a developer, follow this constrained, multi-step LLM prompting workflow to generate and maintain the tactical graph (defined in `/.cursor/skills/tactical-gen/SKILL.md`) while staying faithful to the context in `/docs/Plot-Device.md`.
 
 Single source-of-truth for rules (per domain): 
 - `/.cursor/skills/tactical-gen/SKILL.md`
@@ -188,8 +188,8 @@ Output ONLY the updated DSL block.
 
 Invocation: Execute Prompt 5 for `SCENE_ID` when needed.
 
-## Prompt 6 — Generate Twee from the Plot Graph (Cursor-friendly)
-Convert the validated plot graph into SugarCube v2 Twee passages for the specified scene.
+## Prompt 6 — Generate Twee from the Tactical Graph (Cursor-friendly)
+Convert the validated tactical graph into SugarCube v2 Twee passages for the specified scene.
 
 Suggested prompt (Cursor-friendly):
 ```text

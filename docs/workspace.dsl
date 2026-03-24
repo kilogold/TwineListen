@@ -1,6 +1,6 @@
 // [Instructions/Guide]
 // Purpose:
-// This file is the single source of truth for the plot graph using Structurizr DSL (C4-inspired) for an interactive narrative.
+// This file is the single source of truth for the tactical graph using Structurizr DSL (C4-inspired) for an interactive narrative.
 //
 // Strict naming (no slugs):
 // - NN token (naming convention): two-digit sequence number (01, 02, ...). NN is not a node.
@@ -29,14 +29,14 @@
 // - Optional conditions append after a comma. Operands may include NPC state (Stress, Anger ∈ [0,100]) and visit counts via visited(PNN).
 //   Example: p03_rg -> p04_go "Act: Hold the gaze, 11 <= Stress <= 16 || visited(P10) >= 2"
 //
-// See single source of truth for tactical generation rules: /.cursor/rules/tactical-gen.mdc
+// See single source of truth for tactical generation rules: /.cursor/skills/tactical-gen/SKILL.md
 //
 // Modeling guidance:
 // - Interpret relationship direction as narrative continuity ("because ...").
 // - Multiple incoming edges complement narrative ("and ...").
 // - Multiple outgoing edges revisit with new information; ensure overall forward motion.
 
-workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
+workspace "Tactical Graph" "A narrative graph for \"Strangers in the Attic\"" {
 
     !identifiers hierarchical
 
