@@ -21,9 +21,11 @@
 // - Fully qualified (across scenes/chapters): cNN.sNN.pNN_<kind>
 // - DSL does not support forward references; declare elements before relationships.
 // - Example (cross-scene): c01.s01.p03_rg -> c02.s01.p01_rg "Act: Step back"
+//   (Select a non-verbal label from the Scene Brief per the Cross-scene handoff policy; `timer` allowed but prefer `Act`).
 //
 // Relationship syntax:
 // - Labels allowed (exact): "Act: <non-verbal action>" | "timer" (no variants)
+//   - "Act: Respawn" is GO-only: allowed only from `pNN_go` to regular passages; use for restarts instead of `timer`.
 // - Optional conditions append after a comma. Operands may include NPC state (Stress, Anger ∈ [0,100]) and visit counts via visited(PNN).
 //   Example: p03_rg -> p04_go "Act: Hold the gaze, 11 <= Stress <= 16 || visited(P10) >= 2"
 //
@@ -50,8 +52,7 @@ workspace "Plot Graph" "A narrative graph for \"Strangers in the Attic\"" {
                 p01_rg = component "P01" "PLACEHOLDER" "" "Passage"
             }
             
-            s02 = container "Lost job" {
-            }
+            s02 = container "Lost job"
             s03 = container "Dead dreams of raising a family"
             s04 = container "Lost marriage"      
         }

@@ -4,7 +4,7 @@ The [Plot Graph](#plot-graph) & [Plot Details](#plot-detail) form the backstory 
 
 # Setting
 ## Environment
-A cold empty attic in an old house somewhere near a river. There's a supernatural sense in the air, as if shadows or spirits lurk around. Only Leon and the player are initially present. It's night time.
+A cold empty wooden attic in an old house within a forest, somewhere near a river. There's a supernatural sense in the air, as if shadows or spirits lurk around. Only Leon and the player are initially present. It's night time.
 
 ## Leon
 Sits at the center of the attic facing toward the wall. He's been there for a long time, but it's unclear exactly how long - could be hours, or could be days. He's hunched over, withered, and frail. His mind is still pacing.

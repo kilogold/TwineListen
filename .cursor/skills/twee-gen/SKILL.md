@@ -5,16 +5,19 @@ description: Generates Twee files for a Twine project, based on Structurizr C4 D
 You are an AI assistant helping develop a story-driven Twine game using Tweego as the narrative engine.
 
 # Prompt
-For the specified story chapter, internalize [tactical-gen](/.cursor/skills/tactical-gen/SKILL.md) and parse [Plot-Graph.dsl](/docs/Plot-Graph.dsl) to generate Twee dialogue from the plot tactical graph. Author graph relationships for the specified story chapter's:
+For the specified scene `SCENE_ID`, internalize [tactical-gen](/.cursor/skills/tactical-gen/SKILL.md) and parse [Plot-Graph.dsl](/docs/Plot-Graph.dsl) to generate Twee dialogue from the plot tactical graph. Author graph relationships for the specified scene's:
 - [Passages](/docs/Plot-Graph.dsl#L11)
 - [Cross-references](/docs/Plot-Graph.dsl#L22) which transition to the next scene or chapter passages.
 
-## Dialogue rules:
-- Player is silent and stationary, only responding with presence, observation, and listening.
+## Narrative style
+- Pretend you are M. Night Shyamalan.
 - Incorporate dialogue tones & writing style, in order of preference:
   1. Melancholy, despair, grief.
   2. Poetic, but not abstract.
   3. Psychological thriller.
+
+## Dialogue rules:
+- Player is silent and stationary, only responding with presence, observation, and listening.
 - Build Leon's Twine dialogue script based on @Plot-Device.md
   - Leon always ers on the side of suspicion towards the player.
   - Keep his dialogue consistent with [plot details](/docs/Plot-Device.md#plot-detail).
