@@ -1,5 +1,6 @@
 :: c01s01p01
 <<set $stress to Math.max(0, Math.min(100, $stress + 4))>>
+<img src="images/c01s01p01.png"/>
 
 The cold empty wooden attic leans around Leon like a held breath. He sits facing the wall, muttering low enough that the room seems to decide whether you belong inside it.
 
@@ -22,6 +23,7 @@ The cold empty wooden attic leans around Leon like a held breath. He sits facing
 :: c01s01p02
 <<set $stress to Math.max(0, Math.min(100, $stress + 4))>>
 <<set $anger to Math.max(0, Math.min(100, $anger + 2))>>
+<img src="images/c01s01p02.png"/>
 
 He stays hunched over, withered and frail, but your attention lands hard enough to make the dark feel crowded. Even stillness can be mistaken for pressure here.
 
@@ -37,6 +39,7 @@ He stays hunched over, withered and frail, but your attention lands hard enough 
 
 :: c01s01p03
 <<set $stress to Math.max(0, Math.min(100, $stress + 3))>>
+<img src="images/c01s01p03.png"/>
 
 The notes wait by the floorboards where dust, splinters, and old drafts keep nudging their corners. He wrote them to not forget, which is exactly why touching them feels dangerous.
 
@@ -51,6 +54,7 @@ The notes wait by the floorboards where dust, splinters, and old drafts keep nud
 
 :: c01s01p04
 <<set $stress to Math.max(0, Math.min(100, $stress + 5))>>
+<img src="images/c01s01p04.png"/>
 
 Dust drifts through the attic's stale air while Leon's muttering loops over itself. The groove of going in circles is invisible until you feel it trying to pull your thoughts into it too.
 
@@ -66,6 +70,7 @@ Dust drifts through the attic's stale air while Leon's muttering loops over itse
 
 :: c01s01p05
 <<set $stress to Math.max(0, Math.min(100, $stress + 7))>>
+<img src="images/c01s01p05.png"/>
 
 The paper whispers under the draft, and every line seems to warn that reading feels worse because memory does not stay flat once it is handled.
 
@@ -83,6 +88,7 @@ The paper whispers under the draft, and every line seems to warn that reading fe
 :: c01s01p06
 <<set $stress to Math.max(0, Math.min(100, $stress - 4))>>
 <<set $anger to Math.max(0, Math.min(100, $anger - 2))>>
+<img src="images/c01s01p06.png"/>
 
 The floorboards cool your hand and the old house within a forest settles into a quieter shape. For a moment, patience feels less like helplessness and more like the only honest form of care.
 
@@ -99,6 +105,7 @@ The floorboards cool your hand and the old house within a forest settles into a 
 :: c01s01p07
 <<set $stress to Math.max(0, Math.min(100, $stress + 2))>>
 <<set $anger to Math.max(0, Math.min(100, $anger + 6))>>
+<img src="images/c01s01p07.png"/>
 
 From beside him, the wall stops looking blank and starts looking defensive. Rotting away in misery is not just what he feels here; it is how he keeps strangers from coming closer.
 
@@ -114,6 +121,7 @@ From beside him, the wall stops looking blank and starts looking defensive. Rott
 :: c01s01p08
 <<set $stress to Math.max(0, Math.min(100, $stress - 3))>>
 <<set $anger to Math.max(0, Math.min(100, $anger - 2))>>
+<img src="images/c01s01p08.png"/>
 
 The attic finally holds still long enough for his muttering to soften into something almost human. Night, notes, and wall no longer compete; they orbit the possibility that he might let himself be witnessed.
 
@@ -141,6 +149,8 @@ The attic finally holds still long enough for his muttering to soften into somet
 <</if>>
 
 :: c01s01p10
+<img src="images/c01s01p10.png"/>
+
 The frail shape in front of you breaks into impossible force. Splinters jump, dust fills the dark, and your body gives way fast enough to prove that witness becomes betrayal the moment it feels like touch.
 
 <p class="dialogue">"Don't."</p>
@@ -149,6 +159,8 @@ The frail shape in front of you breaks into impossible force. Splinters jump, du
 [[Respawn|c01s01p12]]
 
 :: c01s01p11
+<img src="images/c01s01p11.png"/>
+
 The wall, the notes, and your nearness collapse into one insult too many. Leon wheels with feral panic, and the attic turns your curiosity into impact, black air, and a lesson about prying at open wounds.
 
 <p class="dialogue">"Stop handling me like a puzzle."</p>
@@ -159,6 +171,7 @@ The wall, the notes, and your nearness collapse into one insult too many. Leon w
 :: c01s01p12
 <<set $stress to Math.max(0, Math.min(100, Math.floor($stress / 2)))>>
 <<set $anger to 0>>
+<img src="images/c01s01p12.png"/>
 
 You gather again in the cold empty wooden attic, carrying the memory of that touch like a burn without skin. Coming back does not make you safe; it only proves the room remembers you differently now.
 
@@ -172,6 +185,7 @@ You gather again in the cold empty wooden attic, carrying the memory of that tou
 :: c01s01p13
 <<set $stress to Math.max(0, Math.min(100, Math.floor($stress / 2)))>>
 <<set $anger to 0>>
+<img src="images/c01s01p13.png"/>
 
 You reform near the dust and notes, where the old house within a forest feels colder for having thrown you out once already. Death here clarifies that forcing revelation only drives Leon deeper into violence.
 
