@@ -7,7 +7,7 @@ ARG="${1:-}"
 
 if [[ "$ARG" == "-s" || "$ARG" == "-sa" ]]; then
   # Stop Structurizr container
-  docker rm -f structurizr-lite >/dev/null 2>&1 || true
+  docker rm -f structurizr/structurizr >/dev/null 2>&1 || true
   # Optionally stop Docker Desktop
   if [[ "$ARG" == "-sa" ]]; then
     # Force quit Docker Desktop
