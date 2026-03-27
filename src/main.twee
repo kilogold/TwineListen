@@ -215,10 +215,14 @@ Macro.add("timedprogressbar", {
   height: 100%;
   background: #00ff00;
 }
-:: Start
+
+:: StoryInit
+<<cacheaudio "bgm" "audio/bgm.mp3">>
+<<audio "bgm" play>>
 <<set $timer to 30>>
 <<set $gazed to false>>
 <<set $listened to false>>
 <<set $stress to 0>>
 <<set $anger to 0>>
+:: Start
 <<goto "c01s01p01">>

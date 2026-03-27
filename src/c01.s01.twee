@@ -16,7 +16,6 @@ The cold empty wooden attic leans around Leon like a held breath. He sits facing
 <<timedprogressbar $timer>>
 <<goto "c01s01p04">>
 <</timedprogressbar>>
-[[Glance at the notes|c01s01p03]]
 [[Hold the gaze|c01s01p02]]
 [[Lower your gaze|c01s01p06]]
 
@@ -197,4 +196,7 @@ You reform near the dust and notes, where the old house within a forest feels co
 <</timedprogressbar>>
 
 :: c02s01p01 [stub]
+<img src="images/c02s01p01.png"/>
 The next scene waits beyond Leon's first concession to your presence.
+
+TO BE CONTINUED...
