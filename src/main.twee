@@ -218,7 +218,7 @@ Macro.add("timedprogressbar", {
 
 :: StoryInit
 <<cacheaudio "bgm" "audio/bgm.mp3">>
-<<audio "bgm" play>>
+<<audio "bgm" play loop>>
 <<set $timer to 30>>
 <<set $gazed to false>>
 <<set $listened to false>>
