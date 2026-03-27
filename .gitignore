@@ -2,8 +2,9 @@
 twine-specs
 build
 
+include/
+
 docs/workspace.json
 docs/.structurizr
 docs/structurizr.properties
-
-include/images/
+docs/Stable Diffusion Prompt Book.pdf
