@@ -1,5 +1,5 @@
 # Strangers In The Attic
-<img src="/include/images/title.png" alt="Description" width="500" height="750">
+<img src="https://kilogold.github.io/TwineListen/build/images/title.png" alt="Description" width="500" height="750">
 A Twine narrative prototype.
 
 ## Key development constraints
