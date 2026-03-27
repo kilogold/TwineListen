@@ -1,6 +1,11 @@
 # Strangers In The Attic
-<img src="https://kilogold.github.io/TwineListen/build/images/title.png" alt="Description" width="500" height="750">
+<img src="https://kilogold.github.io/TwineListen/build/images/title.png" alt="Description" width="500" height="750">  
+
 A Twine narrative prototype.
+
+> **ℹ️ Note:**  
+> See the playable [demo site](https://kilogold.github.io/TwineListen/).
+> 
 
 ## Key development constraints
 1. The game has only two mechanics: gaze & listen.
@@ -20,7 +25,31 @@ A Twine narrative prototype.
 
 ## Project structure
 - [src](/src/): All Twee files for Twine narrative.
-- [docs](/docs/): Story context for narrative generation. See [workflow](/docs/Workflow.md) for details.
+- [docs](/docs/): Story context for narrative generation. 
 - [include](/include/): Assets bundled with the build.
 - [tools](/tools/): Misc automations for development.
 - [.cursor](/.cursor/): LLM generation rules for [Tactical Graph](/docs/workspace.dsl).
+
+## AI Workflow
+See [workflow](/docs/Workflow.md) for implementation details:
+```mermaid
+flowchart TD
+    PD((start)) -->|"docs/Plot-Device.md"| P1["Prompt 1 — Generate Scene Brief"]
+    P1 -->|"docs/briefs/{SCENE_ID}.json"| P2["Prompt 2 — Audit Scene Brief"]
+    P2 -->|"docs/briefs/{SCENE_ID}.json"| P3["Prompt 3 — Generate Tactical Graph"]
+    P3 -->|"docs/workspace.dsl"| P4["Prompt 4 — Audit Tactical Graph"]
+    P4 -->|"docs/workspace.dsl"| P5{"Existing scene?"}
+    P5 -->|"Yes: docs/workspace.dsl + docs/briefs/{SCENE_ID}.json"| P5a["Prompt 5 — Refactor Tactical Graph"]
+    P5a -->|"docs/workspace.dsl"| P4
+    P5 -->|"No: docs/workspace.dsl"| P6["Prompt 6 — Generate Twee"]
+    P6 -->|"src/{SCENE_ID}.twee"| P7["Prompt 7 — Audit Twee"]
+    P7 -->|"src/{SCENE_ID}.twee"| Done(((done)))
+```
+
+### Tested recommended models per prompt
+| Model         | P1 | P2 | P3 | P4 | P5 | P6 | P7 |
+|---------------|----|----|----|----|----|----|----|
+| GPT 5.4       | ✓  |    | ✓  |    | ✓  | ✓  |    |
+| Opus 4.6      | ✓  |    | ✓  |    | ✓  | ✓  |    |
+| Sonnet 4.6    |    | ✓  |    | ✓  |    |    | ✓  |
+| GPT 5.3 Codex |    | ✓  |    | ✓  |    |    | ✓  |
