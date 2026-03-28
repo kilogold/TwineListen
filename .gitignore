@@ -1,6 +1,9 @@
 .DS_Store
 twine-specs
 
-docs/Plot-Graph.json
+include/
+
+docs/workspace.json
 docs/.structurizr
 docs/structurizr.properties
+docs/Stable Diffusion Prompt Book.pdf
