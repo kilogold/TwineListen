@@ -289,30 +289,22 @@
         .cta__card-text {
             position: relative;
             z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35em;
             font-family: 'Cormorant Garamond', Georgia, serif;
             font-weight: 400;
             font-size: 1.3rem;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--whisper);
             text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
             transition: color 0.4s ease;
         }
 
-        .cta__card:hover .cta__card-text {
-            color: var(--amber);
-        }
-
-        .cta__card--external .cta__card-text {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.35em;
-            letter-spacing: 0.1em;
-        }
-
-        .cta__card--external .cta__card-text::after {
-            content: 'Source · docs · graph';
+        .cta__card-text::after {
+            content: attr(data-cta-sub);
             font-family: 'Special Elite', monospace;
             font-size: 0.52em;
             font-weight: normal;
@@ -324,7 +316,11 @@
             transition: color 0.4s ease, opacity 0.4s ease;
         }
 
-        .cta__card--external:hover .cta__card-text::after {
+        .cta__card:hover .cta__card-text {
+            color: var(--amber);
+        }
+
+        .cta__card:hover .cta__card-text::after {
             color: var(--whisper);
             opacity: 0.95;
         }
@@ -459,15 +455,15 @@
         <div class="cta__cards">
             <a href="build/index.html" class="cta__card" data-reveal>
                 <div class="cta__card-bg" style="background-image: url('build/images/title.png')"></div>
-                <span class="cta__card-text">Enter the Attic</span>
+                <span class="cta__card-text" data-cta-sub="demo">The Attic</span>
             </a>
             <a href="build/graph/index.html#Component-001" class="cta__card" data-reveal>
                 <div class="cta__card-bg" style="background-image: url('build/images/c01s01p01.png')"></div>
-                <span class="cta__card-text">Story Architecture</span>
+                <span class="cta__card-text" data-cta-sub="graph">The Architecture</span>
             </a>
-            <a href="https://github.com/kilogold/TwineListen" class="cta__card cta__card--external" data-reveal target="_blank" rel="noopener noreferrer" aria-label="TwineListen on GitHub — source, docs, and tools (opens in a new tab)">
+            <a href="https://github.com/kilogold/TwineListen" class="cta__card" data-reveal target="_blank" rel="noopener noreferrer" aria-label="TwineListen on GitHub — source, docs, and tools (opens in a new tab)">
                 <div class="cta__card-bg" style="background-image: url('build/images/attic_scene_reference.png')"></div>
-                <span class="cta__card-text">Open the Workshop</span>
+                <span class="cta__card-text" data-cta-sub="source · docs">The Workshop</span>
             </a>
         </div>
     </section>
