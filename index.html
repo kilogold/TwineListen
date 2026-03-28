@@ -205,104 +205,6 @@
             transform: translateY(0);
         }
 
-        /* ============ GALLERY ============ */
-
-        .gallery {
-            padding: 80px 0 100px;
-        }
-
-        .gallery__heading {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-weight: 300;
-            font-size: clamp(1rem, 1.6vw, 1.2rem);
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--dust);
-            text-align: center;
-            margin-bottom: 48px;
-            opacity: 0;
-            transform: translateY(16px);
-            transition: opacity 1s ease-out, transform 1s ease-out;
-        }
-
-        .gallery__heading.--visible {
-            opacity: 0.6;
-            transform: translateY(0);
-        }
-
-        .gallery__track {
-            display: flex;
-            gap: 20px;
-            padding: 0 40px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-        }
-
-        .gallery__track::-webkit-scrollbar {
-            display: none;
-        }
-
-        .gallery__item {
-            flex: 0 0 auto;
-            width: min(70vw, 560px);
-            aspect-ratio: 4 / 3;
-            position: relative;
-            border-radius: 4px;
-            overflow: hidden;
-            scroll-snap-align: center;
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        .gallery__item.--visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .gallery__item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            filter: brightness(0.7) saturate(0.8);
-            transition: filter 0.6s ease, transform 0.6s ease;
-        }
-
-        .gallery__item:hover img {
-            filter: brightness(0.85) saturate(1);
-            transform: scale(1.03);
-        }
-
-        .gallery__overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                to top,
-                rgba(10, 10, 10, 0.85) 0%,
-                transparent 50%
-            );
-            display: flex;
-            align-items: flex-end;
-            padding: 24px;
-            pointer-events: none;
-        }
-
-        .gallery__caption {
-            font-family: 'Special Elite', monospace;
-            font-size: 0.85rem;
-            color: var(--dust);
-            opacity: 0;
-            transform: translateY(8px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .gallery__item:hover .gallery__caption {
-            opacity: 0.8;
-            transform: translateY(0);
-        }
-
         /* ============ CTA ============ */
 
         .cta {
@@ -475,7 +377,9 @@
         <div class="hero__vignette"></div>
         <div class="hero__content">
             <h1 class="hero__title">Strangers In The Attic</h1>
-            <p class="hero__tagline">Some attics hold forgotten things. This one holds a forgotten man.</p>
+            <p class="hero__tagline">
+                Some attics hold forgotten things.<br>This one holds a forgotten man.
+            </p>
         </div>
         <div class="hero__scroll">listen</div>
     </section>
@@ -488,55 +392,12 @@
         <div class="lore__divider" data-reveal></div>
 
         <p class="lore__pitch" data-reveal>
-            A psychological narrative where you don't fight monsters&thinsp;&mdash;&thinsp;you sit with one.
+            A psychological thriller.<br>You don't fight monsters.<br>You sit with one.
         </p>
 
         <p class="lore__punchline" data-reveal>
             "You can't love someone into loving you back."
         </p>
-    </section>
-
-    <!-- SCENE GALLERY -->
-    <section class="gallery">
-        <p class="gallery__heading" data-reveal>Glimpses</p>
-        <div class="gallery__track">
-            <div class="gallery__item" data-reveal>
-                <img src="build/images/c01s01p01.png" alt="Leon surrounded by scattered letters in a moonlit attic" loading="lazy">
-                <div class="gallery__overlay">
-                    <span class="gallery__caption">I wrote notes to not forget</span>
-                </div>
-            </div>
-            <div class="gallery__item" data-reveal>
-                <img src="build/images/c01s01p03.png" alt="The attic viewed from the shadows" loading="lazy">
-                <div class="gallery__overlay">
-                    <span class="gallery__caption">My memories of the past have begun to blur</span>
-                </div>
-            </div>
-            <div class="gallery__item" data-reveal>
-                <img src="build/images/c01s01p06.png" alt="Leon hunched in dim light" loading="lazy">
-                <div class="gallery__overlay">
-                    <span class="gallery__caption">I'm just here, for one more day</span>
-                </div>
-            </div>
-            <div class="gallery__item" data-reveal>
-                <img src="build/images/c01s01p08.png" alt="Moonlight casting across worn floorboards" loading="lazy">
-                <div class="gallery__overlay">
-                    <span class="gallery__caption">Time won't heal this pain, it just numbs it</span>
-                </div>
-            </div>
-            <div class="gallery__item" data-reveal>
-                <img src="build/images/c01s01p12.png" alt="Deep shadow with faint outlines" loading="lazy">
-                <div class="gallery__overlay">
-                    <span class="gallery__caption">No more dreams... No more family...</span>
-                </div>
-            </div>
-            <div class="gallery__item" data-reveal>
-                <img src="build/images/c02s01p01.png" alt="A new chapter unfolds in the attic" loading="lazy">
-                <div class="gallery__overlay">
-                    <span class="gallery__caption">Who do I live for without a family?</span>
-                </div>
-            </div>
-        </div>
     </section>
 
     <!-- CALL TO ACTION -->
@@ -547,7 +408,7 @@
                 <div class="cta__card-bg" style="background-image: url('build/images/title.png')"></div>
                 <span class="cta__card-text">Enter the Attic</span>
             </a>
-            <a href="build/graph/index.html" class="cta__card" data-reveal>
+            <a href="build/graph/index.html#Component-001" class="cta__card" data-reveal>
                 <div class="cta__card-bg" style="background-image: url('build/images/c01s01p01.png')"></div>
                 <span class="cta__card-text">Story Architecture</span>
             </a>
@@ -557,7 +418,7 @@
     <!-- FOOTER -->
     <footer class="footer">
         <p class="footer__whisper">
-            "The player is a listener, the one we wish we have around in our most distressing moments."
+            "The player is a listener, one we wish for in our most distressing moments."
         </p>
         <p class="footer__mark">Strangers In The Attic</p>
     </footer>
