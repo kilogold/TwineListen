@@ -4,15 +4,14 @@
 
 The cold empty wooden attic leans around Leon like a held breath. He sits facing the wall, muttering low enough that the room seems to decide whether you belong inside it.
 
-<<if visited("c01s01p01") > 1>>
-<p class="dialogue">"You again. Or something wearing the shape of again. Hard to tell in a room like this."</p>
-<p class="dialogue">"Another day, another night... same boards, same wall, same mouth running in circles. Maybe you're here to watch. Maybe that's all anything is good for."</p>
-<<else>>
-<p class="dialogue">"Another day, another night... How long has it been? Does it matter?"</p>
-<p class="dialogue">"No footsteps. No knocking. Just a presence in the dark pretending that doesn't count as an arrival."</p>
-<p class="dialogue">"If you're here to witness, then witness. If you're here to meddle, the attic will know before I do."</p>
-<</if>>
-
+<<if visited("c01s01p01") > 1>>\
+<p class="dialogue">"You again. Or something wearing the shape of "again". Hard to tell in a room like this."</p>\
+<p class="dialogue">"Another day, another night... same boards, same wall, same mouth running in circles. Maybe you're here to watch. Maybe that's all anything is good for."</p>\
+<<else>>\
+<p class="dialogue">"Another day, another night... How long has it been? Does it matter?"</p>\
+<p class="dialogue">"No footsteps. No knocking. Just a presence in the dark pretending that doesn't count as an arrival."</p>\
+<p class="dialogue">"If you're here to witness, then witness. If you're here to meddle, the attic will know before I do."</p>\
+<</if>>\
 <<timedprogressbar $timer>>
 <<goto "c01s01p04">>
 <</timedprogressbar>>
@@ -26,10 +25,9 @@ The cold empty wooden attic leans around Leon like a held breath. He sits facing
 
 He stays hunched over, withered and frail, but your attention lands hard enough to make the dark feel crowded. Even stillness can be mistaken for pressure here.
 
-<p class="dialogue">"You don't blink much. That's what makes this worse."</p>
-<p class="dialogue">"A person looks away when they still remember manners. A ghost doesn't. A guilty memory doesn't. It just keeps staring until the room turns mean."</p>
-<p class="dialogue">"If you want to be useful, don't act like you're entitled to whatever breaks loose next."</p>
-
+<p class="dialogue">"You don't blink much. That's what makes this worse."</p>\
+<p class="dialogue">"A person looks away when they still remember manners. A ghost doesn't. A guilty memory doesn't. It just keeps staring until the room turns mean."</p>\
+<p class="dialogue">"If you want to be useful, don't act like you're entitled to whatever breaks loose next."</p>\
 <<timedprogressbar $timer>>
 <<goto "c01s01p06">>
 <</timedprogressbar>>
@@ -42,10 +40,9 @@ He stays hunched over, withered and frail, but your attention lands hard enough 
 
 The notes wait by the floorboards where dust, splinters, and old drafts keep nudging their corners. He wrote them to not forget, which is exactly why touching them feels dangerous.
 
-<p class="dialogue">"Those pages aren't wisdom. They're just evidence that memory rots slower when you pin it down."</p>
-<p class="dialogue">"I wrote notes to not forget. Stupid thing is, reading feels worse. Writing lets me bleed in order. Reading just opens it back up."</p>
-<p class="dialogue">"So if you're deciding whether to look, decide whether you're helping first."</p>
-
+<p class="dialogue">"Those pages aren't wisdom. They're just evidence that memory rots slower when you pin it down."</p>\
+<p class="dialogue">"I wrote notes to not forget. Stupid thing is, reading feels worse. Writing lets me bleed in order. Reading just opens it back up."</p>\
+<p class="dialogue">"So if you're deciding whether to look, decide whether you're helping first."</p>\
 <<timedprogressbar $timer>>
 <<goto "c01s01p06">>
 <</timedprogressbar>>
@@ -57,10 +54,9 @@ The notes wait by the floorboards where dust, splinters, and old drafts keep nud
 
 Dust drifts through the attic's stale air while Leon's muttering loops over itself. The groove of going in circles is invisible until you feel it trying to pull your thoughts into it too.
 
-<p class="dialogue">"Do you know what circles are for? Not progress. Not meaning. Just erosion."</p>
-<p class="dialogue">"You take one thought, worry it raw, then bring it back around because pain hates being left alone."</p>
-<p class="dialogue">"Stay long enough and you'll either learn patience or become another thing I have to resist."</p>
-
+<p class="dialogue">"Do you know what circles are for? Not progress. Not meaning. Just erosion."</p>\
+<p class="dialogue">"You take one thought, worry it raw, then bring it back around because pain hates being left alone."</p>\
+<p class="dialogue">"Stay long enough and you'll either learn patience or become another thing I have to resist."</p>\
 <<timedprogressbar $timer>>
 <<goto "c01s01p02">>
 <</timedprogressbar>>
@@ -73,10 +69,9 @@ Dust drifts through the attic's stale air while Leon's muttering loops over itse
 
 The paper whispers under the draft, and every line seems to warn that reading feels worse because memory does not stay flat once it is handled.
 
-<p class="dialogue">"There it is. Proof in graphite. Misery trying to look organized."</p>
-<p class="dialogue">"People think if pain can be written down, it can be solved. That's vanity. It's still pain. It just learned how to sit in rows."</p>
-<p class="dialogue">"If you reach for it now, you're not listening. You're excavating."</p>
-
+<p class="dialogue">"There it is. Proof in graphite. Misery trying to look organized."</p>\
+<p class="dialogue">"People think if pain can be written down, it can be solved. That's vanity. It's still pain. It just learned how to sit in rows."</p>\
+<p class="dialogue">"If you reach for it now, you're not listening. You're excavating."</p>\
 <<timedprogressbar $timer>>
 <<goto "c01s01p08">>
 <</timedprogressbar>>
@@ -91,10 +86,9 @@ The paper whispers under the draft, and every line seems to warn that reading fe
 
 The floorboards cool your hand and the old house within a forest settles into a quieter shape. For a moment, patience feels less like helplessness and more like the only honest form of care.
 
-<p class="dialogue">"Better. That's better."</p>
-<p class="dialogue">"You don't have to fix anything. That's what people never understand. They rush in with hands, plans, speeches... and then act surprised when the wound bites."</p>
-<p class="dialogue">"Sometimes not pressing is the closest thing to kindness left."</p>
-
+<p class="dialogue">"Better. That's better."</p>\
+<p class="dialogue">"You don't have to fix anything. That's what people never understand. They rush in with hands, plans, speeches... and then act surprised when the wound bites."</p>\
+<p class="dialogue">"Sometimes not pressing is the closest thing to kindness left."</p>\
 <<timedprogressbar $timer>>
 <<goto "c01s01p04">>
 <</timedprogressbar>>
@@ -108,10 +102,9 @@ The floorboards cool your hand and the old house within a forest settles into a 
 
 From beside him, the wall stops looking blank and starts looking defensive. Rotting away in misery is not just what he feels here; it is how he keeps strangers from coming closer.
 
-<p class="dialogue">"Don't flank me."</p>
-<p class="dialogue">"That's what people do when they want leverage. They circle, lean, crowd, act curious while they measure where to press."</p>
-<p class="dialogue">"If you step around me now, don't pretend it's compassion. Call it what it is."</p>
-
+<p class="dialogue">"Don't flank me."</p>\
+<p class="dialogue">"That's what people do when they want leverage. They circle, lean, crowd, act curious while they measure where to press."</p>\
+<p class="dialogue">"If you step around me now, don't pretend it's compassion. Call it what it is."</p>\
 <<timedprogressbar $timer>>
 <<goto "c01s01p08">>
 <</timedprogressbar>>
@@ -124,15 +117,14 @@ From beside him, the wall stops looking blank and starts looking defensive. Rott
 
 The attic finally holds still long enough for his muttering to soften into something almost human. Night, notes, and wall no longer compete; they orbit the possibility that he might let himself be witnessed.
 
-<<if visited("c01s01p10") > 0 || visited("c01s01p11") > 0>>
-<p class="dialogue">"You keep coming back. That should terrify me more than it does."</p>
-<p class="dialogue">"Maybe you're too stupid to leave. Maybe I'm too tired to keep pretending your returns mean nothing. Either way, the room has started making space for you."</p>
-<<else>>
-<p class="dialogue">"Quiet. Finally."</p>
-<p class="dialogue">"If you stay like this, I can almost imagine you aren't here to take anything from me."</p>
-<p class="dialogue">"Almost."</p>
-<</if>>
-
+<<if visited("c01s01p10") > 0 || visited("c01s01p11") > 0>>\
+<p class="dialogue">"You keep coming back. That should terrify me more than it does."</p>\
+<p class="dialogue">"Maybe you're too stupid to leave. Maybe I'm too tired to keep pretending your returns mean nothing. Either way, the room has started making space for you."</p>\
+<<else>>\
+<p class="dialogue">"Quiet. Finally."</p>\
+<p class="dialogue">"If you stay like this, I can almost imagine you aren't here to take anything from me."</p>\
+<p class="dialogue">"Almost."</p>\
+<</if>>\
 <<if visited("c01s01p10") == 0 && visited("c01s01p11") == 0>>
 <<timedprogressbar $timer>>
 <<goto "c01s01p05">>
@@ -147,24 +139,22 @@ The attic finally holds still long enough for his muttering to soften into somet
 [[Touch his wrist|c01s01p10]]
 <</if>>
 
-:: c01s01p10
+:: c01s01p10 [blood-red]
 <img src="images/c01s01p10.png"/>
 
 The frail shape in front of you breaks into impossible force. Splinters jump, dust fills the dark, and your body gives way fast enough to prove that witness becomes betrayal the moment it feels like touch.
 
-<p class="dialogue">"Don't."</p>
-<p class="dialogue">"You don't get to touch what's barely holding."</p>
-
+<p class="dialogue">"Don't."</p>\
+<p class="dialogue">"You don't get to touch what's barely holding."</p>\
 [[Respawn|c01s01p12]]
 
-:: c01s01p11
+:: c01s01p11 [blood-red]
 <img src="images/c01s01p11.png"/>
 
 The wall, the notes, and your nearness collapse into one insult too many. Leon wheels with feral panic, and the attic turns your curiosity into impact, black air, and a lesson about prying at open wounds.
 
-<p class="dialogue">"Stop handling me like a puzzle."</p>
-<p class="dialogue">"You don't earn truth by cornering it."</p>
-
+<p class="dialogue">"Stop handling me like a puzzle."</p>\
+<p class="dialogue">"You don't earn truth by cornering it."</p>\
 [[Respawn|c01s01p13]]
 
 :: c01s01p12
@@ -174,9 +164,8 @@ The wall, the notes, and your nearness collapse into one insult too many. Leon w
 
 You gather again in the cold empty wooden attic, carrying the memory of that touch like a burn without skin. Coming back does not make you safe; it only proves the room remembers you differently now.
 
-<p class="dialogue">"Still here? Then learn from it."</p>
-<p class="dialogue">"If you're some spirit, act wiser than the living."</p>
-
+<p class="dialogue">"Still here? Then learn from it."</p>\
+<p class="dialogue">"If you're some spirit, act wiser than the living."</p>\
 <<timedprogressbar $timer>>
 <<goto "c01s01p01">>
 <</timedprogressbar>>
@@ -188,9 +177,8 @@ You gather again in the cold empty wooden attic, carrying the memory of that tou
 
 You reform near the dust and notes, where the old house within a forest feels colder for having thrown you out once already. Death here clarifies that forcing revelation only drives Leon deeper into violence.
 
-<p class="dialogue">"There. Now maybe you'll understand the difference between listening and trespassing."</p>
-<p class="dialogue">"Pain talks when it wants to. Not when it's cornered."</p>
-
+<p class="dialogue">"There. Now maybe you'll understand the difference between listening and trespassing."</p>\
+<p class="dialogue">"Pain talks when it wants to. Not when it's cornered."</p>\
 <<timedprogressbar $timer>>
 <<goto "c01s01p01">>
 <</timedprogressbar>>

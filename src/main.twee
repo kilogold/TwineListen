@@ -15,42 +15,106 @@ The Attic Encounter
 }
 
 :: stylesheet [stylesheet]
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap");
+
+:root {
+    --void: #0a0a0a;
+    --charcoal: #1a1612;
+    --moonlight: #4a6a8a;
+    --amber: #c4863b;
+    --dust: #8a8078;
+    --whisper: #d4cdc4;
+}
+
+/* html/body: SugarCube mirrors passage tags onto these for [data-tags~="…"] / .class-from-tag */
+
+html {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
 body {
-    font-family: 'Georgia', serif;
-    background-color: #1a1a1a;
-    color: #e0e0e0;
+    background-color: var(--void);
+    color: var(--whisper);
+    font-family: inherit;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+#story {
+    box-sizing: border-box;
+}
+
+#passages {
+    padding: 2em 1.25em;
+    box-sizing: border-box;
 }
 
 .passage {
-    max-width: 600px;
-    margin: 2em auto;
-    padding: 2em;
-    background-color: #2a2a2a;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2em 1.5em;
+    background-color: var(--charcoal);
+    border-radius: 4px;
+    border: 1px solid rgba(74, 106, 138, 0.15);
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
 }
 
-a.link-internal {
-    color: #8ab4f8;
+.passage.blood-red {
+    background-color: #200800;
+}
+
+.passage a.link-internal {
+    color: var(--moonlight);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
-a.link-internal:hover {
-    color: #adc7f8;
+.passage a.link-internal:hover {
+    color: var(--amber);
     text-decoration: underline;
 }
 
-.dialogue {
-    font-style: italic;
-    color: #b8b8b8;
-    margin: 1em 0;
-    padding-left: 1em;
-    border-left: 3px solid #4a4a4a;
+.passage a.link-internal:active {
+    color: var(--whisper);
 }
 
-img{
-    max-width: 100%
+.passage a.link-external {
+    color: var(--dust);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.passage a.link-external:hover {
+    color: var(--amber);
+}
+
+.passage a.link-broken {
+    color: #a85c5c;
+    text-decoration: line-through;
+}
+
+.passage a.link-disabled {
+    color: var(--dust);
+    opacity: 0.45;
+    cursor: default;
+    pointer-events: none;
+}
+
+.passage img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+/* Passage markup (not a SugarCube class; used by scene Twee) */
+
+.passage .dialogue {
+    font-style: italic;
+    color: var(--dust);
+    margin: 1em 0;
+    padding-left: 1em;
+    border-left: 3px solid var(--moonlight);
 }
 
 :: script [script]
