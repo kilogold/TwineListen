@@ -25,14 +25,22 @@ A Twine narrative prototype.
 - The story has multiple endings based on player interactions & NPC reactions.
 - Player only nods and listens.
 
-## Project structure
+## Project details 
+### Setup
+- Install Cursor IDE
+- Setup [Twine (Twee 3) Language](https://github.com/sgranade/twine-twee-language) plugin
+  - [Build](https://github.com/sgranade/twine-twee-language?tab=readme-ov-file#building-your-game)
+  - [Run](https://github.com/sgranade/twine-twee-language?tab=readme-ov-file#running-your-game)
+
+
+### File structure
 - [src](/src/): All Twee files for Twine narrative.
 - [docs](/docs/): Story context for narrative generation. 
 - [include](/include/): Assets bundled with the build.
 - [tools](/tools/): Misc automations for development.
 - [.cursor](/.cursor/): LLM generation rules for [Tactical Graph](/docs/workspace.dsl).
 
-## AI Workflow
+### AI Workflow
 See [workflow](/docs/Workflow.md) for implementation details:
 ```mermaid
 flowchart TD
