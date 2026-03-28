@@ -1,10 +1,27 @@
-structurizr.ui.DEFAULT_FONT_NAME = "Arial";
-structurizr.ui.DEFAULT_FONT_URL = undefined;
+structurizr.ui.DEFAULT_FONT_NAME = 'Tahoma, Verdana, Helvetica, Arial';
 
 structurizr.ui.RENDERING_MODE_COOKIE_NAME = 'structurizr.renderingMode';
 structurizr.ui.RENDERING_MODE_SYSTEM = '';
 structurizr.ui.RENDERING_MODE_LIGHT = 'light';
 structurizr.ui.RENDERING_MODE_DARK = 'dark';
+
+structurizr.ui.DEFAULT_AUTOLAYOUT_RANK_DIRECTION = 'LeftRight';
+structurizr.ui.DEFAULT_AUTOLAYOUT_RANK_SEPARATION = 100;
+structurizr.ui.DEFAULT_AUTOLAYOUT_NODE_SEPARATION = 50;
+structurizr.ui.DEFAULT_AUTOLAYOUT_EDGE_SEPARATION = 50;
+structurizr.ui.DEFAULT_AUTOLAYOUT_VERTICES = true;
+
+
+structurizr.ui.LIGHT_MODE_DEFAULTS = {
+    background: '#ffffff',
+    color: '#444444',
+    strokeWidth: 2
+};
+structurizr.ui.DARK_MODE_DEFAULTS = {
+    background: '#111111',
+    color: '#cccccc',
+    strokeWidth: 2
+};
 
 structurizr.ui.themes = [];
 structurizr.ui.ignoredImages = [];
@@ -16,61 +33,40 @@ structurizr.ui.getBranding = function() {
         if (theme.logo !== undefined) {
             branding.logo = theme.logo;
         }
-
-        if (theme.font !== undefined) {
-            branding.font = theme.font;
-        }
     })
 
     if (structurizr.workspace.views.configuration.branding.logo !== undefined) {
         branding.logo = structurizr.workspace.views.configuration.branding.logo;
     }
 
-    if (structurizr.workspace.views.configuration.branding.font !== undefined) {
-        branding.font = structurizr.workspace.views.configuration.branding.font;
-    }
-
-    if (branding.font === undefined) {
-        branding.font = {
-            name: structurizr.ui.DEFAULT_FONT_NAME,
-            url: structurizr.ui.DEFAULT_FONT_URL
-        }
-    }
-
     return branding;
 }
 
-structurizr.ui.applyBranding = function() {
-    var branding = structurizr.ui.getBranding();
-    if (branding.font.url) {
-        const head = document.head;
-        const link = document.createElement('link');
+structurizr.ui.applyWorkspaceLogo = function() {
+    const logoLight = structurizr.ui.findElementStyle( { type: undefined, tags: 'Workspace:Icon' }, false).icon;
+    const logoDark = structurizr.ui.findElementStyle( { type: undefined, tags: 'Workspace:Icon' }, true).icon;
 
-        link.type = 'text/css';
-        link.rel = 'stylesheet';
-        link.href = branding.font.url;
-
-        head.appendChild(link);
+    if (logoLight) {
+        const workspaceLogo = $('.img-light.workspaceLogo');
+        workspaceLogo.attr('src', logoLight);
     }
 
-    var fontNames = '';
-    branding.font.name.split(',').forEach(function(fontName) {
-        fontNames += '"' + structurizr.util.escapeHtml(fontName.trim()) + '", ';
-    });
-
-    const brandingStyles = $('#brandingStyles');
-    brandingStyles.append('#documentationPanel { font-family: ' + fontNames.substr(0, fontNames.length-2) + ' }');
-
-    if (branding.logo) {
-        const brandingLogo = $('.brandingLogo');
-        brandingLogo.attr('src', branding.logo);
-        brandingLogo.removeClass('hidden');
+    if (logoDark) {
+        const workspaceLogo = $('.img-dark.workspaceLogo');
+        workspaceLogo.attr('src', logoDark);
     }
+
+    $('#workspaceLogoAnchor').removeClass('hidden');
 }
 
-structurizr.ui.loadThemes = function(localPrebuiltThemesUrl, callback) {
+structurizr.ui.loadThemes = function(callback) {
     structurizr.workspace.views.configuration.themes.forEach(function(theme) {
-        structurizr.ui.loadTheme(localPrebuiltThemesUrl, theme);
+        if (theme.indexOf('http') === 0) {
+            structurizr.ui.loadTheme(theme);
+        } else {
+            // built-in theme
+            structurizr.ui.loadTheme('/static/themes/' + theme + '/theme.json');
+        }
     });
 
     setTimeout(function() {
@@ -88,13 +84,7 @@ structurizr.ui.waitForThemesToLoad = function(callback) {
     }
 }
 
-structurizr.ui.loadTheme = function(localPrebuiltThemesUrl, url) {
-    // use local versions of the prebuilt themes if configured
-    const prebuiltThemesUrl = 'https://static.structurizr.com/themes/';
-    if (url.indexOf(prebuiltThemesUrl) === 0) {
-        url = localPrebuiltThemesUrl + url.substring(prebuiltThemesUrl.length);
-    }
-
+structurizr.ui.loadTheme = function( url) {
     $.get(url, undefined, function(data) {
         try {
             const theme = JSON.parse(data);
@@ -125,10 +115,9 @@ structurizr.ui.loadTheme = function(localPrebuiltThemesUrl, url) {
 
             structurizr.ui.themes.push(
                 {
-                    elements: theme.elements,
-                    relationships: theme.relationships,
-                    logo: theme.logo,
-                    font: theme.font
+                    elements: theme.elements.sort(structurizr.util.sortStyles),
+                    relationships: theme.relationships.sort(structurizr.util.sortStyles),
+                    logo: theme.logo
                 }
             );
         } catch (e) {
@@ -160,6 +149,7 @@ structurizr.ui.ElementStyle = function(width, height, background, color, fontSiz
     this.fontSize = fontSize;
     this.shape = shape;
     this.icon = icon;
+    this.iconPosition = 'Bottom';
     this.border = border;
     this.opacity = opacity;
     this.metadata = metadata;
@@ -172,20 +162,23 @@ structurizr.ui.ElementStyle = function(width, height, background, color, fontSiz
     };
 
     this.toString = function() {
-        return "".concat(this.tag, ",", this.width, ",", this.height, ",", this.background, ",", this.stroke, ",", this.color, ",", this.fontSize, ",", this.shape, ",", this.icon, ",", this.border, ",", this.opacity, ",", this.metadata, ",", this.description);
+        return "".concat(this.tag, ",", this.width, ",", this.height, ",", this.background, ",", this.stroke, ",", this.color, ",", this.fontSize, ",", this.shape, ",", this.icon, ",", this.iconPosition, ",", this.border, ",", this.opacity, ",", this.metadata, ",", this.description);
     };
 
 };
 
-structurizr.ui.RelationshipStyle = function(thickness, color, dashed, routing, fontSize, width, position, opacity) {
+structurizr.ui.RelationshipStyle = function(thickness, color, dashed, routing, jump, fontSize, width, position, opacity, metadata, description) {
     this.thickness = thickness;
     this.color = color;
     this.dashed = dashed;
     this.routing = routing;
+    this.jump = jump;
     this.fontSize = fontSize;
     this.width = width;
     this.position = position;
     this.opacity = opacity;
+    this.metadata = metadata;
+    this.description = description;
 
     this.tag = "Relationship";
 
@@ -194,80 +187,98 @@ structurizr.ui.RelationshipStyle = function(thickness, color, dashed, routing, f
     };
 
     this.toString = function() {
-        return "".concat(this.tag, ",", this.thickness, ",", this.color, ",", this.dashed, ",", this.routing, ",", this.fontSize, ",", this.width, ",", this.position, ",", this.opacity)
+        return "".concat(this.tag, ",", this.thickness, ",", this.color, ",", this.dashed, ",", this.routing, ",", this.jump, ",", this.fontSize, ",", this.width, ",", this.position, ",", this.opacity)
     };
 
 };
 
+structurizr.ui.getElementStylesForPerspective = function(perspective, darkMode) {
+    var elementStyles = [];
+    const elementStylesForPerspective = [];
+    const tag = 'Perspective:' + perspective;
+    const colorScheme = darkMode ? 'Dark' : 'Light';
+
+    structurizr.ui.themes.forEach(function (theme) {
+        elementStyles = elementStyles.concat(theme.elements);
+    });
+    elementStyles = elementStyles.concat(structurizr.workspace.views.configuration.styles.elements);
+
+    for (var i = 0; i < elementStyles.length; i++) {
+        const elementStyle = elementStyles[i];
+        if (elementStyle.tag.indexOf(tag) === 0 && (elementStyle.colorScheme === undefined || elementStyle.colorScheme === colorScheme)) {
+            elementStylesForPerspective.push(elementStyle);
+        }
+    }
+
+    return elementStylesForPerspective;
+}
+
+structurizr.ui.getRelationshipStylesForPerspective = function(perspective, darkMode) {
+    var relationshipStyles = [];
+    const relationshipStylesForPerspective = [];
+    const tag = 'Perspective:' + perspective;
+    const colorScheme = darkMode ? 'Dark' : 'Light';
+
+    structurizr.ui.themes.forEach(function (theme) {
+        relationshipStyles = relationshipStyles.concat(theme.relationships);
+    });
+    relationshipStyles = relationshipStyles.concat(structurizr.workspace.views.configuration.styles.relationships);
+
+    for (var i = 0; i < relationshipStyles.length; i++) {
+        const relationshipStyle = relationshipStyles[i];
+        if (relationshipStyle.tag.indexOf(tag) === 0 && (relationshipStyle.colorScheme === undefined || relationshipStyle.colorScheme === colorScheme)) {
+            relationshipStylesForPerspective.push(relationshipStyle);
+        }
+    }
+
+    return relationshipStylesForPerspective;
+}
+
 structurizr.ui.findElementStyle = function(element, darkMode) {
-    const defaultElementStyle = new structurizr.ui.ElementStyle(450, 300, '#dddddd', '#000000', 24, 'Box', undefined, 'Solid', undefined, 2, 100, true, true);
-    const defaultElementStyleForDeploymentNode = new structurizr.ui.ElementStyle(450, 300, '#ffffff', '#000000', 24, 'Box', undefined, 'Solid', '#888888', 1, 100, true, true);
-    const defaultBoundaryStyle = new structurizr.ui.ElementStyle(undefined, undefined, undefined, undefined, 24, undefined, undefined, undefined, undefined, 1, 100, true, true);
-
-    var defaultStyle;
-    var defaultSizeInUse = true;
-
     if (darkMode === undefined) {
         darkMode = false;
     }
 
-    if (element.type === structurizr.constants.DEPLOYMENT_NODE_ELEMENT_TYPE) {
-        defaultStyle = defaultElementStyleForDeploymentNode;
-
-        if (darkMode === true) {
-            defaultStyle.background = '#111111';
-            defaultStyle.color = '#ffffff';
-        } else {
-            defaultStyle.background = '#ffffff';
-            defaultStyle.color = '#000000';
-        }
-    } else if (element.type === 'Boundary') {
-        defaultStyle = defaultBoundaryStyle;
-    } else {
-        defaultStyle = defaultElementStyle;
-    }
+    const defaults = darkMode ? structurizr.ui.DARK_MODE_DEFAULTS : structurizr.ui.LIGHT_MODE_DEFAULTS;
+    var defaultStyle = new structurizr.ui.ElementStyle(450, 300, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, 100, true, true);
+    var defaultSizeInUse = true;
 
     var elementStylesMap = {};
+    var elementStyles = [];
 
-    if (structurizr.ui.themes.length > 0) {
-        // use the styles defined in the theme as a starting point
-        structurizr.ui.themes.forEach(function(theme) {
-            theme.elements.forEach(function(elementStyle) {
-                elementStylesMap[elementStyle.tag] = elementStyle;
-            });
-        })
+    // use the styles defined in the theme as a starting point
+    structurizr.ui.themes.forEach(function(theme) {
+        elementStyles = elementStyles.concat(theme.elements);
+    });
 
-        // (1) add workspace styles that are not defined in the theme
-        // (2) override the styles defined in the theme where necessary
-        structurizr.workspace.views.configuration.styles.elements.forEach(function(elementStyleFromWorkspace) {
-            const tag = elementStyleFromWorkspace.tag;
-            var elementStyle = elementStylesMap[tag];
+    // then the styles defined in the workspace
+    elementStyles = elementStyles.concat(structurizr.workspace.views.configuration.styles.elements);
+
+    elementStyles.forEach(function(elementStyleDefinition) {
+        const colorScheme = darkMode ? 'Dark' : 'Light';
+        if (elementStyleDefinition.colorScheme === undefined || elementStyleDefinition.colorScheme === colorScheme) {
+            const tag = elementStyleDefinition.tag;
+            const elementStyle = elementStylesMap[tag];
 
             if (elementStyle === undefined) {
-                // the workspace has an element style defined for a tag that isn't in the theme, so add it
-                elementStylesMap[tag] = elementStyleFromWorkspace;
+                elementStylesMap[tag] = elementStyleDefinition;
             } else {
-                // both the theme and workspace have an element style defined for a tag, so override the attributes
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'width');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'height');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'background');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'stroke');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'color');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'fontSize');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'shape');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'icon');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'border');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'opacity');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'metadata');
-                structurizr.util.copyAttributeIfSpecified(elementStyleFromWorkspace, elementStyle, 'description');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'width');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'height');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'background');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'stroke');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'color');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'fontSize');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'shape');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'icon');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'iconPosition');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'border');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'opacity');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'metadata');
+                structurizr.util.copyAttributeIfSpecified(elementStyleDefinition, elementStyle, 'description');
             }
-        });
-    } else {
-        structurizr.workspace.views.configuration.styles.elements.forEach(function(elementStyleFromWorkspace) {
-            const tag = elementStyleFromWorkspace.tag;
-            elementStylesMap[tag] = elementStyleFromWorkspace;
-        });
-    }
+        }
+    });
 
     var style = new structurizr.ui.ElementStyle(
         defaultStyle.width,
@@ -286,9 +297,21 @@ structurizr.ui.findElementStyle = function(element, darkMode) {
 
     style.tags = ['Element'];
 
+    switch (element.type) {
+        case structurizr.constants.DEPLOYMENT_NODE_ELEMENT_TYPE:
+            style.tags.push('Deployment Node');
+            break;
+        case structurizr.constants.GROUP_ELEMENT_TYPE:
+            style.tags.push('Group');
+            break;
+        case structurizr.constants.BOUNDARY_ELEMENT_TYPE:
+            style.tags.push('Boundary');
+            break;
+    }
+
     const tags = structurizr.workspace.getAllTagsForElement(element);
     for (var i = 0; i < tags.length; i++) {
-        const tag = tags[i].trim();
+        var tag = tags[i].trim();
         var elementStyle = elementStylesMap[tag];
         if (elementStyle) {
             if (elementStyle.width !== undefined || elementStyle.height !== undefined) {
@@ -303,11 +326,16 @@ structurizr.ui.findElementStyle = function(element, darkMode) {
             style.copyStyleAttributeIfSpecified(elementStyle, 'fontSize');
             style.copyStyleAttributeIfSpecified(elementStyle, 'shape');
             style.copyStyleAttributeIfSpecified(elementStyle, 'icon');
+            style.copyStyleAttributeIfSpecified(elementStyle, 'iconPosition');
             style.copyStyleAttributeIfSpecified(elementStyle, 'border');
             style.copyStyleAttributeIfSpecified(elementStyle, 'opacity');
             style.copyStyleAttributeIfSpecified(elementStyle, 'metadata');
             style.copyStyleAttributeIfSpecified(elementStyle, 'description');
-            style.tag = tag;
+
+            if (tag.indexOf('Group:') === 0) {
+                // special treatment for tags prefixed Group: ... remove the prefix
+                tag = tag.substring('Group:'.length);
+            }
 
             if (style.tags.indexOf(tag) === -1) {
                 style.tags.push(tag);
@@ -315,15 +343,62 @@ structurizr.ui.findElementStyle = function(element, darkMode) {
         }
     }
 
-    if (style.stroke === undefined && style.background) {
-        style.stroke = structurizr.util.shadeColor(style.background, -10);
+    if (style.background !== undefined) {
+        if (style.stroke === undefined) {
+            // the background has been defined, so default the stroke to a darker version if necessary
+            style.stroke = structurizr.util.shadeColor(style.background, -10);
+        }
     }
 
-    if (style.strokeWidth !== undefined) {
+    if (style.background === undefined) {
+        style.background = defaults.background;
+    }
+
+    if (style.stroke === undefined) {
+        if (element.type === structurizr.constants.BOUNDARY_ELEMENT_TYPE) {
+            // do nothing - stroke is taken from the element the boundary represents
+        } else {
+            style.stroke = defaults.color;
+        }
+    }
+
+    if (style.color === undefined) {
+        if (element.type === structurizr.constants.BOUNDARY_ELEMENT_TYPE) {
+            // do nothing - color is taken from the element the boundary represents
+        } else {
+            style.color = defaults.color;
+        }
+    }
+
+    if (style.strokeWidth === undefined) {
+        if (element.type === structurizr.constants.BOUNDARY_ELEMENT_TYPE) {
+            // do nothing - stroke width is taken from the element the boundary represents
+        } else {
+            style.strokeWidth = defaults.strokeWidth;
+        }
+    } else {
         if (style.strokeWidth < 1) {
             style.strokeWidth = 1;
         } else if (style.strokeWidth > 10) {
             style.strokeWidth = 10;
+        }
+    }
+
+    if (style.shape === undefined) {
+        if (element.type === structurizr.constants.BOUNDARY_ELEMENT_TYPE) {
+            // default to element style
+        } else {
+            style.shape = 'Box';
+        }
+    }
+
+    if (style.border === undefined) {
+        if (element.type === structurizr.constants.BOUNDARY_ELEMENT_TYPE) {
+            // default to element style
+        } else if (element.type === structurizr.constants.GROUP_ELEMENT_TYPE) {
+            style.border = 'Dotted';
+        } else {
+            style.border = 'Solid';
         }
     }
 
@@ -354,72 +429,77 @@ structurizr.ui.findElementStyle = function(element, darkMode) {
         style.icon = undefined;
     }
 
+    if (style.fontSize === undefined) {
+        if (element.tags === 'Diagram:Title') {
+            style.fontSize = 36;
+        } else if (element.tags === 'Diagram:Description') {
+            style.fontSize = 24;
+        } else if (element.tags === 'Diagram:Metadata') {
+            style.fontSize = 24;
+        } else {
+            style.fontSize = 24;
+        }
+    }
+
     return style;
 };
 
 structurizr.ui.findRelationshipStyle = function(relationship, darkMode) {
-    const defaultRelationshipStyle = new structurizr.ui.RelationshipStyle(2, '#707070', true, 'Direct', 24, 200, 50, 100);
-
     if (darkMode === undefined) {
         darkMode = false;
     }
 
+    const defaults = darkMode ? structurizr.ui.DARK_MODE_DEFAULTS : structurizr.ui.LIGHT_MODE_DEFAULTS;
+    const defaultRelationshipStyle = new structurizr.ui.RelationshipStyle(2, defaults.color, true, 'Direct', undefined, 24, 200, 50, 100, true, true);
+
     var defaultStyle = defaultRelationshipStyle;
 
-    if (darkMode === true) {
-        defaultStyle.color = '#aaaaaa';
-    } else {
-        defaultStyle.color = '#707070';
-    }
-
     var relationshipStylesMap = {};
+    var relationshipStyles = [];
 
-    if (structurizr.ui.themes.length > 0) {
-        // use the styles defined in the theme as a starting point
-        structurizr.ui.themes.forEach(function(theme) {
-            theme.relationships.forEach(function(relationshipStyle) {
-                relationshipStylesMap[relationshipStyle.tag] = relationshipStyle;
-            });
-        })
+    // use the styles defined in the theme as a starting point
+    structurizr.ui.themes.forEach(function(theme) {
+        relationshipStyles = relationshipStyles.concat(theme.relationships);
+    });
 
-        // (1) add workspace styles that are not defined in the theme
-        // (2) override the styles defined in the theme where necessary
-        structurizr.workspace.views.configuration.styles.relationships.forEach(function(relationshipStyleFromWorkspace) {
-            const tag = relationshipStyleFromWorkspace.tag;
+    // then the styles defined in the workspace
+    relationshipStyles = relationshipStyles.concat(structurizr.workspace.views.configuration.styles.relationships);
+
+    relationshipStyles.forEach(function(relationshipStyleDefinition) {
+        const colorScheme = darkMode ? 'Dark' : 'Light';
+        if (relationshipStyleDefinition.colorScheme === undefined || relationshipStyleDefinition.colorScheme === colorScheme) {
+            const tag = relationshipStyleDefinition.tag;
             var relationshipStyle = relationshipStylesMap[tag];
 
             if (relationshipStyle === undefined) {
-                // the workspace has a relationship style defined for a tag that isn't in the theme, so add it
-                relationshipStylesMap[tag] = relationshipStyleFromWorkspace;
+                relationshipStylesMap[tag] = relationshipStyleDefinition;
             } else {
-                // both the theme and workspace have an element style defined for a tag, so override the attributes
-                structurizr.util.copyAttributeIfSpecified(relationshipStyleFromWorkspace, relationshipStyle, 'thickness');
-                structurizr.util.copyAttributeIfSpecified(relationshipStyleFromWorkspace, relationshipStyle, 'color');
-                structurizr.util.copyAttributeIfSpecified(relationshipStyleFromWorkspace, relationshipStyle, 'dashed');
-                structurizr.util.copyAttributeIfSpecified(relationshipStyleFromWorkspace, relationshipStyle, 'style');
-                structurizr.util.copyAttributeIfSpecified(relationshipStyleFromWorkspace, relationshipStyle, 'routing');
-                structurizr.util.copyAttributeIfSpecified(relationshipStyleFromWorkspace, relationshipStyle, 'fontSize');
-                structurizr.util.copyAttributeIfSpecified(relationshipStyleFromWorkspace, relationshipStyle, 'width');
-                structurizr.util.copyAttributeIfSpecified(relationshipStyleFromWorkspace, relationshipStyle, 'position');
-                structurizr.util.copyAttributeIfSpecified(relationshipStyleFromWorkspace, relationshipStyle, 'opacity');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'thickness');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'color');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'dashed');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'style');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'routing');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'jump');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'fontSize');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'width');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'position');
+                structurizr.util.copyAttributeIfSpecified(relationshipStyleDefinition, relationshipStyle, 'opacity');
             }
-        });
-    } else {
-        structurizr.workspace.views.configuration.styles.relationships.forEach(function(relationshipStyleFromWorkspace) {
-            const tag = relationshipStyleFromWorkspace.tag;
-            relationshipStylesMap[tag] = relationshipStyleFromWorkspace;
-        });
-    }
+        }
+    });
 
     var style = new structurizr.ui.RelationshipStyle(
         defaultStyle.thickness,
         defaultStyle.color,
         defaultStyle.dashed,
         defaultStyle.routing,
+        defaultStyle.jump,
         defaultStyle.fontSize,
         defaultStyle.width,
         defaultStyle.position,
-        defaultStyle.opacity);
+        defaultStyle.opacity,
+        defaultStyle.metadata,
+        defaultStyle.description);
     style.tags = [ "Relationship" ];
 
     const tags = structurizr.workspace.getAllTagsForRelationship(relationship);
@@ -431,11 +511,13 @@ structurizr.ui.findRelationshipStyle = function(relationship, darkMode) {
             style.copyStyleAttributeIfSpecified(relationshipStyle, 'dashed');
             style.copyStyleAttributeIfSpecified(relationshipStyle, 'style');
             style.copyStyleAttributeIfSpecified(relationshipStyle, 'routing');
+            style.copyStyleAttributeIfSpecified(relationshipStyle, 'jump');
             style.copyStyleAttributeIfSpecified(relationshipStyle, 'fontSize');
             style.copyStyleAttributeIfSpecified(relationshipStyle, 'width');
             style.copyStyleAttributeIfSpecified(relationshipStyle, 'position');
             style.copyStyleAttributeIfSpecified(relationshipStyle, 'opacity');
-            style.tag = tags[i].trim();
+            style.copyStyleAttributeIfSpecified(relationshipStyle, 'metadata');
+            style.copyStyleAttributeIfSpecified(relationshipStyle, 'description');
 
             if (style.tags.indexOf(tags[i].trim()) === -1) {
                 style.tags.push(tags[i].trim());
@@ -449,6 +531,12 @@ structurizr.ui.findRelationshipStyle = function(relationship, darkMode) {
         } else {
             style.style = 'Dashed';
         }
+    }
+
+    if (style.thickness < 1) {
+        style.thickness = 1;
+    } else if (style.thickness > 10) {
+        style.thickness = 10;
     }
 
     return style;
@@ -465,6 +553,12 @@ structurizr.ui.getTitleForView = function(view) {
         return this.getTitleForView(baseView);
     }
 
+    // if the view name has been set, use that
+    if (view && view.name && view.name.trim().length > 0) {
+        return view.name;
+    }
+
+    // fallback
     return this.getDefaultViewName(view);
 };
 
@@ -474,24 +568,24 @@ structurizr.ui.getDefaultViewName = function(view) {
     }
 
     if (view.type === structurizr.constants.CUSTOM_VIEW_TYPE) {
-        return '[Custom] ' + ((view.title && view.title.trim().length > 0) ? view.title : 'Untitled');
+        return 'Custom View: ' + ((view.title && view.title.trim().length > 0) ? view.title : 'Untitled');
 
     } else if (view.type === structurizr.constants.SYSTEM_LANDSCAPE_VIEW_TYPE) {
         const enterprise = structurizr.workspace.model.enterprise;
-        return '[System Landscape]' + (enterprise ? ' ' + enterprise.name : '');
+        return 'System Landscape View' + (enterprise ? ': ' + enterprise.name : '');
 
     } else if (view.type === structurizr.constants.SYSTEM_CONTEXT_VIEW_TYPE) {
         const softwareSystem = structurizr.workspace.findElementById(view.softwareSystemId);
-        return '[System Context] ' + softwareSystem.name;
+        return 'System Context View: ' + softwareSystem.name;
 
     } else if (view.type === structurizr.constants.CONTAINER_VIEW_TYPE) {
         const softwareSystem = structurizr.workspace.findElementById(view.softwareSystemId);
-        return '[Container] ' + softwareSystem.name;
+        return 'Container View: ' + softwareSystem.name;
 
     } else if (view.type === structurizr.constants.COMPONENT_VIEW_TYPE) {
         const container = structurizr.workspace.findElementById(view.containerId);
         const softwareSystem = structurizr.workspace.findElementById(container.parentId);
-        return '[Component] ' + softwareSystem.name + ' - ' + container.name;
+        return 'Component View: ' + softwareSystem.name + ' - ' + container.name;
 
     } else if (view.type === structurizr.constants.DYNAMIC_VIEW_TYPE) {
         var element = structurizr.workspace.findElementById(view.elementId);
@@ -500,24 +594,24 @@ structurizr.ui.getDefaultViewName = function(view) {
         }
         if (element) {
             if (element.type === structurizr.constants.SOFTWARE_SYSTEM_ELEMENT_TYPE) {
-                return '[Dynamic] ' + element.name;
+                return 'Dynamic View: ' + element.name;
             } else if (element.type === structurizr.constants.CONTAINER_ELEMENT_TYPE) {
                 const softwareSystem = structurizr.workspace.findElementById(element.parentId);
-                return '[Dynamic] ' + softwareSystem.name + ' - ' + element.name;
+                return 'Dynamic View: ' + softwareSystem.name + ' - ' + element.name;
             }
         } else {
-            return '[Dynamic]';
+            return 'Dynamic View';
         }
 
     } else if (view.type === structurizr.constants.DEPLOYMENT_VIEW_TYPE) {
         if (view.softwareSystemId) {
             const softwareSystem = structurizr.workspace.findElementById(view.softwareSystemId);
-            return '[Deployment] ' + softwareSystem.name + ' - ' + view.environment;
+            return 'Deployment View: ' + softwareSystem.name + ' - ' + view.environment;
         } else {
-            return '[Deployment] ' + view.environment;
+            return 'Deployment View: ' + view.environment;
         }
     } else if (view.type === structurizr.constants.IMAGE_VIEW_TYPE) {
-        return '[Image] ' + view.key;
+        return 'Image View: ' + view.key;
     }
 
     return '';
@@ -630,9 +724,24 @@ structurizr.ui.changeRenderingMode = function() {
     try {
         if (structurizr.ui.isDarkMode()) {
             document.head.appendChild(darkModeStylesheetLink);
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
         } else {
             document.head.removeChild(darkModeStylesheetLink);
+            document.documentElement.setAttribute('data-bs-theme', 'light');
         }
+
+        const embeddedDiagrams = $('iframe.structurizrEmbed');
+        embeddedDiagrams.each(function (index) {
+            var iframe = embeddedDiagrams[index];
+            if (iframe.contentWindow.structurizr) {
+                if (iframe.contentWindow.structurizr.ui) {
+                    iframe.contentWindow.structurizr.ui.changeRenderingMode();
+                }
+                if (iframe.contentWindow.structurizr.diagram) {
+                    iframe.contentWindow.structurizr.diagram.setDarkMode(structurizr.ui.isDarkMode());
+                }
+            }
+        });
     } catch (e) {
         // ignore
     }

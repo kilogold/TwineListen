@@ -417,6 +417,26 @@ structurizr.Workspace = class Workspace {
         return tags;
     };
 
+    getUserDefinedTags() {
+        if (this.views.configuration && this.views.configuration.properties) {
+            const tagsAsString = this.views.configuration.properties['structurizr.filter.tags'];
+            if (tagsAsString) {
+                return tagsAsString.split(',');
+            }
+        }
+
+        const tags = this.getTags();
+
+        structurizr.constants.DEFAULT_TAGS.forEach(function(tag) {
+            const index = tags.indexOf(tag);
+            if (index > -1) {
+                tags.splice(index, 1);
+            }
+        });
+
+        return tags;
+    }
+
     getAllTagsForElement(element) {
         var tags = (element.tags ? element.tags : '');
 
@@ -699,10 +719,16 @@ structurizr.Workspace = class Workspace {
 
         if (this.#workspace.views.configuration.styles.elements === undefined) {
             this.#workspace.views.configuration.styles.elements = [];
+        } else {
+            // sort element styles by color scheme (unspecified first, followed by dark and light) and tag
+            this.#workspace.views.configuration.styles.elements.sort(structurizr.util.sortStyles);
         }
 
         if (this.#workspace.views.configuration.styles.relationships === undefined) {
             this.#workspace.views.configuration.styles.relationships = [];
+        } else {
+            // sort relationship styles by color scheme (unspecified first, followed by dark and light) and tag
+            this.#workspace.views.configuration.styles.relationships.sort(structurizr.util.sortStyles);
         }
 
         if (this.#workspace.views.configuration.metadataSymbols === undefined) {
@@ -816,6 +842,20 @@ structurizr.Workspace = class Workspace {
                 if (baseView.type === structurizr.constants.COMPONENT_VIEW_TYPE && baseView.containerId === containerId) {
                     views.push(view);
                 }
+            }
+        }
+
+        return views;
+    };
+
+    findDynamicViewsForElement(elementId) {
+        const views = [];
+
+        for (var i = 0; i < this.views.dynamicViews.length; i++) {
+            var view = this.views.dynamicViews[i];
+
+            if (view.elementId === elementId) {
+                views.push(view);
             }
         }
 

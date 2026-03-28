@@ -3,9 +3,10 @@ structurizr.ui.Tooltip = function() {
     var enabled = false;
 
     var tooltip = $('#tooltip');
+    var tooltipHeader = $('#tooltipHeader');
     var tooltipName = $('#tooltipName');
     var tooltipParent = $('#tooltipParent');
-    var tooltipType = $('#tooltipType');
+    const tooltipHr = $('#tooltip hr');
     var tooltipDescription = $('#tooltipDescription');
     var tooltipMetadata = $('#tooltipMetadata');
     var tooltipTags = $('#tooltipTags');
@@ -71,55 +72,76 @@ structurizr.ui.Tooltip = function() {
         this.reposition(0, 0);
     };
 
-    this.showTooltipForElement = function(element, style, x, y, additionalContent) {
+    this.showTooltipForElement = function(element, style, x, y, header, perspective) {
         if (element === undefined) {
             return;
         }
 
-        tooltipName.html(structurizr.util.escapeHtml(element.name));
-        tooltipDescription.html(element.description ? structurizr.util.escapeHtml(element.description).replaceAll('\n', '<br />') : '');
-        tooltipMetadata.text(structurizr.ui.getMetadataForElement(element, true));
+        if (header) {
+            var parent = '';
+            if (element.parentId) {
+                const parentElement = structurizr.workspace.findElementById(element.parentId);
+                parent = 'Parent: ' + parentElement.name + ' [' + structurizr.workspace.getTerminologyFor(parentElement) + ']';
+            }
 
-        if (element.parentId) {
-            var parentElement = structurizr.workspace.findElementById(element.parentId);
-            tooltipParent.text('from ' + parentElement.name + ' [' + structurizr.workspace.getTerminologyFor(parentElement) + ']');
+            renderHeader(
+                structurizr.util.escapeHtml(element.name),
+                structurizr.ui.getMetadataForElement(element, true),
+                parent,
+                element.description ? structurizr.util.escapeHtml(element.description).replaceAll('\n', '<br />') : ''
+            );
         } else {
-            tooltipParent.text('');
+            tooltipHeader.addClass('hidden');
         }
 
-        var tagsHtml = '';
-        var tags = structurizr.workspace.getAllTagsForElement(element);
-        tagsHtml += '<div class="smaller">';
-        tags.forEach(function(tag) {
-            if (tag !== undefined) {
-                tag = tag.trim();
-                if (tag.length > 0) {
-                    tagsHtml += '<span class="tag">';
-                    tagsHtml += structurizr.util.escapeHtml(tag);
-                    tagsHtml += '</span>';
+        if (perspective === undefined) {
+            renderTags(structurizr.workspace.getAllTagsForElement(element));
+            renderProperties(structurizr.workspace.getAllPropertiesForElement(element));
+            renderUrl(element.url);
+            renderAdditionalContent('');
+        } else {
+            renderTags([]);
+            renderUrl(undefined);
+            renderProperties({});
+
+            var additionalContent = '';
+            var perspectiveDetails = undefined;
+
+            if (element.perspectives) {
+                element.perspectives.forEach(function(p) {
+                    if (p.name === perspective) {
+                        perspectiveDetails = p;
+                    }
+                });
+            }
+
+            if (perspectiveDetails === undefined) {
+                if (element.type === 'SoftwareSystemInstance') {
+                    var softwareSystem = structurizr.workspace.findElementById(element.softwareSystemId);
+                    if (softwareSystem.perspectives) {
+                        softwareSystem.perspectives.forEach(function(p) {
+                            if (p.name === perspective) {
+                                perspectiveDetails = p;
+                            }
+                        });
+                    }
+                } else if (element.type === 'ContainerInstance') {
+                    var container = structurizr.workspace.findElementById(element.containerId);
+                    if (container.perspectives) {
+                        container.perspectives.forEach(function(p) {
+                            if (p.name === perspective) {
+                                perspectiveDetails = p;
+                            }
+                        });
+                    }
                 }
             }
-        });
-        tagsHtml += '</div>';
-        tooltipTags.html(tagsHtml);
 
-        renderProperties(structurizr.workspace.getAllPropertiesForElement(element));
+            if (perspectiveDetails !== undefined) {
+                additionalContent += renderPerspective(perspectiveDetails);
+            }
 
-        var urlHtml = '';
-        var url = element.url;
-        if (url && url.trim().length > 0) {
-            urlHtml += '<div class="smaller">';
-            urlHtml += '<p>URL: ';
-            urlHtml += '<a href="' + structurizr.util.escapeHtml(url) + '" target="_blank">' + structurizr.util.escapeHtml(url) + '</a>';
-            urlHtml += '</p>';
-            urlHtml += '</div>';
-        }
-        tooltipUrl.html(urlHtml);
-
-        if (additionalContent !== undefined) {
-            tooltipAdditionalContent.html(additionalContent);
-        } else {
-            tooltipAdditionalContent.html('');
+            renderAdditionalContent(additionalContent);
         }
 
         show();
@@ -153,7 +175,7 @@ structurizr.ui.Tooltip = function() {
         }
     };
 
-    this.showTooltipForRelationship = function(relationship, relationshipInView, style, x, y, additionalContent, darkMode) {
+    this.showTooltipForRelationship = function(relationship, relationshipInView, style, x, y, header, perspective) {
         if (relationship === undefined) {
             return;
         }
@@ -162,74 +184,88 @@ structurizr.ui.Tooltip = function() {
             relationshipInView = {};
         }
 
-        var relationshipSummary = relationshipInView.description;
-        if (relationshipSummary === undefined) {
-            relationshipSummary = relationship.description;
-        }
-        if (relationshipSummary === undefined || relationshipSummary.length === 0) {
-            relationshipSummary = '';
+        const darkMode = structurizr.ui.isDarkMode();
+        tooltip.css("background", (darkMode === true ? structurizr.ui.DARK_MODE_DEFAULTS.background : structurizr.ui.LIGHT_MODE_DEFAULTS.background));
+
+        if (header) {
+            var relationshipSummary = relationshipInView.description;
+            if (relationshipSummary === undefined) {
+                relationshipSummary = relationship.description;
+            }
+            if (relationshipSummary === undefined || relationshipSummary.length === 0) {
+                relationshipSummary = '';
+            }
+
+            var description = '';
+            description += '<p style="font-weight: bold">';
+            description += structurizr.util.escapeHtml(structurizr.workspace.findElementById(relationship.sourceId).name);
+            description += ' <span style="color: gray;">--</span> ';
+            description += structurizr.util.escapeHtml(relationshipSummary);
+            description += ' <span style="color: gray;">-&gt;</span> ';
+            description += structurizr.util.escapeHtml(structurizr.workspace.findElementById(relationship.destinationId).name);
+            description += '</p>';
+            tooltipDescription.html(description);
+
+            renderHeader(
+                (relationshipInView.order ? relationshipInView.order + ': ' : '') + relationshipSummary,
+                '[' + structurizr.workspace.getTerminologyFor(relationship) + ']',
+                '',
+                description
+            )
+
+            tooltipHeader.removeClass('hidden');
+        } else {
+            tooltipHeader.addClass('hidden');
         }
 
-        tooltipName.text((relationshipInView.order ? relationshipInView.order + ': ' : '') + relationshipSummary);
-        tooltipParent.html('');
-        tooltipMetadata.text('[' + structurizr.workspace.getTerminologyFor(relationship) + ']');
+        if (perspective === undefined) {
+            renderTags(structurizr.workspace.getAllTagsForRelationship(relationship));
+            renderProperties(structurizr.workspace.getAllPropertiesForRelationship(relationship));
+            renderUrl(relationship.url);
+            renderAdditionalContent('');
+        } else {
+            renderTags([]);
+            renderUrl(undefined);
+            renderProperties({});
 
-        if (darkMode === undefined) {
-            darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        }
+            var additionalContent = '';
+            var perspectiveDetails = undefined;
 
-        tooltip.css("background", (darkMode === true ? '#111111' : '#ffffff'));
-        var color = style.color;
-        if (color === undefined) {
-            color = (darkMode === true ? '#eeeeee' : '#777777');
-        }
-        var description = '';
-        description += '<p style="font-weight: bold">';
-        description += structurizr.util.escapeHtml(structurizr.workspace.findElementById(relationship.sourceId).name);
-        description += ' <span style="color: gray;">--</span> ';
-        description += structurizr.util.escapeHtml(relationshipSummary);
-        description += ' <span style="color: gray;">-&gt;</span> ';
-        description += structurizr.util.escapeHtml(structurizr.workspace.findElementById(relationship.destinationId).name);
-        description += '</p>';
-        tooltipDescription.html(description);
+            if (relationship.perspectives) {
+                relationship.perspectives.forEach(function(p) {
+                    if (p.name === perspective) {
+                        perspectiveDetails = p;
+                    }
+                });
+            }
 
-        var tagsHtml = '';
-        var tags = structurizr.workspace.getAllTagsForRelationship(relationship);
-        tagsHtml += '<div class="smaller">';
-        tags.forEach(function(tag) {
-            if (tag !== undefined) {
-                tag = tag.trim();
-                if (tag.length > 0) {
-                    tagsHtml += '<span class="tag">';
-                    tagsHtml += structurizr.util.escapeHtml(tag);
-                    tagsHtml += '</span>';
+            if (perspectiveDetails === undefined) {
+                if (relationship.linkedRelationshipId) {
+                    var linkedRelationship = structurizr.workspace.findRelationshipById(relationship.linkedRelationshipId);
+                    if (linkedRelationship && linkedRelationship.perspectives) {
+                        linkedRelationship.perspectives.forEach(function(p) {
+                            if (p.name === perspective) {
+                                perspectiveDetails = p;
+                            }
+                        });
+                    }
                 }
             }
-        });
-        tagsHtml += '</div>';
-        tooltipTags.html(tagsHtml);
 
-        renderProperties(structurizr.workspace.getAllPropertiesForRelationship(relationship));
+            if (perspectiveDetails !== undefined) {
+                additionalContent += renderPerspective(perspectiveDetails);
+            }
 
-        var urlHtml = '';
-        var url = relationship.url;
-        if (url && url.trim().length > 0) {
-            urlHtml += '<div class="smaller">';
-            urlHtml += '<p>URL: ';
-            urlHtml += '<a href="' + structurizr.util.escapeHtml(url) + '" target="_blank">' + structurizr.util.escapeHtml(url) + '</a>';
-            urlHtml += '</p>';
-            urlHtml += '</div>';
-        }
-        tooltipUrl.html(urlHtml);
-
-        if (additionalContent !== undefined) {
-            tooltipAdditionalContent.html(additionalContent);
-        } else {
-            tooltipAdditionalContent.html('');
+            renderAdditionalContent(additionalContent);
         }
 
         show();
         this.reposition(x, y);
+
+        var color = style.color;
+        if (color === undefined) {
+            color = (darkMode === true ? structurizr.ui.DARK_MODE_DEFAULTS.color : structurizr.io.LIGHT_MODE_DEFAULTS.color);
+        }
 
         tooltip.css("border-color", color);
         tooltip.css("color", color);
@@ -245,8 +281,51 @@ structurizr.ui.Tooltip = function() {
         return visible;
     }
 
+    function renderHeader(name, metadata, parent, description) {
+        tooltipName.html(name);
+        tooltipMetadata.text(metadata);
+
+        if (parent && parent.length > 0) {
+            tooltipParent.text(parent);
+            tooltipParent.removeClass('hidden');
+        } else {
+            tooltipParent.text('');
+            tooltipParent.addClass('hidden');
+        }
+
+        tooltipDescription.html(description);
+
+        tooltipHeader.removeClass('hidden');
+    }
+
+    function renderTags(tags) {
+        if (tags.length > 0) {
+            var tagsHtml = '<div class="smaller">';
+
+            tags.forEach(function (tag) {
+                if (tag !== undefined) {
+                    tag = tag.trim();
+                    if (tag.length > 0) {
+                        tagsHtml += '<span class="tag">';
+                        tagsHtml += structurizr.util.escapeHtml(tag);
+                        tagsHtml += '</span>';
+                    }
+                }
+            });
+
+            tagsHtml += '</div>';
+
+            tooltipTags.html(tagsHtml);
+            tooltipTags.removeClass('hidden');
+        } else {
+            tooltipTags.html('');
+            tooltipTags.addClass('hidden');
+        }
+    }
+
     function renderProperties(properties) {
         var propertiesHtml = '';
+
         if (Object.keys(properties).length > 0) {
             Object.keys(properties).forEach(function (key) {
                 if (key.indexOf('structurizr.') === 0) {
@@ -266,10 +345,73 @@ structurizr.ui.Tooltip = function() {
         }
 
         if (propertiesHtml.length > 0) {
-            tooltipProperties.html('<div class="smaller"><p>Properties:</p><ul>' + propertiesHtml + '</ul></div>');
+            tooltipProperties.html('<div class="smaller"><div>Properties:</div><ul>' + propertiesHtml + '</ul></div>');
+            tooltipProperties.removeClass('hidden');
         } else {
             tooltipProperties.html('');
+            tooltipProperties.addClass('hidden');
         }
+    }
+
+    function renderUrl(url) {
+        if (url && url.trim().length > 0) {
+            var urlHtml = '';
+            urlHtml += '<div class="smaller">';
+            urlHtml += '<div>URL: ';
+            urlHtml += '<a href="' + structurizr.util.escapeHtml(url) + '" target="_blank">' + structurizr.util.escapeHtml(url) + '</a>';
+            urlHtml += '</div>';
+            urlHtml += '</div>';
+
+            tooltipUrl.html(urlHtml);
+            tooltipUrl.removeClass('hidden');
+        } else {
+            tooltipUrl.html('');
+            tooltipUrl.addClass('hidden');
+        }
+    }
+
+    function renderAdditionalContent(content) {
+        if (content && content.length > 0) {
+            tooltipAdditionalContent.html(content);
+            tooltipAdditionalContent.removeClass('hidden');
+        } else {
+            tooltipAdditionalContent.html('');
+            tooltipAdditionalContent.addClass('hidden');
+        }
+    }
+
+    function renderPerspective(perspective) {
+        var html = '';
+
+        var perspectiveDescription = perspective.description;
+        if (perspectiveDescription === undefined) {
+            perspectiveDescription = '';
+        }
+        perspectiveDescription = structurizr.util.escapeHtml(perspectiveDescription).replaceAll('\n', '<br />');
+
+        html += '<div style="font-weight: bold; margin-bottom: 10px;">Perspective: ';
+        html += structurizr.util.escapeHtml(perspective.name);
+        html += '</div>';
+
+        if (perspectiveDescription && perspectiveDescription.length > 0) {
+            html += '<div style="margin-bottom: 10px;">';
+            html += perspectiveDescription;
+            html += '</div>';
+        }
+
+        if (perspective.url && perspective.url.length > 0) {
+            html += '<div>';
+            html += 'URL: <a href="' + perspective.url + '" target="_blank">' + perspective.url + '</a>';
+            html += '</div>';
+        }
+
+        if (perspective.value !== undefined && perspective.value.length > 0) {
+            html += '<div>';
+            html += 'Value: ' + perspective.value;
+            html += '</div>';
+        }
+
+        return html;
     }
 
     function isUrl(s) {

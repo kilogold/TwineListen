@@ -91,6 +91,14 @@ structurizr.util.trim = function(s) {
     }
 };
 
+structurizr.util.removeNewlineCharacters = function(s) {
+    if (s) {
+        s = s.replace(/(\r\n|\r|\n)/g, ' ');
+    }
+
+    return s;
+};
+
 structurizr.util.btoa = function(plain) {
     return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(plain));
 };
@@ -128,6 +136,36 @@ structurizr.util.shadeColor = function(color, percentAsInteger, darkMode) {
     }
     const f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
     return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+};
+
+structurizr.util.sortStyles = function(a, b) {
+    if (a.colorScheme === undefined && b.colorScheme === undefined) {
+        return a.tag.localeCompare(b.tag);
+    }
+
+    if (a.colorScheme === undefined) {
+        return -1;
+    }
+
+    if (b.colorScheme === undefined) {
+        return 1;
+    }
+
+    return (a.colorScheme + '/' + a.tag).localeCompare(b.colorScheme + '/' + b.tag);
+};
+
+structurizr.util.getItemFromLocalStorage = function(key, defaultValue) {
+    const value = localStorage.getItem(key);
+
+    if (value === undefined || value === null || value.length === 0) {
+        return defaultValue;
+    }
+
+    return value;
+};
+
+structurizr.util.setItemInLocalStorage = function(key, value) {
+    localStorage.setItem(key, value);
 };
 
 if (!String.prototype.startsWith) {

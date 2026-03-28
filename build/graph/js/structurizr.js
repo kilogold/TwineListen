@@ -14,6 +14,8 @@ var structurizr = structurizr || {
         INFRASTRUCTURE_NODE_ELEMENT_TYPE: "InfrastructureNode",
         SOFTWARE_SYSTEM_INSTANCE_ELEMENT_TYPE: "SoftwareSystemInstance",
         CONTAINER_INSTANCE_ELEMENT_TYPE: "ContainerInstance",
+        BOUNDARY_ELEMENT_TYPE: "Boundary",
+        GROUP_ELEMENT_TYPE: "Group",
 
         CUSTOM_VIEW_TYPE: "Custom",
         SYSTEM_LANDSCAPE_VIEW_TYPE: "SystemLandscape",
@@ -34,7 +36,19 @@ var structurizr = structurizr || {
         INTRA_WORKSPACE_URL_PREFIX: '{workspace}',
         INTER_WORKSPACE_URL_PREFIX: '{workspace:',
         INTER_WORKSPACE_URL_SEPARATOR: ':',
-        INTER_WORKSPACE_URL_SUFFIX: '}'
+        INTER_WORKSPACE_URL_SUFFIX: '}',
 
+        DEFAULT_TAGS: [
+            'Element',
+            'Relationship',
+            'Person',
+            'Software System',
+            'Container',
+            'Component',
+            'Deployment Node',
+            'Infrastructure Node',
+            'Software System Instance',
+            'Container Instance'
+        ]
     }
 };

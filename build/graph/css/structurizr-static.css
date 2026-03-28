@@ -1,5 +1,6 @@
 body {
-    font-family: "Open Sans", sans-serif;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
     padding-left: 0;
     padding-right: 0;
     line-height: 1.5;
@@ -61,8 +62,13 @@ body {
 }
 
 .modal-xl {
-    width: 95%
+    width: 95%;
+    max-width: 95%;
 }
+.modal-content {
+    font-size: 15px;
+}
+
 .btn-active {
     background: #999999;
 }
@@ -129,4 +135,23 @@ body {
     border-radius: 6px;
     white-space: nowrap;
     display: inline-block;
+}
+.hidden {
+    display: none !important;
+}
+
+code {
+    color: #000000;
+    font-weight: bold;
+}
+
+.img-light {
+    display: block;
+}
+.img-dark {
+    display: none;
+}
+
+.structurizrDiagramViewport {
+    background: #ffffff;
 }
