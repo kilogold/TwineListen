@@ -303,6 +303,32 @@
             color: var(--amber);
         }
 
+        .cta__card--external .cta__card-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35em;
+            letter-spacing: 0.1em;
+        }
+
+        .cta__card--external .cta__card-text::after {
+            content: 'Source · docs · graph';
+            font-family: 'Special Elite', monospace;
+            font-size: 0.52em;
+            font-weight: normal;
+            letter-spacing: 0.18em;
+            text-transform: none;
+            color: var(--dust);
+            opacity: 0.75;
+            text-shadow: none;
+            transition: color 0.4s ease, opacity 0.4s ease;
+        }
+
+        .cta__card--external:hover .cta__card-text::after {
+            color: var(--whisper);
+            opacity: 0.95;
+        }
+
         /* ============ FOOTER ============ */
 
         .footer {
@@ -321,6 +347,33 @@
             margin: 0 auto 32px;
             opacity: 0.5;
             line-height: 1.9;
+        }
+
+        .footer__source {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            margin-bottom: 28px;
+            opacity: 0.45;
+        }
+
+        .footer__source a {
+            color: var(--moonlight);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(74, 106, 138, 0.25);
+            transition: color 0.35s ease, border-color 0.35s ease;
+        }
+
+        .footer__source a:hover {
+            color: var(--amber);
+            border-color: rgba(196, 134, 59, 0.45);
+        }
+
+        .footer__source-note {
+            color: var(--dust);
+            opacity: 0.55;
+            font-style: italic;
+            letter-spacing: 0.06em;
         }
 
         .footer__mark {
@@ -412,13 +465,20 @@
                 <div class="cta__card-bg" style="background-image: url('build/images/c01s01p01.png')"></div>
                 <span class="cta__card-text">Story Architecture</span>
             </a>
+            <a href="https://github.com/kilogold/TwineListen" class="cta__card cta__card--external" data-reveal target="_blank" rel="noopener noreferrer" aria-label="TwineListen on GitHub — source, docs, and tools (opens in a new tab)">
+                <div class="cta__card-bg" style="background-image: url('build/images/attic_scene_reference.png')"></div>
+                <span class="cta__card-text">Open the Workshop</span>
+            </a>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer class="footer">
         <p class="footer__whisper">
-            "The player is a listener, one we wish for in our most distressing moments."
+            A player. A listener. Someone we wish for in our most distressing moments.
+        </p>
+        <p class="footer__source">
+            <a href="https://github.com/kilogold/TwineListen" target="_blank" rel="noopener noreferrer">kilogold/TwineListen</a>
         </p>
         <p class="footer__mark">Strangers In The Attic</p>
     </footer>
