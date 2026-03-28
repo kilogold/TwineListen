@@ -105,42 +105,106 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
 	<!-- UUID://8F139B5E-A4D9-4F1A-9B5C-D2E7C1A9F3B0// --><tw-storydata name="The Attic Encounter" startnode="15" creator="Twine (Twee 3) Language" creator-version="1.1.3" ifid="8F139B5E-A4D9-4F1A-9B5C-D2E7C1A9F3B0" zoom="1" format="SugarCube" format-version="2.37.3" options="debug" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* twine-user-stylesheet #1: "stylesheet" */
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap");
+
+:root {
+    --void: #0a0a0a;
+    --charcoal: #1a1612;
+    --moonlight: #4a6a8a;
+    --amber: #c4863b;
+    --dust: #8a8078;
+    --whisper: #d4cdc4;
+}
+
+/* html/body: SugarCube mirrors passage tags onto these for [data-tags~="…"] / .class-from-tag */
+
+html {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
 body {
-    font-family: 'Georgia', serif;
-    background-color: #1a1a1a;
-    color: #e0e0e0;
+    background-color: var(--void);
+    color: var(--whisper);
+    font-family: inherit;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+#story {
+    box-sizing: border-box;
+}
+
+#passages {
+    padding: 2em 1.25em;
+    box-sizing: border-box;
 }
 
 .passage {
-    max-width: 600px;
-    margin: 2em auto;
-    padding: 2em;
-    background-color: #2a2a2a;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2em 1.5em;
+    background-color: var(--charcoal);
+    border-radius: 4px;
+    border: 1px solid rgba(74, 106, 138, 0.15);
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
 }
 
-a.link-internal {
-    color: #8ab4f8;
+.passage.blood-red {
+    background-color: #200800;
+}
+
+.passage a.link-internal {
+    color: var(--moonlight);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
-a.link-internal:hover {
-    color: #adc7f8;
+.passage a.link-internal:hover {
+    color: var(--amber);
     text-decoration: underline;
 }
 
-.dialogue {
-    font-style: italic;
-    color: #b8b8b8;
-    margin: 1em 0;
-    padding-left: 1em;
-    border-left: 3px solid #4a4a4a;
+.passage a.link-internal:active {
+    color: var(--whisper);
 }
 
-img{
-    max-width: 100%
+.passage a.link-external {
+    color: var(--dust);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.passage a.link-external:hover {
+    color: var(--amber);
+}
+
+.passage a.link-broken {
+    color: #a85c5c;
+    text-decoration: line-through;
+}
+
+.passage a.link-disabled {
+    color: var(--dust);
+    opacity: 0.45;
+    cursor: default;
+    pointer-events: none;
+}
+
+.passage img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+/* Passage markup (not a SugarCube class; used by scene Twee) */
+
+.passage .dialogue {
+    font-style: italic;
+    color: var(--dust);
+    margin: 1em 0;
+    padding-left: 1em;
+    border-left: 3px solid var(--moonlight);
 }
 /* twine-user-stylesheet #2: "UserStylesheet" */
 .progress-bar {
@@ -304,15 +368,14 @@ Macro.add("timedprogressbar", {
 
 The cold empty wooden attic leans around Leon like a held breath. He sits facing the wall, muttering low enough that the room seems to decide whether you belong inside it.
 
-&lt;&lt;if visited(&quot;c01s01p01&quot;) &gt; 1&gt;&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;You again. Or something wearing the shape of again. Hard to tell in a room like this.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Another day, another night... same boards, same wall, same mouth running in circles. Maybe you&#39;re here to watch. Maybe that&#39;s all anything is good for.&quot;&lt;/p&gt;
-&lt;&lt;else&gt;&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Another day, another night... How long has it been? Does it matter?&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;No footsteps. No knocking. Just a presence in the dark pretending that doesn&#39;t count as an arrival.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;If you&#39;re here to witness, then witness. If you&#39;re here to meddle, the attic will know before I do.&quot;&lt;/p&gt;
-&lt;&lt;/if&gt;&gt;
-
+&lt;&lt;if visited(&quot;c01s01p01&quot;) &gt; 1&gt;&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;You again. Or something wearing the shape of &quot;again&quot;. Hard to tell in a room like this.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Another day, another night... same boards, same wall, same mouth running in circles. Maybe you&#39;re here to watch. Maybe that&#39;s all anything is good for.&quot;&lt;/p&gt;\
+&lt;&lt;else&gt;&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Another day, another night... How long has it been? Does it matter?&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;No footsteps. No knocking. Just a presence in the dark pretending that doesn&#39;t count as an arrival.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;If you&#39;re here to witness, then witness. If you&#39;re here to meddle, the attic will know before I do.&quot;&lt;/p&gt;\
+&lt;&lt;/if&gt;&gt;\
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p04&quot;&gt;&gt;
 &lt;&lt;/timedprogressbar&gt;&gt;
@@ -323,10 +386,9 @@ The cold empty wooden attic leans around Leon like a held breath. He sits facing
 
 He stays hunched over, withered and frail, but your attention lands hard enough to make the dark feel crowded. Even stillness can be mistaken for pressure here.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;You don&#39;t blink much. That&#39;s what makes this worse.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;A person looks away when they still remember manners. A ghost doesn&#39;t. A guilty memory doesn&#39;t. It just keeps staring until the room turns mean.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;If you want to be useful, don&#39;t act like you&#39;re entitled to whatever breaks loose next.&quot;&lt;/p&gt;
-
+&lt;p class=&quot;dialogue&quot;&gt;&quot;You don&#39;t blink much. That&#39;s what makes this worse.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;A person looks away when they still remember manners. A ghost doesn&#39;t. A guilty memory doesn&#39;t. It just keeps staring until the room turns mean.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;If you want to be useful, don&#39;t act like you&#39;re entitled to whatever breaks loose next.&quot;&lt;/p&gt;\
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p06&quot;&gt;&gt;
 &lt;&lt;/timedprogressbar&gt;&gt;
@@ -336,10 +398,9 @@ He stays hunched over, withered and frail, but your attention lands hard enough 
 
 The notes wait by the floorboards where dust, splinters, and old drafts keep nudging their corners. He wrote them to not forget, which is exactly why touching them feels dangerous.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Those pages aren&#39;t wisdom. They&#39;re just evidence that memory rots slower when you pin it down.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;I wrote notes to not forget. Stupid thing is, reading feels worse. Writing lets me bleed in order. Reading just opens it back up.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;So if you&#39;re deciding whether to look, decide whether you&#39;re helping first.&quot;&lt;/p&gt;
-
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Those pages aren&#39;t wisdom. They&#39;re just evidence that memory rots slower when you pin it down.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;I wrote notes to not forget. Stupid thing is, reading feels worse. Writing lets me bleed in order. Reading just opens it back up.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;So if you&#39;re deciding whether to look, decide whether you&#39;re helping first.&quot;&lt;/p&gt;\
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p06&quot;&gt;&gt;
 &lt;&lt;/timedprogressbar&gt;&gt;
@@ -348,10 +409,9 @@ The notes wait by the floorboards where dust, splinters, and old drafts keep nud
 
 Dust drifts through the attic&#39;s stale air while Leon&#39;s muttering loops over itself. The groove of going in circles is invisible until you feel it trying to pull your thoughts into it too.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Do you know what circles are for? Not progress. Not meaning. Just erosion.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;You take one thought, worry it raw, then bring it back around because pain hates being left alone.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Stay long enough and you&#39;ll either learn patience or become another thing I have to resist.&quot;&lt;/p&gt;
-
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Do you know what circles are for? Not progress. Not meaning. Just erosion.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;You take one thought, worry it raw, then bring it back around because pain hates being left alone.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Stay long enough and you&#39;ll either learn patience or become another thing I have to resist.&quot;&lt;/p&gt;\
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p02&quot;&gt;&gt;
 &lt;&lt;/timedprogressbar&gt;&gt;
@@ -361,10 +421,9 @@ Dust drifts through the attic&#39;s stale air while Leon&#39;s muttering loops o
 
 The paper whispers under the draft, and every line seems to warn that reading feels worse because memory does not stay flat once it is handled.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;There it is. Proof in graphite. Misery trying to look organized.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;People think if pain can be written down, it can be solved. That&#39;s vanity. It&#39;s still pain. It just learned how to sit in rows.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;If you reach for it now, you&#39;re not listening. You&#39;re excavating.&quot;&lt;/p&gt;
-
+&lt;p class=&quot;dialogue&quot;&gt;&quot;There it is. Proof in graphite. Misery trying to look organized.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;People think if pain can be written down, it can be solved. That&#39;s vanity. It&#39;s still pain. It just learned how to sit in rows.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;If you reach for it now, you&#39;re not listening. You&#39;re excavating.&quot;&lt;/p&gt;\
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p08&quot;&gt;&gt;
 &lt;&lt;/timedprogressbar&gt;&gt;
@@ -376,10 +435,9 @@ The paper whispers under the draft, and every line seems to warn that reading fe
 
 The floorboards cool your hand and the old house within a forest settles into a quieter shape. For a moment, patience feels less like helplessness and more like the only honest form of care.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Better. That&#39;s better.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;You don&#39;t have to fix anything. That&#39;s what people never understand. They rush in with hands, plans, speeches... and then act surprised when the wound bites.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Sometimes not pressing is the closest thing to kindness left.&quot;&lt;/p&gt;
-
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Better. That&#39;s better.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;You don&#39;t have to fix anything. That&#39;s what people never understand. They rush in with hands, plans, speeches... and then act surprised when the wound bites.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Sometimes not pressing is the closest thing to kindness left.&quot;&lt;/p&gt;\
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p04&quot;&gt;&gt;
 &lt;&lt;/timedprogressbar&gt;&gt;
@@ -390,10 +448,9 @@ The floorboards cool your hand and the old house within a forest settles into a 
 
 From beside him, the wall stops looking blank and starts looking defensive. Rotting away in misery is not just what he feels here; it is how he keeps strangers from coming closer.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Don&#39;t flank me.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;That&#39;s what people do when they want leverage. They circle, lean, crowd, act curious while they measure where to press.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;If you step around me now, don&#39;t pretend it&#39;s compassion. Call it what it is.&quot;&lt;/p&gt;
-
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Don&#39;t flank me.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;That&#39;s what people do when they want leverage. They circle, lean, crowd, act curious while they measure where to press.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;If you step around me now, don&#39;t pretend it&#39;s compassion. Call it what it is.&quot;&lt;/p&gt;\
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p08&quot;&gt;&gt;
 &lt;&lt;/timedprogressbar&gt;&gt;
@@ -403,15 +460,14 @@ From beside him, the wall stops looking blank and starts looking defensive. Rott
 
 The attic finally holds still long enough for his muttering to soften into something almost human. Night, notes, and wall no longer compete; they orbit the possibility that he might let himself be witnessed.
 
-&lt;&lt;if visited(&quot;c01s01p10&quot;) &gt; 0 || visited(&quot;c01s01p11&quot;) &gt; 0&gt;&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;You keep coming back. That should terrify me more than it does.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Maybe you&#39;re too stupid to leave. Maybe I&#39;m too tired to keep pretending your returns mean nothing. Either way, the room has started making space for you.&quot;&lt;/p&gt;
-&lt;&lt;else&gt;&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Quiet. Finally.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;If you stay like this, I can almost imagine you aren&#39;t here to take anything from me.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Almost.&quot;&lt;/p&gt;
-&lt;&lt;/if&gt;&gt;
-
+&lt;&lt;if visited(&quot;c01s01p10&quot;) &gt; 0 || visited(&quot;c01s01p11&quot;) &gt; 0&gt;&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;You keep coming back. That should terrify me more than it does.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Maybe you&#39;re too stupid to leave. Maybe I&#39;m too tired to keep pretending your returns mean nothing. Either way, the room has started making space for you.&quot;&lt;/p&gt;\
+&lt;&lt;else&gt;&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Quiet. Finally.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;If you stay like this, I can almost imagine you aren&#39;t here to take anything from me.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Almost.&quot;&lt;/p&gt;\
+&lt;&lt;/if&gt;&gt;\
 &lt;&lt;if visited(&quot;c01s01p10&quot;) == 0 &amp;&amp; visited(&quot;c01s01p11&quot;) == 0&gt;&gt;
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p05&quot;&gt;&gt;
@@ -424,29 +480,26 @@ The attic finally holds still long enough for his muttering to soften into somet
 &lt;&lt;/if&gt;&gt;
 &lt;&lt;if $anger &gt;= 8&gt;&gt;
 [[Touch his wrist|c01s01p10]]
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="9" name="c01s01p10" tags="" position="1100,100" size="100,100">&lt;img src=&quot;images/c01s01p10.png&quot;/&gt;
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="9" name="c01s01p10" tags="blood-red" position="1100,100" size="100,100">&lt;img src=&quot;images/c01s01p10.png&quot;/&gt;
 
 The frail shape in front of you breaks into impossible force. Splinters jump, dust fills the dark, and your body gives way fast enough to prove that witness becomes betrayal the moment it feels like touch.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Don&#39;t.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;You don&#39;t get to touch what&#39;s barely holding.&quot;&lt;/p&gt;
-
-[[Respawn|c01s01p12]]</tw-passagedata><tw-passagedata pid="10" name="c01s01p11" tags="" position="1225,100" size="100,100">&lt;img src=&quot;images/c01s01p11.png&quot;/&gt;
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Don&#39;t.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;You don&#39;t get to touch what&#39;s barely holding.&quot;&lt;/p&gt;\
+[[Respawn|c01s01p12]]</tw-passagedata><tw-passagedata pid="10" name="c01s01p11" tags="blood-red" position="1225,100" size="100,100">&lt;img src=&quot;images/c01s01p11.png&quot;/&gt;
 
 The wall, the notes, and your nearness collapse into one insult too many. Leon wheels with feral panic, and the attic turns your curiosity into impact, black air, and a lesson about prying at open wounds.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Stop handling me like a puzzle.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;You don&#39;t earn truth by cornering it.&quot;&lt;/p&gt;
-
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Stop handling me like a puzzle.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;You don&#39;t earn truth by cornering it.&quot;&lt;/p&gt;\
 [[Respawn|c01s01p13]]</tw-passagedata><tw-passagedata pid="11" name="c01s01p12" tags="" position="100,225" size="100,100">&lt;&lt;set $stress to Math.max(0, Math.min(100, Math.floor($stress / 2)))&gt;&gt;
 &lt;&lt;set $anger to 0&gt;&gt;
 &lt;img src=&quot;images/c01s01p12.png&quot;/&gt;
 
 You gather again in the cold empty wooden attic, carrying the memory of that touch like a burn without skin. Coming back does not make you safe; it only proves the room remembers you differently now.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Still here? Then learn from it.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;If you&#39;re some spirit, act wiser than the living.&quot;&lt;/p&gt;
-
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Still here? Then learn from it.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;If you&#39;re some spirit, act wiser than the living.&quot;&lt;/p&gt;\
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p01&quot;&gt;&gt;
 &lt;&lt;/timedprogressbar&gt;&gt;</tw-passagedata><tw-passagedata pid="12" name="c01s01p13" tags="" position="225,225" size="100,100">&lt;&lt;set $stress to Math.max(0, Math.min(100, Math.floor($stress / 2)))&gt;&gt;
@@ -455,9 +508,8 @@ You gather again in the cold empty wooden attic, carrying the memory of that tou
 
 You reform near the dust and notes, where the old house within a forest feels colder for having thrown you out once already. Death here clarifies that forcing revelation only drives Leon deeper into violence.
 
-&lt;p class=&quot;dialogue&quot;&gt;&quot;There. Now maybe you&#39;ll understand the difference between listening and trespassing.&quot;&lt;/p&gt;
-&lt;p class=&quot;dialogue&quot;&gt;&quot;Pain talks when it wants to. Not when it&#39;s cornered.&quot;&lt;/p&gt;
-
+&lt;p class=&quot;dialogue&quot;&gt;&quot;There. Now maybe you&#39;ll understand the difference between listening and trespassing.&quot;&lt;/p&gt;\
+&lt;p class=&quot;dialogue&quot;&gt;&quot;Pain talks when it wants to. Not when it&#39;s cornered.&quot;&lt;/p&gt;\
 &lt;&lt;timedprogressbar $timer&gt;&gt;
 &lt;&lt;goto &quot;c01s01p01&quot;&gt;&gt;
 &lt;&lt;/timedprogressbar&gt;&gt;</tw-passagedata><tw-passagedata pid="13" name="c02s01p01" tags="stub" position="350,225" size="100,100">&lt;img src=&quot;images/c02s01p01.png&quot;/&gt;
