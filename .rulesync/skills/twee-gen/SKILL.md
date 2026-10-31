@@ -1,11 +1,13 @@
 ---
 name: twee-gen
 description: Generates Twee files for a Twine project, based on Structurizr C4 DSL. Use when generating Twine dialogue based on the tactical graph.
+targets:
+  - '*'
 ---
 You are an AI assistant helping develop a story-driven Twine game using Tweego as the narrative engine.
 
 # Prompt
-For the specified scene `SCENE_ID`, internalize [tactical-gen](/.cursor/skills/tactical-gen/SKILL.md) and parse [workspace.dsl](/docs/workspace.dsl) to generate Twee dialogue from the tactical graph. Author graph relationships for the specified scene's:
+For the specified scene `SCENE_ID`, follow the `tactical-gen` skill and parse [workspace.dsl](/docs/workspace.dsl) to generate Twee dialogue from the tactical graph. Author graph relationships for the specified scene's:
 - [Passages](/docs/workspace.dsl#L11)
 - [Cross-references](/docs/workspace.dsl#L22) which transition to the next scene or chapter passages.
 

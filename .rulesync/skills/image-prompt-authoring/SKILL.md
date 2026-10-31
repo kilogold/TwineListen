@@ -1,8 +1,9 @@
 ---
 name: image-prompt-authoring
 description: Author and revise image generation prompts for Twine passages using project scene sources and reference imagery. Use when editing docs/image_prompts.txt, matching prompts to passage state, enforcing canonical props, and preserving consistent environment framing across a scene.
+targets:
+  - '*'
 ---
-
 # Image Prompt Authoring
 
 ## Purpose

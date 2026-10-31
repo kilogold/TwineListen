@@ -29,7 +29,7 @@
 // - Optional conditions append after a comma. Operands may include NPC state (Stress, Anger ∈ [0,100]) and visit counts via visited(PNN).
 //   Example: p03_rg -> p04_go "Act: Hold the gaze, 11 <= Stress <= 16 || visited(P10) >= 2"
 //
-// See single source of truth for tactical generation rules: /.cursor/skills/tactical-gen/SKILL.md
+// See single source of truth for tactical generation rules: /.rulesync/skills/tactical-gen/SKILL.md
 //
 // Modeling guidance:
 // - Interpret relationship direction as narrative continuity ("because ...").

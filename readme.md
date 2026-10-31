@@ -27,7 +27,13 @@ A Twine narrative prototype.
 
 ## Project details 
 ### Setup
-- Install Cursor IDE
+- Install [RuleSync](https://rulesync.dyoshikawa.com/) version **16.30.2** (requires Node.js and npm):
+  ```sh
+  npm install -g rulesync@16.30.2
+  rulesync generate
+  ```
+  Run `rulesync generate` after a fresh checkout and whenever the RuleSync sources change. It generates the ignored Codex and Cursor rules and skills. The version is documented rather than enforced by the repository.
+- Use Codex or Cursor for AI-assisted development.
 - Setup [Twine (Twee 3) Language](https://github.com/sgranade/twine-twee-language) plugin
   - [Build](https://github.com/sgranade/twine-twee-language?tab=readme-ov-file#building-your-game)
   - [Run](https://github.com/sgranade/twine-twee-language?tab=readme-ov-file#running-your-game)
@@ -38,7 +44,7 @@ A Twine narrative prototype.
 - [docs](/docs/): Story context for narrative generation. 
 - [include](/include/): Assets bundled with the build.
 - [tools](/tools/): Misc automations for development.
-- [.cursor](/.cursor/): LLM generation rules for [Tactical Graph](/docs/workspace.dsl).
+- [.rulesync](/.rulesync/): Source rules and skills used to generate Codex and Cursor configuration.
 
 ### AI Workflow
 See [workflow](/docs/Workflow.md) for implementation details:

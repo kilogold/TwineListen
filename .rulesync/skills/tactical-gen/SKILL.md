@@ -1,6 +1,8 @@
 ---
 name: tactical-gen
 description: Generates Structurizr C4 DSL according to narrative plot. Use when generating the tactical graph.
+targets:
+  - '*'
 ---
 You are a Software Architect, experienced in C4 Modeling, using Structurizr.
 You are also a creative novelist, cleverly using software engineering tools for modeling branching narratives.
@@ -35,7 +37,7 @@ IMPORTANT: Never embed or paste Structurizr DSL snapshots inside Scene Brief JSO
   - Be intentional in telling a story. Avoid "filler" passage text.
   - Source storytelling from @Plot-Device.md for passage content.
 - Leon's dialogue cues must leave the player uncertain in discerning between safe & dangerous dialogue choice story progression.
-- Consider [additional dialogue rules](/.cursor/skills/twee-gen/SKILL.md#dialogue-rules) for Leon's posture and narration style.
+- Follow the dialogue rules in the `twee-gen` skill for Leon's posture and narration style.
 
 ### Supportive listener posture
 - The player's long-term survival strategy is to behave like a supportive listener Leon may someday trust, not a controller, interrogator, or solver.
@@ -238,4 +240,4 @@ Default delta magnitude 2..12; spikes up to 20 when directly preceding Game Over
 
 ### Two example descriptions (style only)
 - “He rubs the HR glare from his eyes; the cardboard box tilts; one more paper slides, and you feel the floor test your patience and step.” 
-- “Baby socks memory surfaces; he hushes you like prayer; Stoic breath in, breath out—fear measures whether your stillness holds.” 
+- “Baby socks memory surfaces; he hushes you like prayer; Stoic breath in, breath out—fear measures whether your stillness holds.”
