@@ -289,4 +289,4 @@ Macro.add("timedprogressbar", {
 <<set $stress to 0>>
 <<set $anger to 0>>
 :: Start
-<<goto "c01s01p01">>
+<<goto "c01.s01.P01">>

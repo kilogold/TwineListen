@@ -15,6 +15,12 @@
 // - description: concise narrative description
 // - status-effect: "" or comma-separated NPC state deltas (e.g., "Stress +10, Anger +5")
 // - tag: "Passage" | "Passage-GameOver"
+//   Additional boundary tags: "Passage,Passage-Stub" for WIP; "Passage,Passage-Ending" for an intentional ending (both retain pNN_rg IDs).
+// - WIP entry: p01_rg with passage-name "P01", explicit work-in-progress description, empty status-effect, and Passage-Stub tag; no outgoing edges.
+//   Declare only the planned successor's missing chapter/scene/entry before its incoming handoff. Do not invent scene content or a successor.
+//   Placeholder-only scenes are exempt from full-scene gameplay/content quotas until developed; preserve the entry ID and incoming edges on expansion, then remove Passage-Stub.
+// - Intentional ending: Passage-Ending may have no onward progression. A scene explicitly designated final by plot/request carries container tag Scene-Final and has no next-scene handoff.
+//   Unmarked missing edges remain defects; Game Overs still require contextual respawns. WIP and ending markers are mutually exclusive.
 //
 // Addressing & cross-references:
 // - Local (within same scene): pNN_<kind>
@@ -29,7 +35,7 @@
 // - Optional conditions append after a comma. Operands may include NPC state (Stress, Anger ∈ [0,100]) and visit counts via visited(PNN).
 //   Example: p03_rg -> p04_go "Act: Hold the gaze, 11 <= Stress <= 16 || visited(P10) >= 2"
 //
-// See single source of truth for tactical generation rules: /.rulesync/skills/tactical-gen/SKILL.md
+// See single source of truth for tactical generation rules: .rulesync/skills/tactical-gen/SKILL.md
 //
 // Modeling guidance:
 // - Interpret relationship direction as narrative continuity ("because ...").
@@ -93,7 +99,7 @@ workspace "Tactical Graph" "A narrative graph for \"Strangers in the Attic\"" {
         }
         c02 = softwareSystem "Lost" {
             s01 = container "Feeling stuck" {
-                p01_rg = component "P01" "PLACEHOLDER" "" "Passage"
+                p01_rg = component "P01" "Work in progress: the planned Feeling stuck scene has not been developed yet. This entry preserves the handoff and stops the current build." "" "Passage,Passage-Stub"
             }
 
             s02 = container "Lost job" {
