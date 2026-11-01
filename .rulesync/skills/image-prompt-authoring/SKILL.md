@@ -6,6 +6,8 @@ targets:
 ---
 # Image Prompt Authoring
 
+Resolve source and output paths from the repository root; Markdown link targets are relative to this skill file.
+
 ## Purpose
 
 Create standalone, generator-facing image prompts for Twine passages that stay faithful to project canon and visually coherent across the same scene.
@@ -33,15 +35,16 @@ Use sources in this order:
 Use this block format in `docs/image_prompts.txt`:
 
 ```text
-cNNsNNpNN
+cNN.sNN.PNN
 
 <single standalone prompt paragraph>
 ```
 
-One blank line between passage id and prompt, and one blank line between blocks.
+One blank line between passage id and prompt, and one blank line between blocks. Use the exact dotted, case-sensitive Twee title from the [canonical title mapping](../twee-gen/SKILL.md). Image asset filenames are independent of passage titles; preserve existing image paths when renaming passages.
 
 ## Authoring Rules
 
+- Apply the [Player agency section](../../../docs/narrative-rules.md#player-agency) as read-only visual constraints: preserve ambiguity in physical attempts without depicting completed player contact or player-caused physical effects, and keep the player's ethereal nature concealed until the planned endgame revelation. Read only that section for this purpose; retain the director language below.
 - Every prompt is standalone. Do not rely on prior prompt context.
 - Repetition is expected when the environment is mostly the same.
 - Keep canonical scene props/architecture consistent across prompts.
@@ -96,7 +99,7 @@ When model drift inflates character scale, include explicit positive framing:
 
 ## Quality Checklist
 
-- [ ] Passage id exists and matches scene passage naming (`cNNsNNpNN`)
+- [ ] Passage id exists and exactly matches its Twee passage title (`cNN.sNN.PNN`)
 - [ ] Prompt is standalone
 - [ ] Leon named first, pronouns afterward
 - [ ] Far-end wall orientation is respected when relevant
