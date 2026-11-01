@@ -39,3 +39,16 @@ For example, the player reaches toward Leon's shoulder, but a noise makes him tu
   - reframe a previously seen object, action, or emotional reaction with new meaning
 - Do not author filler deaths that differ only in surface flavor. Distinct Game Over branches should teach meaningfully different lessons about Leon, the player, or their relationship.
 - Respawn placement should let the player apply what the death just taught rather than dumping them into a semantically unrelated loop.
+
+
+## Constraint applicability
+- Apply shared rules and the target scene's constraints below during brief, graph, and dialogue authoring and review. Other scenes' constraints do not apply by default.
+- Scene-specific hard constraints take precedence over optional creative heuristics. Report conflicts between hard requirements rather than silently overriding them.
+- These are authored, read-only inputs during generation and auditing. Fresh attempts overwrite generated outputs, not these requirements. They do not extend the Scene Brief JSON schema or supply prose anchors.
+
+## Scene-specific constraints
+
+### c01.s01 — Attic Encounter
+- **Explicit-action deaths only:** every incoming edge to a Game Over must be an explicit player action (`Act: ...`). Timers must not enter Game Over passages; inaction alone must not cause death.
+- **Either death is sufficient:** continuation requires at least one Game Over, but either Game Over independently satisfies that requirement. Do not require both deaths, directly or indirectly, before allowing continuation.
+- Graph review must check every Game Over's incoming edges and demonstrate a continuation path after each death independently, with the other Game Over unvisited. Check timer-only routes for accidental deaths. Twee review must confirm equivalent behavior in the implementation.
