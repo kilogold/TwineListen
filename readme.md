@@ -47,9 +47,18 @@ A Twine narrative prototype.
 - [.rulesync](/.rulesync/): Source rules and skills used to generate Codex and Cursor configuration.
 
 ### AI Workflow
-Use the [twine-workflow coordinator skill](/.rulesync/skills/twine-workflow/SKILL.md) to run one scene with fresh author/reviewer subagents. Invoke it in Codex with `$twine-workflow generate c01.s01`. It runs through graph review and pauses for your approval. After approving the graph, request continuation to Twee and playtest.
-
-Edit skill sources under `.rulesync/skills/` and worker profiles under [.rulesync/subagents/](/.rulesync/subagents/), then run `rulesync generate`. This installs skills for Codex and Cursor and generates the six Codex role profiles in `.codex/agents/`. Each worker source contains its description, instructions, and Codex model and effort settings.
+- **Run the scene workflow directly** with the [twine-workflow coordinator skill](/.rulesync/skills/twine-workflow/SKILL.md).
+  - In Codex, invoke `$twine-workflow generate c01.s01` to run one scene with fresh author/reviewer subagents.
+  - The workflow runs through graph review and pauses for your approval. After approving the graph, request continuation to Twee and playtest.
+- **Run the workflow in a separate Git worktree** with the [twine-factory skill](/.rulesync/skills/twine-factory/SKILL.md).
+  - Start with `$twine-factory start c01.s01 --base HEAD`.
+  - One factory run stays open at a time.
+  - Use `$twine-factory status` or `$twine-factory resume c01.s01` to pick up an open run.
+  - After reviewing its graph, use `$twine-factory continue c01.s01 --approve <checkpoint-sha>`.
+  - `$twine-factory close c01.s01` frees the slot and keeps the candidate.
+- **Update the skills and worker profiles** under `.rulesync/skills/` and [.rulesync/subagents/](/.rulesync/subagents/), then run `rulesync generate`.
+  - This installs skills for Codex and Cursor and generates the six Codex role profiles in `.codex/agents/`.
+  - Each worker source contains its description, instructions, and Codex model and effort settings.
 
 ```mermaid
 flowchart TD

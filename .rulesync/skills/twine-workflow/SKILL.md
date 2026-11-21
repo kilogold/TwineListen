@@ -11,7 +11,7 @@ Coordinate one target scene at a time using the installed `tactical-gen` and `tw
 
 ## Invocation and progression
 
-Resolve the `SCENE_ID` (`cNN.sNN`), operation, and requested endpoint from the user's request. Ask only for missing information that cannot be inferred. Work in the active workspace by default. Use an isolated trial only when requested.
+Resolve the `SCENE_ID` (`cNN.sNN`), operation, and requested endpoint from the request. Use the active workspace by default. When given a specific checkout, use its root for artifact paths and worker commands and load its installed skills and role profiles. Ask only for missing information that cannot be inferred.
 
 | Request | Sequence |
 | --- | --- |
