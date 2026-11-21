@@ -47,22 +47,26 @@ A Twine narrative prototype.
 - [.rulesync](/.rulesync/): Source rules and skills used to generate Codex and Cursor configuration.
 
 ### AI Workflow
-See [workflow](/docs/Workflow.md) for implementation details:
+Use the [twine-workflow coordinator skill](/.rulesync/skills/twine-workflow/SKILL.md) to run one scene with fresh author/reviewer subagents. Invoke it in Codex with `$twine-workflow generate c01.s01`. It runs through graph review and pauses for your approval. After approving the graph, request continuation to Twee and playtest.
+
+Edit skill sources under `.rulesync/skills/` and worker profiles under [.rulesync/subagents/](/.rulesync/subagents/), then run `rulesync generate`. This installs skills for Codex and Cursor and generates the six Codex role profiles in `.codex/agents/`. Each worker source contains its description, instructions, and Codex model and effort settings.
+
 ```mermaid
 flowchart TD
     PD((start)) -->|"docs/Plot-Device.md"| P1["Prompt 1 — Generate Scene Brief"]
     P1 -->|"docs/briefs/{SCENE_ID}.json"| P2["Prompt 2 — Audit Scene Brief"]
     P2 -->|"docs/briefs/{SCENE_ID}.json"| P3["Prompt 3 — Generate Tactical Graph"]
     P3 -->|"docs/workspace.dsl"| P4["Prompt 4 — Audit Tactical Graph"]
-    P4 -->|"docs/workspace.dsl"| P5{"Existing scene?"}
-    P5 -->|"Yes: docs/workspace.dsl + docs/briefs/{SCENE_ID}.json"| P5a["Prompt 5 — Refactor Tactical Graph"]
+    P4 --> Review{"Your graph review"}
+    Review -->|"Requested revision"| P5a["Prompt 5 — Refactor Tactical Graph"]
     P5a -->|"docs/workspace.dsl"| P4
-    P5 -->|"No: docs/workspace.dsl"| P6["Prompt 6 — Generate Twee"]
+    Review -->|"Approve and continue"| P6["Prompt 6 — Generate Twee"]
     P6 -->|"src/{SCENE_ID}.twee"| P7["Prompt 7 — Audit Twee"]
-    P7 -->|"src/{SCENE_ID}.twee"| Done(((done)))
+    P7 --> Playtest["Build and playtest branches, tone, and pacing"]
+    Playtest --> Done(((done)))
 ```
 
-### Tested recommended models per prompt
+### Historical model trials per prompt
 | Model         | P1 | P2 | P3 | P4 | P5 | P6 | P7 |
 |---------------|----|----|----|----|----|----|----|
 | GPT 5.4       | ✓  |    | ✓  |    | ✓  | ✓  |    |

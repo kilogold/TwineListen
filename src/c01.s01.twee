@@ -1,160 +1,153 @@
 :: c01.s01.P01
-<<set $stress to Math.max(0, Math.min(100, $stress + 4))>>
+<<set $stress to Math.max(0, Math.min(100, $stress + 2))>>
 <img src="images/c01s01p01.png"/>
 
-The cold empty wooden attic leans around Leon like a held breath. He sits facing the wall, muttering low enough that the room seems to decide whether you belong inside it.
+Cold hangs in the empty wooden attic. At its center, Leon sits facing the wall, his muttering uneven in the dark.
 
-<<if visited("c01.s01.P01") > 1>>\
-<p class="dialogue">"You again. Or something wearing the shape of "again". Hard to tell in a room like this."</p>\
-<p class="dialogue">"Another day, another night... same boards, same wall, same mouth running in circles. Maybe you're here to watch. Maybe that's all anything is good for."</p>\
-<<else>>\
-<p class="dialogue">"Another day, another night... How long has it been? Does it matter?"</p>\
-<p class="dialogue">"No footsteps. No knocking. Just a presence in the dark pretending that doesn't count as an arrival."</p>\
-<p class="dialogue">"If you're here to witness, then witness. If you're here to meddle, the attic will know before I do."</p>\
-<</if>>\
-<<timedprogressbar $timer>>
-<<goto "c01.s01.P04">>
-<</timedprogressbar>>
-[[Hold the gaze|c01.s01.P02]]
-[[Lower your gaze|c01.s01.P06]]
-
-:: c01.s01.P02
-<<set $stress to Math.max(0, Math.min(100, $stress + 4))>>
-<<set $anger to Math.max(0, Math.min(100, $anger + 2))>>
-<img src="images/c01s01p02.png"/>
-
-He stays hunched over, withered and frail, but your attention lands hard enough to make the dark feel crowded. Even stillness can be mistaken for pressure here.
-
-<p class="dialogue">"You don't blink much. That's what makes this worse."</p>\
-<p class="dialogue">"A person looks away when they still remember manners. A ghost doesn't. A guilty memory doesn't. It just keeps staring until the room turns mean."</p>\
-<p class="dialogue">"If you want to be useful, don't act like you're entitled to whatever breaks loose next."</p>\
-<<timedprogressbar $timer>>
-<<goto "c01.s01.P06">>
-<</timedprogressbar>>
-[[Shift your weight|c01.s01.P07]]
-[[Touch his shoulder|c01.s01.P10]]
-
-:: c01.s01.P03
-<<set $stress to Math.max(0, Math.min(100, $stress + 3))>>
-<img src="images/c01s01p03.png"/>
-
-The notes wait by the floorboards where dust, splinters, and old drafts keep nudging their corners. He wrote them to not forget, which is exactly why touching them feels dangerous.
-
-<p class="dialogue">"Those pages aren't wisdom. They're just evidence that memory rots slower when you pin it down."</p>\
-<p class="dialogue">"I wrote notes to not forget. Stupid thing is, reading feels worse. Writing lets me bleed in order. Reading just opens it back up."</p>\
-<p class="dialogue">"So if you're deciding whether to look, decide whether you're helping first."</p>\
-<<timedprogressbar $timer>>
-<<goto "c01.s01.P06">>
-<</timedprogressbar>>
-[[Glance at the notes|c01.s01.P05]]
-
-:: c01.s01.P04
-<<set $stress to Math.max(0, Math.min(100, $stress + 5))>>
-<img src="images/c01s01p04.png"/>
-
-Dust drifts through the attic's stale air while Leon's muttering loops over itself. The groove of going in circles is invisible until you feel it trying to pull your thoughts into it too.
-
-<p class="dialogue">"Do you know what circles are for? Not progress. Not meaning. Just erosion."</p>\
-<p class="dialogue">"You take one thought, worry it raw, then bring it back around because pain hates being left alone."</p>\
-<p class="dialogue">"Stay long enough and you'll either learn patience or become another thing I have to resist."</p>\
+<p class="dialogue">“Another day, another night. How long has it been? Does it matter?”</p>
+<p class="dialogue">“Does anyone even care? I keep asking the wall, and it keeps giving me the same answer.”</p>
+<<if visited("c01.s01.P01") > 1>>
+<p class="dialogue">“That feeling again. If somebody's there, I don't know what you expect me to say.”</p>
+<</if>>
 <<timedprogressbar $timer>>
 <<goto "c01.s01.P02">>
 <</timedprogressbar>>
-[[Trace a circle in dust|c01.s01.P03]]
-[[Lean toward the wall|c01.s01.P07]]
+[[Listen to Leon's muttering|c01.s01.P02]]
+[[Glance across the wooden attic|c01.s01.P03]]
 
-:: c01.s01.P05
-<<set $stress to Math.max(0, Math.min(100, $stress + 7))>>
-<img src="images/c01s01p05.png"/>
+:: c01.s01.P02
+<<set $stress to Math.max(0, Math.min(100, $stress + 4))>>
+<<set $anger to Math.max(0, Math.min(100, $anger + 4))>>
+<img src="images/c01s01p02.png"/>
 
-The paper whispers under the draft, and every line seems to warn that reading feels worse because memory does not stay flat once it is handled.
+Leon remains hunched toward the wall, withered and frail. His shoulders stiffen between breaths, defining the space behind him as a boundary.
 
-<p class="dialogue">"There it is. Proof in graphite. Misery trying to look organized."</p>\
-<p class="dialogue">"People think if pain can be written down, it can be solved. That's vanity. It's still pain. It just learned how to sit in rows."</p>\
-<p class="dialogue">"If you reach for it now, you're not listening. You're excavating."</p>\
+<p class="dialogue">“I can feel a room change, you know. Doesn't mean I know what's in it.”</p>
+<p class="dialogue">“If someone's standing back there, stay where I can bear it. I haven't got the strength for a surprise.”</p>
+<<if visited("c01.s01.P02") > 1>><p class="dialogue">“Still can't make myself turn around. Give me a minute.”</p><</if>>
 <<timedprogressbar $timer>>
-<<goto "c01.s01.P08">>
+<<goto "c01.s01.P03">>
 <</timedprogressbar>>
-<<if $stress >= 14>>
-[[Reach toward the notes|c01.s01.P11]]
-<</if>>
+[[Try to close the distance to Leon|c01.s01.P10]]
+[[Hold your gaze on the wall beyond Leon|c01.s01.P04]]
 
-:: c01.s01.P06
-<<set $stress to Math.max(0, Math.min(100, $stress - 4))>>
-<<set $anger to Math.max(0, Math.min(100, $anger - 2))>>
-<img src="images/c01s01p06.png"/>
+:: c01.s01.P03
+<<set $stress to Math.max(0, Math.min(100, $stress + 2))>>
+<img src="images/c01s01p03.png"/>
 
-The floorboards cool your hand and the old house within a forest settles into a quieter shape. For a moment, patience feels less like helplessness and more like the only honest form of care.
+Darkness fills the cold attic. Leon's muttering pauses, then resumes before the silence can settle.
 
-<p class="dialogue">"Better. That's better."</p>\
-<p class="dialogue">"You don't have to fix anything. That's what people never understand. They rush in with hands, plans, speeches... and then act surprised when the wound bites."</p>\
-<p class="dialogue">"Sometimes not pressing is the closest thing to kindness left."</p>\
+<p class="dialogue">“I used to think there'd be a day when it all made sense. Now I can't even tell one night from the next.”</p>
+<p class="dialogue">“Maybe I should stop talking. But it's a long time to sit here with nothing but the boards creaking.”</p>
+<<if visited("c01.s01.P03") > 1>><p class="dialogue">“There I go again. I wonder if the house ever gets tired of it.”</p><</if>>
 <<timedprogressbar $timer>>
 <<goto "c01.s01.P04">>
 <</timedprogressbar>>
-[[Count breaths|c01.s01.P08]]
-[[Rest a hand on the floorboards|c01.s01.P03]]
+[[Watch Leon's frail shoulders|c01.s01.P06]]
 
-:: c01.s01.P07
-<<set $stress to Math.max(0, Math.min(100, $stress + 2))>>
-<<set $anger to Math.max(0, Math.min(100, $anger + 6))>>
-<img src="images/c01s01p07.png"/>
+:: c01.s01.P04
+<<set $stress to Math.max(0, Math.min(100, $stress + 4))>>
+<<set $anger to Math.max(0, Math.min(100, $anger + 4))>>
+<img src="images/c01s01p04.png"/>
 
-From beside him, the wall stops looking blank and starts looking defensive. Rotting away in misery is not just what he feels here; it is how he keeps strangers from coming closer.
+Leon shakes his head, still facing the wall. The notes lie within his downward gaze.
 
-<p class="dialogue">"Don't flank me."</p>\
-<p class="dialogue">"That's what people do when they want leverage. They circle, lean, crowd, act curious while they measure where to press."</p>\
-<p class="dialogue">"If you step around me now, don't pretend it's compassion. Call it what it is."</p>\
+<p class="dialogue">“I deserve my fate. No... it's her fault.”</p>
+<p class="dialogue">“That's easy to say when she isn't here to answer. Doesn't make it go away, either.”</p>
+<<if visited("c01.s01.P04") > 1>><p class="dialogue">“Same two answers, and neither one lets me sleep.”</p><</if>>
+<<timedprogressbar $timer>>
+<<goto "c01.s01.P06">>
+<</timedprogressbar>>
+[[Notice the notes|c01.s01.P05]]
+
+:: c01.s01.P05
+<<set $stress to Math.max(0, Math.min(100, $stress + 4))>>
+<img src="images/c01s01p05.png"/>
+
+The notes rustle as Leon bends nearer, their pages still beneath his gaze.
+
+<p class="dialogue">“My memories have started to blur. I wrote notes so I wouldn't forget.”</p>
+<p class="dialogue">“But reading feels worse. A few words and the pain comes back like it never left.”</p>
+<<if visited("c01.s01.P05") > 1>><p class="dialogue">“They're still here. I suppose I wanted them to be.”</p><</if>>
 <<timedprogressbar $timer>>
 <<goto "c01.s01.P08">>
 <</timedprogressbar>>
-[[Step around Leon|c01.s01.P11]]
+[[Study the notes from a distance|c01.s01.P07]]
+
+:: c01.s01.P06
+<<set $stress to Math.max(0, Math.min(100, $stress - 4))>>
+<<set $anger to Math.max(0, Math.min(100, $anger - 4))>>
+<img src="images/c01s01p06.png"/>
+
+Leon is still muttering, but his jaw eases as the words trail off.
+
+<p class="dialogue">“It's her fault... Maybe it isn't that simple. Maybe no one's to blame, and this is just life.”</p>
+<p class="dialogue">“I don't know if that's kinder or worse. At least there's a little room to breathe before I decide.”</p>
+<<if visited("c01.s01.P06") > 1>><p class="dialogue">“I can sit with that for another moment, I think.”</p><</if>>
+<<timedprogressbar $timer>>
+<<goto "c01.s01.P08">>
+<</timedprogressbar>>
+<<if visited("c01.s01.P04") >= 2>>[[Follow the pauses in Leon's muttering|c01.s01.P14]]<</if>>
+[[Listen through the unfinished murmur|c01.s01.P09]]
+
+:: c01.s01.P07
+<<set $stress to Math.max(0, Math.min(100, $stress + 2))>>
+<<set $anger to Math.max(0, Math.min(100, $anger + 8))>>
+<img src="images/c01s01p07.png"/>
+
+Leon bows over the notes, his fingers curling beside the paper. A faint rustle interrupts the stillness.
+
+<p class="dialogue">“I wrote those down because I was afraid of losing them. Doesn't mean I want anyone going through them.”</p>
+<p class="dialogue">“I can barely stand to read them myself. Leave me a little time with what I remember.”</p>
+<<if visited("c01.s01.P07") > 1>><p class="dialogue">“They're right where I left them. That's enough for now.”</p><</if>>
+<<timedprogressbar $timer>>
+<<goto "c01.s01.P08">>
+<</timedprogressbar>>
+<<if $stress >= 12>>[[Try to reach toward the notes|c01.s01.P11]]<</if>>
+[[Try to draw your attention back from the notes|c01.s01.P06]]
 
 :: c01.s01.P08
-<<set $stress to Math.max(0, Math.min(100, $stress - 3))>>
+<<set $stress to Math.max(0, Math.min(100, $stress - 4))>>
 <<set $anger to Math.max(0, Math.min(100, $anger - 2))>>
 <img src="images/c01s01p08.png"/>
 
-The attic finally holds still long enough for his muttering to soften into something almost human. Night, notes, and wall no longer compete; they orbit the possibility that he might let himself be witnessed.
+Leon's voice thins in the cold attic. His hunched back rises and falls as he waits for his next thought.
 
-<<if visited("c01.s01.P10") > 0 || visited("c01.s01.P11") > 0>>\
-<p class="dialogue">"You keep coming back. That should terrify me more than it does."</p>\
-<p class="dialogue">"Maybe you're too stupid to leave. Maybe I'm too tired to keep pretending your returns mean nothing. Either way, the room has started making space for you."</p>\
-<<else>>\
-<p class="dialogue">"Quiet. Finally."</p>\
-<p class="dialogue">"If you stay like this, I can almost imagine you aren't here to take anything from me."</p>\
-<p class="dialogue">"Almost."</p>\
-<</if>>\
-<<if visited("c01.s01.P10") == 0 && visited("c01.s01.P11") == 0>>
+<p class="dialogue">“I'm going in circles. I wrote it down so I wouldn't forget, and now reading it brings the pain back.”</p>
+<p class="dialogue">“So I sit here instead. Some days I think I'm just rotting away, waiting for an answer I already lost.”</p>
+<<if visited("c01.s01.P10") >= 1 || visited("c01.s01.P11") >= 1>><p class="dialogue">“It's quiet again. I don't know why that feels different this time.”</p><<elseif visited("c01.s01.P08") > 1>><p class="dialogue">“Back to that same thought. Maybe I can let it pass this time.”</p><</if>>
 <<timedprogressbar $timer>>
-<<goto "c01.s01.P05">>
+<<goto "c01.s01.P09">>
 <</timedprogressbar>>
-<</if>>
-<<if visited("c01.s01.P10") > 0 || visited("c01.s01.P11") > 0>>
+[[Lower your gaze from Leon's hunched back|c01.s01.P09]]
+<<if visited("c01.s01.P10") >= 1 || visited("c01.s01.P11") >= 1>>[[Try to shift farther from Leon|c02.s01.P01]]<</if>>
+
+:: c01.s01.P09
+<<set $stress to Math.max(0, Math.min(100, $stress - 2))>>
+<<set $anger to Math.max(0, Math.min(100, $anger - 2))>>
+
+In the cold wooden attic, Leon lets a breath finish before he speaks again.
+
+<p class="dialogue">“Another day, another night. I keep saying it like the words might tell me how long I've been here.”</p>
+<p class="dialogue">“Maybe I don't have to know tonight. Maybe I can just sit a while.”</p>
+<<if visited("c01.s01.P09") > 1>><p class="dialogue">“There's that quiet again. I'll take it while it lasts.”</p><</if>>
 <<timedprogressbar $timer>>
-<<goto "c02.s01.P01">>
+<<goto "c01.s01.P03">>
 <</timedprogressbar>>
-<</if>>
-<<if $anger >= 8>>
-[[Touch his wrist|c01.s01.P10]]
-<</if>>
+[[Attend to the silence between breaths|c01.s01.P06]]
 
 :: c01.s01.P10 [blood-red]
 <img src="images/c01s01p10.png"/>
 
-The frail shape in front of you breaks into impossible force. Splinters jump, dust fills the dark, and your body gives way fast enough to prove that witness becomes betrayal the moment it feels like touch.
+Before the attempted approach resolves, Leon lashes backward at the presence he suspects behind him. The blow breaks your neck. His frailty had concealed his terror of someone at his back.
 
-<p class="dialogue">"Don't."</p>\
-<p class="dialogue">"You don't get to touch what's barely holding."</p>\
 [[Respawn|c01.s01.P12]]
 
 :: c01.s01.P11 [blood-red]
 <img src="images/c01s01p11.png"/>
 
-The wall, the notes, and your nearness collapse into one insult too many. Leon wheels with feral panic, and the attic turns your curiosity into impact, black air, and a lesson about prying at open wounds.
+Before your attempt to reach the notes resolves, Leon folds over them and strikes toward the attention he fears. The impact stops your breath for good. He cannot bear to read the memories, yet guards them fiercely.
 
-<p class="dialogue">"Stop handling me like a puzzle."</p>\
-<p class="dialogue">"You don't earn truth by cornering it."</p>\
 [[Respawn|c01.s01.P13]]
 
 :: c01.s01.P12
@@ -162,10 +155,11 @@ The wall, the notes, and your nearness collapse into one insult too many. Leon w
 <<set $anger to 0>>
 <img src="images/c01s01p12.png"/>
 
-You gather again in the cold empty wooden attic, carrying the memory of that touch like a burn without skin. Coming back does not make you safe; it only proves the room remembers you differently now.
+The cold attic surrounds you again. Leon faces the wall; his shoulders tense before his voice returns.
 
-<p class="dialogue">"Still here? Then learn from it."</p>\
-<p class="dialogue">"If you're some spirit, act wiser than the living."</p>\
+<p class="dialogue">“Thought I heard something behind me. Damn it, I can't even trust the quiet.”</p>
+<p class="dialogue">“Just give me some space. I need a minute to know where I am.”</p>
+<<if visited("c01.s01.P12") > 1>><p class="dialogue">“That feeling comes back so easily.”</p><</if>>
 <<timedprogressbar $timer>>
 <<goto "c01.s01.P01">>
 <</timedprogressbar>>
@@ -175,13 +169,27 @@ You gather again in the cold empty wooden attic, carrying the memory of that tou
 <<set $anger to 0>>
 <img src="images/c01s01p13.png"/>
 
-You reform near the dust and notes, where the old house within a forest feels colder for having thrown you out once already. Death here clarifies that forcing revelation only drives Leon deeper into violence.
+Leon mutters again beside the notes. Their faint rustle recalls the fatal strike.
 
-<p class="dialogue">"There. Now maybe you'll understand the difference between listening and trespassing."</p>\
-<p class="dialogue">"Pain talks when it wants to. Not when it's cornered."</p>\
+<p class="dialogue">“I thought somebody wanted those pages. Maybe it was just the house settling.”</p>
+<p class="dialogue">“I don't want to lose what I wrote. I just can't bring myself to look at it yet.”</p>
+<<if visited("c01.s01.P13") > 1>><p class="dialogue">“They're safe for another moment, at least.”</p><</if>>
 <<timedprogressbar $timer>>
 <<goto "c01.s01.P01">>
 <</timedprogressbar>>
+
+:: c01.s01.P14
+<<set $stress to Math.max(0, Math.min(100, $stress - 2))>>
+
+Leon falls quiet around the familiar words. In the attic, the pause lasts longer than his breath.
+
+<p class="dialogue">“Another day, another night. I deserve my fate...”</p>
+<p class="dialogue">“I keep saying that like it's settled. I don't know. Maybe I'm only used to hearing it.”</p>
+<<if visited("c01.s01.P14") > 1>><p class="dialogue">“Still don't know what comes after that.”</p><</if>>
+<<timedprogressbar $timer>>
+<<goto "c01.s01.P09">>
+<</timedprogressbar>>
+[[Hold your attention through Leon's hesitation|c01.s01.P08]]
 
 :: c02.s01.P01 [stub]
 <img src="images/c02s01p01.png"/>

@@ -3,33 +3,33 @@
   "scene": "Attic Encounter",
   "anchors": [
     "cold empty wooden attic",
-    "old house within a forest",
-    "supernatural sense in the air",
-    "night time",
     "facing toward the wall",
     "hunched over, withered, and frail",
-    "wrote notes to not forget",
+    "muttering to himself",
+    "Another day, another night",
+    "I deserve my fate",
+    "It's her fault",
+    "notes",
     "reading feels worse",
-    "going in circles",
-    "rotting away in misery"
+    "going in circles"
   ],
   "actions": [
-    "Hold the gaze",
-    "Lower your gaze",
-    "Glance at the notes",
-    "Reach toward the notes",
-    "Trace a circle in dust",
-    "Count breaths",
-    "Step around Leon",
-    "Shift your weight",
-    "Rest a hand on the floorboards",
-    "Lean toward the wall",
-    "Touch his shoulder",
-    "Touch his wrist"
+    "Listen to Leon's muttering",
+    "Hold your gaze on the wall beyond Leon",
+    "Lower your gaze from Leon's hunched back",
+    "Glance across the wooden attic",
+    "Notice the notes",
+    "Study the notes from a distance",
+    "Try to reach toward the notes",
+    "Watch Leon's frail shoulders",
+    "Follow the pauses in Leon's muttering",
+    "Try to shift farther from Leon",
+    "Try to peer over Leon's shoulder",
+    "Try to close the distance to Leon"
   ],
   "thresholds": {
-    "angerHigh": 8,
-    "stressHigh": 14
+    "angerHigh": 12,
+    "stressHigh": 12
   },
   "quotas": {
     "anchor60": true,

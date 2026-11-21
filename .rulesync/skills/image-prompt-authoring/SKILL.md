@@ -28,7 +28,7 @@ Use sources in this order:
 4. Stable environment layout:
    - `include/images/attic_scene_reference.png` (when working on `c01.s01`)
 
-`docs/Workflow.md` is workflow/process guidance, not canonical scene-prop content.
+The `twine-workflow` skill supplies process guidance. Resolve canonical scene props from the sources above.
 
 ## Output Format
 

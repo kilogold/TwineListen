@@ -49,52 +49,61 @@ workspace "Tactical Graph" "A narrative graph for \"Strangers in the Attic\"" {
     model {
         c01 = softwareSystem "Start" {
             s01 = container "Attic Encounter" {
-                p01_rg = component "P01" "In the cold empty wooden attic at night time, Leon faces the wall and mutters in circles; your stillness must decide whether this room gets witnessed or disturbed." "Stress +4" "Passage"
-                p02_rg = component "P02" "He remains facing toward the wall, hunched over, withered, and frail, while your fixed attention tightens the dark and pressures the moment toward contact or restraint." "Stress +4, Anger +2" "Passage"
-                p03_rg = component "P03" "A few pages lie by the floorboards where he wrote notes to not forget; their edges flutter in the draft and tempt you to handle memory like evidence." "Stress +3" "Passage"
-                p04_rg = component "P04" "Dust and splinters show how he has been going in circles, and each quiet second in the attic makes his pacing mind feel close enough to pull you off balance." "Stress +5" "Passage"
-                p05_rg = component "P05" "The paper admits that reading feels worse, and the scrape of graphite turns the old house within a forest into a trap where memory sharpens faster than mercy." "Stress +7" "Passage"
-                p06_rg = component "P06" "You follow his breath through the supernatural sense in the air while the floorboards cool your hand, and patience becomes the only way to keep the night from tightening." "Stress -4, Anger -2" "Passage"
-                p07_rg = component "P07" "From beside him you see how he stays facing toward the wall, rotting away in misery, and any closer movement now risks being mistaken for pressure instead of care." "Stress +2, Anger +6" "Passage"
-                p08_rg = component "P08" "When you match the attic's still rhythm, his muttering loosens around night time and going in circles stops feeling endless, as if he may finally tolerate a witness." "Stress -3, Anger -2" "Passage"
-                p10_go = component "P10" "His frail arm snaps with impossible force; boards crack under you, and the cold attic fills your mouth with dust as he teaches how badly touch can betray witness." "" "Passage-GameOver"
-                p11_go = component "P11" "You crowd the wall and notes at once; Leon wheels with a feral shove, and the room turns splinters and black air, proving his pain punishes being handled like a puzzle." "" "Passage-GameOver"
-                p12_rg = component "P12" "After the blow, the cold empty wooden attic returns with your body unmade and reformed; the sting teaches that sudden touch only proves you misread his boundary." "" "Passage"
-                p13_rg = component "P13" "You gather again by the notes and wall dust, keeping the old house within a forest at a distance; dying here teaches that prying makes his pain strike back." "" "Passage"
+                // Fresh state: Stress = 0, Anger = 0. Clamp every integer state update to [0,100].
+                // Respawn effects below run once on arrival; entry never resets state or visit history.
+                p01_rg = component "P01" "The cold empty wooden attic carries Leon's uneven mutter through the dark. He sits apart, and listening offers no clue yet whether your attention is welcome." "Stress +2" "Passage"
+                p02_rg = component "P02" "Leon sits facing toward the wall, hunched over, withered, and frail. His shoulders stiffen between breaths; the space behind him begins to feel like a boundary." "Stress +4, Anger +4" "Passage"
+                p03_rg = component "P03" "Darkness fills the cold empty wooden attic as Leon keeps muttering to himself. Each pause seems to invite attention, but the next murmur leaves that invitation uncertain." "Stress +2" "Passage"
+                p04_rg = component "P04" "I deserve my fate gives way to It's her fault as Leon shakes his head. He remains facing toward the wall; following the reversal may expose pain he cannot yet hold still." "Stress +4, Anger +4" "Passage"
+                p05_rg = component "P05" "The notes lie within Leon's downward gaze; he explains that reading feels worse. Paper rustles as he bends nearer, leaving memory visible without making it yours to handle." "Stress +4" "Passage"
+                p06_rg = component "P06" "Leon is still muttering to himself, but It's her fault trails into uncertainty. His jaw eases during the silence; staying with that pause may allow something beyond blame." "Stress -4, Anger -4" "Passage"
+                p07_rg = component "P07" "Leon bows over the notes, hunched over, withered, and frail. His fingers curl beside the paper; your interest might be mistaken for a claim on what he fears remembering." "Stress +2, Anger +8" "Passage"
+                p08_rg = component "P08" "Leon admits he is going in circles, and reading feels worse because it brings the pain back. His voice thins; witnessing the circle may matter more than finding its culprit." "Stress -4, Anger -2" "Passage"
+                p09_rg = component "P09" "Another day, another night falls softly into the cold empty wooden attic. Leon lets the next breath finish before beginning again; the pause can hold company without an answer." "Stress -2, Anger -2" "Passage"
+                p10_go = component "P10" "Still facing toward the wall, Leon lashes backward at the approach he suspects. A blow breaks your neck; his frailty concealed a terror of having someone at his back." "" "Passage-GameOver"
+                p11_go = component "P11" "Leon folds over the notes, then strikes toward your perceived interest. The impact stops your breath for good; keeping memory intact matters to him even when reading feels worse." "" "Passage-GameOver"
+                p12_rg = component "P12" "The cold empty wooden attic surrounds you again, with Leon facing toward the wall. His shoulders tense before his voice returns; the same distance now carries the warning of the blow." "Stress = floor(Stress / 2), Anger = 0" "Passage"
+                p13_rg = component "P13" "Leon is muttering to himself again, and the notes remain beside him. The paper's faint rustle recalls the fatal strike; returning attention need not become a claim on his memory." "Stress = floor(Stress / 2), Anger = 0" "Passage"
+                p14_rg = component "P14" "Another day, another night sounds different after Leon's earlier reversal. His mouth stills around I deserve my fate; the repeated words seem less certain than their rhythm suggests." "Stress -2" "Passage"
 
-                p01_rg -> p02_rg "Act: Hold the gaze"
-                p01_rg -> p06_rg "Act: Lower your gaze"
-                p01_rg -> p04_rg "timer"
+                p01_rg -> p02_rg "Act: Listen to Leon's muttering"
+                p01_rg -> p03_rg "Act: Glance across the wooden attic"
+                p01_rg -> p02_rg "timer"
 
-                p02_rg -> p07_rg "Act: Shift your weight"
-                p02_rg -> p10_go "Act: Touch his shoulder"
-                p02_rg -> p06_rg "timer"
+                p02_rg -> p10_go "Act: Try to close the distance to Leon"
+                p02_rg -> p04_rg "Act: Hold your gaze on the wall beyond Leon"
+                p02_rg -> p03_rg "timer"
 
-                p03_rg -> p05_rg "Act: Glance at the notes"
-                p03_rg -> p06_rg "timer"
+                p03_rg -> p06_rg "Act: Watch Leon's frail shoulders"
+                p03_rg -> p04_rg "timer"
 
-                p04_rg -> p03_rg "Act: Trace a circle in dust"
-                p04_rg -> p07_rg "Act: Lean toward the wall"
-                p04_rg -> p02_rg "timer"
+                p04_rg -> p05_rg "Act: Notice the notes"
+                p04_rg -> p06_rg "timer"
 
-                p05_rg -> p11_go "Act: Reach toward the notes, 14 <= Stress <= 100"
+                p05_rg -> p07_rg "Act: Study the notes from a distance"
                 p05_rg -> p08_rg "timer"
 
-                p06_rg -> p08_rg "Act: Count breaths"
-                p06_rg -> p03_rg "Act: Rest a hand on the floorboards"
-                p06_rg -> p04_rg "timer"
+                p06_rg -> p14_rg "Act: Follow the pauses in Leon's muttering, visited(P04) >= 2"
+                p06_rg -> p09_rg "Act: Listen through the unfinished murmur"
+                p06_rg -> p08_rg "timer"
 
-                p07_rg -> p11_go "Act: Step around Leon"
+                p07_rg -> p11_go "Act: Try to reach toward the notes, Stress >= 12"
+                p07_rg -> p06_rg "Act: Try to draw your attention back from the notes"
                 p07_rg -> p08_rg "timer"
 
-                p08_rg -> p10_go "Act: Touch his wrist, 8 <= Anger <= 100"
-                p08_rg -> p05_rg "timer, visited(P10) < 1 && visited(P11) < 1"
+                p08_rg -> p09_rg "Act: Lower your gaze from Leon's hunched back"
+                p08_rg -> p09_rg "timer"
+
+                p09_rg -> p06_rg "Act: Attend to the silence between breaths"
+                p09_rg -> p03_rg "timer"
 
                 p10_go -> p12_rg "Act: Respawn"
                 p11_go -> p13_rg "Act: Respawn"
-
                 p12_rg -> p01_rg "timer"
                 p13_rg -> p01_rg "timer"
+
+                p14_rg -> p08_rg "Act: Hold your attention through Leon's hesitation"
+                p14_rg -> p09_rg "timer"
             }
         }
         c02 = softwareSystem "Lost" {
@@ -119,7 +128,7 @@ workspace "Tactical Graph" "A narrative graph for \"Strangers in the Attic\"" {
         c04 -> c05
 
         # Cross-scene relationships (declared after both endpoints exist)
-        c01.s01.p08_rg -> c02.s01.p01_rg "timer, visited(P10) >= 1 || visited(P11) >= 1"
+        c01.s01.p08_rg -> c02.s01.p01_rg "Act: Try to shift farther from Leon, visited(P10) >= 1 || visited(P11) >= 1"
 
     }
 

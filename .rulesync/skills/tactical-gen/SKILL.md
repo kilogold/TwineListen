@@ -11,14 +11,14 @@ Resolve source and output paths from the repository root; Markdown link targets 
 
 # Prompt
 Generate or refactor the tactical graph for the specified scene `SCENE_ID`.
-For an existing scene, default to refactoring (Workflow Prompt 5). Wholesale regeneration (Prompt 3), including replacement of placeholder passages, requires an explicit `override=true` invocation.
+For an existing scene, default to refactoring (`twine-workflow` Prompt 5). Wholesale regeneration (Prompt 3), including replacement of placeholder passages, requires an explicit `override=true` invocation.
 Expanding a placeholder-only scene into its first authored scene is normal refactoring, not wholesale regeneration; retain its entry ID and incoming handoffs.
 Use `docs/Plot-Device.md` for contextual inspiration.
 Ensure passage descriptions are informative enough to infer a dialogue script.
 
 ## Phase ownership
 - Write only `docs/workspace.dsl`: the target scene and its required model-scope handoff. The narrow successor-scaffolding exception below permits missing declarations needed for that handoff; preserve all existing successor content, unrelated scenes, and IDs during refactoring.
-- Plot sources, Scene Briefs, and shared narrative guidance are read-only inputs. Derive any working brief in memory; persisting a Scene Brief belongs to Workflow Prompts 1–2, not this graph phase.
+- Plot sources, Scene Briefs, and shared narrative guidance are read-only inputs. Derive any working brief in memory; persisting a Scene Brief belongs to `twine-workflow` Prompts 1–2, not this graph phase.
 - Do not generate or edit Twee files, including `src/main.twee`, or invoke dialogue generation through a cross-reference. Hand the validated graph to the separate Twee phase.
 
 ## Narrative rules
