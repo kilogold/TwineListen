@@ -14,8 +14,8 @@ Using the `tactical-gen` skill, the Scene Brief at `docs/briefs/{SCENE_ID}.json`
 Enforce (see the `tactical-gen` skill — single source of truth):
 - Descriptions 100–200 chars; complete sentences; anchor quotas.
 - Non‑verbal actions only. Labels: `Act: ...` and `timer` only; ≥6 distinct verbs.
-- 12–16 authored components with ≥2 Game Over nodes in a developed scene; exclude marked WIP placeholders from content quotas.
-- Timers on ordinary non-GO passages; ≥1 explicit user-choice GO (one unconditional). Marked WIP stops and intentional endings follow Development boundaries in the `tactical-gen` skill.
+- Apply the Quality checks (hard requirements) for authored passage and Game Over counts and unconditional user-choice death paths.
+- Apply Timer & Respawn rules and Development boundaries.
 - Early Game Over pacing: follow `Early Game Over pacing` in the `tactical-gen` skill.
 - First-run scope: follow `First-run scope` in the `tactical-gen` skill.
 - Survival/risk posture: follow `Supportive listener posture` in the `tactical-gen` skill.
@@ -43,6 +43,7 @@ Audit the `SCENE_ID` block in `docs/workspace.dsl` against the `tactical-gen` sk
 
 Checks: see these sections in the `tactical-gen` skill:
 - Quality checks (hard requirements).
+- Timer & Respawn rules. Verify guard coverage and exclusivity in reachable states after each passage's effects.
 - Development boundaries (WIP placeholders and endings): distinguish marked WIP and ending stops from accidental dead-ends, and exclude placeholder-only successors from full-scene gameplay checks.
 - Adaptive Threshold Policy (anger/stress).
 - Cross‑scene handoff policy (canonical).
@@ -70,7 +71,7 @@ Inputs (read by path; do not paste contents):
 
 Tasks:
 - Replace any speech‑like actions (e.g., "Act: Ask about her") with non‑verbal, object‑anchored actions from the Brief.
-- Ensure every ordinary non-GO passage has ≥1 outgoing timer; explicitly marked WIP and ending stops follow Development boundaries in the `tactical-gen` skill. Enforce the Timer & Respawn rules: GO nodes emit only `Act: Respawn` to respawn passages, and respawn passages own the unconditional `timer` back to `p01_rg`.
+- Apply Quality checks (hard requirements), Timer & Respawn rules, and Development boundaries from `tactical-gen`.
 - Ensure the scene still satisfies `Early Game Over pacing` and `First-run scope` from the `tactical-gen` skill.
 - Align survivable and risky branches with `Supportive listener posture` in the `tactical-gen` skill.
 - If multiple deaths are semantically redundant, revise them to satisfy `Game Over meaning` in the `tactical-gen` skill.

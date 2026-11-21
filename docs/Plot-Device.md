@@ -17,8 +17,8 @@ The plot progression is documented as a C4 model, adapted for storytelling purpo
 
 # Plot Detail
 The following is detailed context corresponding to the [Tactical Graph](/docs/workspace.dsl) nodes:
-- Each H2 heading below matches a `scene`/`container` by `<scene-name>`. The section describes what happens in the scene.
-- Each H3 heading matches a `passage`/`component` by `<passage-name>`. The section describes Leon's inner thoughts & monolouge.
+- Each H2 heading (`##`) below names a chapter. Its opening text gives context for the scenes in that chapter.
+- Each H3 heading (`###`) names a scene within that chapter. Its section gives scene-specific material, including Leon's thoughts and dialogue.
 
 Use the provided node context as hints for story generation.
 

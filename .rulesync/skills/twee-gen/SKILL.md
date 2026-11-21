@@ -91,29 +91,22 @@ Work in progress: c02.s01 (Feeling stuck) has not been developed yet. To be cont
   - In each GO passage, render visible links to the mapped respawn targets (regular passages) using the same conditions as the DSL fan‑out (e.g., `visited(...)`). Use SugarCube `visited("...")` with the Twee passage title.
   - Respawn targets are regular passages whose DSL routing unconditionally returns to the scene entry within one hop. Implement those timers; report missing or conflicting graph routing under Phase ownership rather than repairing the DSL.
 
-- Only render a timed progress bar when the timer edge is reachable under current conditions.
-  - Problematic example to avoid, assuming `stress == 30`:
+- Follow the graph's [Timer & Respawn rules](../tactical-gen/SKILL.md#timer-respawn). After applying passage effects, render exactly one timed progress bar for the enabled timer of an ordinary passage. If the graph defines multiple conditional timers, preserve their guards and select only the enabled route. Report overlapping guards or any reachable state with no enabled timer as a graph defect.
+  - For complementary DSL timer guards `Stress > 70` and `Stress <= 70`, render the bar inside the selected branch.
+    ```twee
+    <<if $stress > 70>>
+      <<timedprogressbar $timer>>
+        <<goto "cNN.sNN.P04">>
+      <</timedprogressbar>>
+    <<else>>
+      <<timedprogressbar $timer>>
+        <<goto "cNN.sNN.P05">>
+      <</timedprogressbar>>
+    <</if>>
     ```
-    <<timedprogressbar $timer>>
-      <<if $stress > 70>><<goto "c01.s01.P10">><</if>>
-    <</timedprogressbar>>
-    ```
-      - Progress bar depletion is inconsequential.
-      - A potential solution is to refactor:
-        ```
-        <<if $stress > 70>>
-          <<timedprogressbar $timer>>
-            <<goto "c01.s01.P10">>
-          <</timedprogressbar>>
-        <</if>>
-        ```
-      - Solve for complex conditions involving multiple variables by structuring the  conditions like a software engineer would:
-        - Consider if more than one progress bar must be declared, while only choosing one at runtime.
-        - Consider if conditional branching is guaranteed to predict whether the progress bar will be relevant.
-
 
 ### Dynamic passage content
-- Object‑intro enforcement (Twee): In any passage that emits object‑anchored `Act: …` links, include a narrator sentence that mentions the object phrase before rendering links. Prefer routing attempted object interactions from the object’s intro passage; resolve them under the shared player-agency contract.
+- Follow the graph's [Object-intro passages policy](../tactical-gen/SKILL.md#object-intro). A discovery choice may follow a brief glimpse in the narrator text. Give the object its first focused description in the intro passage. Before showing choices to study the object or attempt interaction from the intro or downstream, name it in the narration. Resolve attempts under the shared player-agency contract.
 While each Twee passage name must be unique, dialogue content may vary.
 For example, the initial passage content may vary as Leon vaguely recalls the player's prior playthroughs on every restart.
 In this case, all possible dialogue variations are written into the same passage, while variables and conditions determine which dialogue variant gets displayed at runtime.

@@ -9,6 +9,8 @@ targets:
 
 Coordinate one target scene at a time using the installed `tactical-gen` and `twee-gen` skills. Resolve artifact paths from the repository root and Markdown links relative to this file. Locate code by passage or symbol name. Read domain skill instructions when needed through the available skill catalog.
 
+Use available media for previews. Keep image generation outside automated workflows until the user re-enables it.
+
 ## Invocation and progression
 
 Resolve the `SCENE_ID` (`cNN.sNN`), operation, and requested endpoint from the request. Use the active workspace by default. When given a specific checkout, use its root for artifact paths and worker commands and load its installed skills and role profiles. Ask only for missing information that cannot be inferred.
@@ -39,7 +41,9 @@ Load only the reference needed for the current stage. Prompt numbers remain stab
 | [Twee and playtest](references/twee.md) | 6 | `twine-twee-author.toml` |
 | [Twee and playtest](references/twee.md) | 7 | `twine-twee-reviewer.toml` |
 
-Launch the matching named role with its scoped task packet. If the launch interface exposes explicit model and effort parameters instead, read the matching generated profile and pass both `model` and `model_reasoning_effort`, including its role instructions in the packet. Maintain each role's description and instructions in `.rulesync/subagents/twine-*.md`, with Codex model and effort settings in its `codexcli` frontmatter section. Run `rulesync generate` after editing the source profiles. Report unavailable roles, models, effort settings, or context isolation before proceeding.
+Read the matching generated profile from the checkout that owns the scene. Its `model` and `model_reasoning_effort` govern the launch. Use a named role only when the launch interface confirms it is bound to that profile or exposes matching model and effort settings. When the named role differs or its settings cannot be verified, use a fresh default subagent with explicit model and effort arguments if the interface can guarantee those settings. Map the TOML effort to the launch tool's effort parameter and include the checkout profile's instructions in the packet. If an exact launch with the required context isolation cannot be guaranteed, stop at that stage before launching the worker. Report the required model and effort and what prevented the launch.
+
+Maintain role descriptions, instructions, and Codex settings in `.rulesync/subagents/twine-*.md` and regenerate with RuleSync.
 
 ## Context and delegation
 
@@ -56,7 +60,7 @@ Reference artifacts by path rather than pasting snapshots. Briefs contain only t
 | 1 and its repairs | `docs/briefs/{SCENE_ID}.json` |
 | 2, 4, 7 | Read-only review |
 | 3, 5 and their repairs | Target scene and required model-scope handoff in `docs/workspace.dsl`, plus only missing successor chapter/scene/entry declarations permitted by `tactical-gen` Development boundaries |
-| 6 and its repairs | `src/{SCENE_ID}.twee`, including allowed handoff stubs, plus removal of exact-title `[stub]` passages in other scene files when superseded or duplicated, preserving all other content |
+| 6 and its repairs | `src/{SCENE_ID}.twee`, including allowed handoff stubs, and exact-title `[stub]` removal in other scene files when superseded or duplicated. The shared-code exception below also applies. |
 
 Graph authors preserve unrelated scenes and existing successor content. Twee authors treat the DSL, brief, plot sources, and shared narrative rules as read-only. Reuse `src/main.twee`; shared-code edits require a requested feature that needs them under the `twee-gen` State lifecycle contract.
 

@@ -5,13 +5,15 @@ import { basename, dirname, join } from 'node:path';
 import { parseArgs } from 'node:util';
 
 const scenePattern = /^c\d{2}\.s\d{2}$/;
+const sharedTwee = 'src/main.twee';
 const roles = ['brief', 'graph', 'twee'].flatMap(stage =>
   ['author', 'reviewer'].map(role => `twine-${stage}-${role}`));
 const optionsByCommand = {
   start: { base: { type: 'string' }, revise: { type: 'boolean' } },
   revise: { rewrite: { type: 'boolean' }, audit: { type: 'boolean' } },
   continue: { approve: { type: 'string' } },
-  status: {}, resume: {}, checkpoint: {}, finish: {}, close: {},
+  finish: { 'approve-shared': { type: 'string' } },
+  status: {}, resume: {}, checkpoint: {}, close: {},
 };
 
 function run(command, args, cwd = process.cwd()) {
@@ -61,10 +63,20 @@ function graphChanges(state, paths) {
   if (unexpected.length) throw new Error(`Outside the brief and graph scope: ${unexpected.join(', ')}`);
 }
 
-function tweeChanges(state, paths, cwd) {
+function tweeChanges(state, paths, cwd, approvedShared) {
   const target = `src/${state.scene}.twee`;
   for (const path of paths) {
     if (path === target) continue;
+    if (path === sharedTwee) {
+      if (!approvedShared) throw new Error(`${sharedTwee} requires explicit approval via --approve-shared <blob-sha>.`);
+      if (git(['diff', '--summary', 'HEAD', '--', path], cwd).trim()) {
+        throw new Error(`Only content edits to ${sharedTwee} are allowed.`);
+      }
+      if (git(['hash-object', '--', path], cwd).trim() !== approvedShared) {
+        throw new Error(`The approved hash does not match ${sharedTwee}. Review the current changes before approving again.`);
+      }
+      continue;
+    }
     if (!/^src\/c\d{2}\.s\d{2}\.twee$/.test(path)) throw new Error(`Outside the Twee scope: ${path}`);
 
     // A neighboring scene can lose whole tagged stubs while its remaining bytes stay intact.
@@ -111,13 +123,21 @@ function recordCommit(state, cwd, phase, save) {
   save(state);
 }
 
-function commitCandidate(state, cwd, command, save) {
+function commitCandidate(state, cwd, command, save, approvedShared) {
   const paths = dirtyPaths(cwd);
   if (command === 'checkpoint') graphChanges(state, paths);
-  else tweeChanges(state, paths, cwd);
+  else tweeChanges(state, paths, cwd, approvedShared);
   if (paths.length) git(['add', '-A', '--', ...paths], cwd);
+  const tree = git(['write-tree'], cwd).trim();
+  if (git(['diff', '--name-only', 'HEAD', tree, '--', sharedTwee], cwd).trim()) {
+    const stagedHash = git(['rev-parse', '--verify', `${tree}:${sharedTwee}`], cwd).trim();
+    const stagedMetadata = git(['diff', '--summary', 'HEAD', tree, '--', sharedTwee], cwd).trim();
+    if (stagedHash !== approvedShared || stagedMetadata) {
+      throw new Error(`${sharedTwee} changed while staging. Review the current changes before approving again.`);
+    }
+  }
   const message = command === 'checkpoint' ? `Review ${state.scene} graph` : `Implement ${state.scene} in Twee`;
-  state.pendingCommit = { from: state.head, paths, tree: git(['write-tree'], cwd).trim(), message, command };
+  state.pendingCommit = { from: state.head, paths, tree, message, command };
   save(state);
   recordCommit(state, cwd, command, save);
 }
@@ -215,7 +235,7 @@ function main() {
     } else {
       const required = command === 'checkpoint' ? 'graph' : 'twee';
       if (state.phase !== required) throw new Error(`${command} requires the ${required} phase.`);
-      commitCandidate(state, cwd, command, save);
+      commitCandidate(state, cwd, command, save, values['approve-shared']);
     }
     return output(state);
   } finally {

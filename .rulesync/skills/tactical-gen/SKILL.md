@@ -39,7 +39,7 @@ IMPORTANT: Never embed or paste Structurizr DSL snapshots inside Scene Brief JSO
       - From `pNN_go`, only `Act: Respawn` is allowed; do not emit any other `Act: …` or `timer` from a Game Over node.
       - Prefer contextual respawns that reference the preceding death’s anchors; do not fan‑out to arbitrary mid‑scene nodes unless they qualify as respawns (i.e., they unconditionally `timer` into `p01_rg`).
       - Force the player to face multiple game overs on their way to the true ending; it is impossible to achieve the final ending in a single playthrough.
-- Every ordinary non–game-over passage must have ≥1 outgoing `timer` relationship (see Timer rule); explicitly marked WIP placeholders and intentional endings follow Development boundaries below.
+- Follow Timer & Respawn rules for timed progression and Development boundaries for WIP placeholders and intentional endings.
 - Each component/passage description must be between 100 and 200 characters.
   - Use complete sentences to describe what happens in the passage.
   - Give passage sequences a coherent sense of story.
@@ -169,10 +169,10 @@ Each description must contain (respect the global 100–200 char requirement):
 
 <a id="object-intro"></a>
 ### Object‑intro passages (procedural)
-- For each important object referenced by outgoing `Act: …` labels, author a dedicated intro passage that first mentions the object (exact phrase) and sets mood.
-- From the predecessor passage, route into the intro using a neutral discovery `Act: …` label (e.g., “Act: Notice the notes”).
-- Offer attempted object interactions (e.g., try to point, reach to pick up, try to hold) only from the object’s intro passage and downstream; descriptions must not confirm player-caused contact or object manipulation.
-- Count intro passages toward the 12–16 total; reuse a single intro per object to avoid duplication.
+- Give each important object used in choices a dedicated intro passage with its first focused description and exact name.
+- A predecessor may briefly mention the object and offer a neutral discovery action such as `Act: Notice the notes` that leads to the intro.
+- Offer choices to study the object or attempt interaction from the intro passage or downstream. Descriptions must preserve the ambiguity of player-caused contact or manipulation.
+- Count intro passages toward the authored passage total and reuse a single intro per object.
 
 Write complete sentences; paraphrase Plot-Device details instead of quoting verbatim. Do not invent lore that contradicts `docs/Plot-Device.md`.
 
@@ -201,8 +201,8 @@ Default delta magnitude 2..12; spikes up to 20 when directly preceding Game Over
 - When both are high, prefer the harsher branch; when both are low, unlock a calmer anchor or de‑escalation thread.
 
 <a id="timer-respawn"></a>
-### Timer & Respawn rules (clarification)
-- Every ordinary non–game-over passage MUST have at least one outgoing `timer` relationship; Development boundaries below defines the only stopping exceptions.
+### Timer & Respawn rules
+- On each arrival at an ordinary passage, exactly one outgoing `timer` must be enabled after passage effects in every reachable state, including first visits and revisits. Use one unconditional timer or conditional timers whose guards are mutually exclusive and collectively cover those states. Timers represent inaction. Check for guard overlap and gaps during graph review. Game Overs, marked WIP placeholders, and intentional endings have no timer.
 - Every Game Over passage (`pNN_go`) MUST have one unconditional `Act: Respawn` relationship to a designated respawn passage; every respawn passage MUST have one unconditional `timer` to `p01_rg`. Direct GO→`p01_rg` is not allowed. You MAY add up to three additional conditional `Act: Respawn` relationships from GO to other respawns (total GO restart targets 1..4).
 - Only point respawns to passages that fit the current emotional trajectory (reuse nodes to avoid bloat). Respawns are regular passages; they are defined by their unconditional timer to `p01_rg`.
 
@@ -224,7 +224,8 @@ Default delta magnitude 2..12; spikes up to 20 when directly preceding Game Over
 
 <a id="quality-checks"></a>
 ### Quality checks (hard requirements)
-- No accidental dead-ends: every ordinary regular passage has ≥1 explicit user action edge and 1 `timer` edge; marked WIP placeholders and intentional endings are deliberate stops under Development boundaries. Every Game Over passage still requires ≥1 `Act: Respawn` relationship to a regular respawn passage.
+- Developed scenes contain 12–16 authored passages, including at least two Game Overs. Exclude WIP placeholders from the count.
+- No accidental dead-ends: every ordinary regular passage has at least one explicit user action edge and follows Timer & Respawn rules. Marked WIP placeholders and intentional endings are deliberate stops under Development boundaries. Every Game Over passage requires an `Act: Respawn` relationship to a regular respawn passage.
 - At least one explicit user-choice path to a Game Over exists in every scene.
   - At least one of these GO edges must be unconditional: explicit `Act: ...` → `pNN_go` with no conditions; do not gate this path by state or visits; do not use timers.
   - Unconditional path from entry: there MUST exist a path starting at `p01_rg` that reaches an unconditional `Act: ...` → `pNN_go` where every edge on that path has no conditions (no thresholds, no `visited(...)`).
@@ -239,7 +240,7 @@ Default delta magnitude 2..12; spikes up to 20 when directly preceding Game Over
  - Prefer contextual respawns: do not indiscriminately send all `pNN_go` to the same target; respawn descriptions should reference anchors from the preceding death and follow regular passage rules while still funneling to `p01_rg` within ≤1 hop.
 - Cross‑scene handoff: enforced per the Cross‑scene handoff policy.
 - Boundary validation: accept only explicitly marked WIP/ending stops, verify all handoff endpoints exist, exclude stubs from authored-content quotas, and list pending WIP scene IDs. Do not apply full-scene gameplay requirements to placeholder-only successor scenes.
-- Object‑intro enforcement: any object‑anchored `Act: …` must originate in, or after, that object’s intro passage. Otherwise, add an intro passage and relabel upstream edges with a neutral discovery action.
+- Verify that discovery leads to the focused intro and further object choices follow the Object-intro passages policy.
 - At least one unresolved thread persists across 3+ passages and is resolved or inverted in a later passage.
 - At generation end, verify anchor quotas and stat clamping.
 - Validate actions: no banned speech verbs; ordinary action labels are unique across the entire scene, excluding `Act: Respawn` (which may repeat across Game Overs and within one Game Over's fan-out); physical choices express attempts and destination descriptions do not establish completed contact or player-caused physical effects; touch attempts obey the scene's thresholds and do not replace the requirement for an early first-run GO elsewhere in the scene.

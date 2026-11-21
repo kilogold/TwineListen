@@ -52,7 +52,7 @@ Tasks:
 2) Parse `src/{SCENE_ID}.twee` and extract passage links and timed progressions.
 3) Enforce the mapping rules from Prompt 6:
    - Scope: the file contains ONLY passages for the specified scene plus connections into the next scene.
-   - Handoffs: for each cross‑chapter relationship in the DSL, add exactly one handoff from its source passage to the designated next scene.
+   - Verify exactly one matching transition for every scene-to-scene relationship in the DSL, including handoffs within a chapter. Check the source, destination, label, and guard.
    - Edge modality: mirror DSL edge labels and conditions — if "timer", use a timed auto‑advance; if "Act: X", use a user link labeled X; include any `Anger`/`Stress` thresholds via SugarCube conditionals.
    - Target ID mapping: use the same canonical title mapping as Prompt 6 (the `twee-gen` skill): `cNN.sNN.pNN_<kind>` → `cNN.sNN.PNN`. Check declarations, links, timed transitions, visit checks, handoffs, and stubs; leave already-valid titles and existing image asset paths unchanged.
    - Stub lifecycle: each declared target resolves to exactly one real passage or `[stub]` across all `src/*.twee` files. Stubs show explicit WIP/To be continued text, contain no state changes or onward links/timer, and cannot hide missing DSL declarations or graph errors. Prefer real content and remove superseded/duplicate tagged stubs only; report conflicting real definitions. List remaining WIP targets separately from errors and completed content.
@@ -63,9 +63,11 @@ Tasks:
    - Missing or extra passages or edges
    - Label mismatches (`Act: ...`), timer presence, and conditions (`Stress`/`Anger` thresholds)
    - Game Over targets and counts
-   - Stat delta consistency per passage (match intent and magnitude bands)
+   - Exact stat effects per passage, including delta values, assignments, clamping, and respawn resets. Check that effects are applied before evaluating outgoing guards.
+   - Exactly one timer is active in every reachable state of passages that require a timer, and its destination matches the enabled DSL edge.
    - ID format and cross‑ref mapping correctness
    - Handoff presence/count and stub existence/tagging
+   - If a requested feature changes `src/main.twee`, audit the shared diff and verify that only the required shared behavior changes.
 6) Source-of-truth policy:
    - If `src/{SCENE_ID}.twee` deviates from `docs/workspace.dsl`, prefer the DSL and propose a Twee correction to its author.
    - If the DSL is invalid, incomplete, or contradicts `docs/Plot-Device.md` themes or anchors, follow Phase ownership: report affected IDs and propose minimal DSL edits without applying them. A matching Twee diff may be proposed, but do not apply speculative changes to affected branches or claim full verification before the graph correction is authorized and applied in the graph phase.
@@ -82,6 +84,8 @@ Invocation: Execute Prompt 7 for `SCENE_ID`.
 After Prompt 7 and any repairs pass, compile using the repository's Tweego build tooling. Inspect the build command before running it. Record the command, compiler version, exit status, and output location. If the bundled compiler cannot run on the host architecture, use an available compatible Tweego executable or report the missing prerequisite. Report a blocked build or browser check explicitly.
 
 Play the compiled SugarCube output in an available browser or browser automation tool. Derive representative paths from the approved graph and applicable scene constraints. Check visible choices and guards, timed transitions, stat changes, visit-dependent unlocks, contextual respawn resets, and the handoff or intentional ending. Check for rendered macro errors and broken passage links. Mark undeveloped successor stubs as WIP.
+
+When a requested feature changes `src/main.twee`, exercise the affected shared behavior in the preview.
 
 For `c01.s01`, exercise each Game Over independently with the other unvisited, verify continuation after each, and verify that a no-death route keeps continuation locked. Exercise timer-only play for accidental deaths. Check that respawn halves Stress and clears Anger once, preserves visit history, and returns through ordinary entry effects. These are target-scene checks derived from `docs/narrative-rules.md` and the state lifecycle contract.
 
